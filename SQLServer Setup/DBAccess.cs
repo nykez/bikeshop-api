@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Oracle.ManagedDataAccess.Client;
+using System.Data;
+using Oracle.ManagedDataAccess.Types;
 using Oracle.EntityFrameworkCore;
 
 namespace SQLServer_Setup {
@@ -55,10 +57,39 @@ namespace SQLServer_Setup {
 			}
 		}
 
+		public void ShowTables(String schema = "") {
+			if(schema == "") schema = this.UID.ToUpper();
+			if(OpenConnection()) {
+				OracleCommand cmd = new OracleCommand($"SELECT owner, table_name FROM all_tables WHERE OWNER = '{schema}'", Connection);
+				OracleDataReader dataReader = cmd.ExecuteReader();
+				while(dataReader.Read()) {
+					Console.WriteLine(dataReader[1]);
+				}
+				dataReader.Close();
+				cmd.Dispose();
+			}
+		}
+
+		public void Describe(String tableName) {
+			if(OpenConnection()) {
+				OracleCommand cmd = new OracleCommand($"SELECT * FROM {tableName}", Connection);
+				OracleDataReader dataReader = cmd.ExecuteReader();
+				DataTable st = dataReader.GetSchemaTable();
+				DataRow row;
+				for(int i = 0; i < st.Rows.Count; i++) {
+					row = st.Rows[i];
+					Console.WriteLine($"Column: {row["COLUMNNAME"]}");
+				}
+				dataReader.Close();
+
+			} else {
+			}
+
+		}
 
 		public List<String[]> Query(String query) {
 			List<String[]> list = new List<String[]>();
-			if(OpenConnection() == true) {
+			if(OpenConnection()) {
 				OracleCommand cmd = new OracleCommand(query, Connection);
 				OracleDataReader dataReader = cmd.ExecuteReader();
 				while(dataReader.Read()) {
