@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 using MySql.Data;
 
 
-namespace DentistOffice {
+namespace SQLServer_Setup {
 
 
 	class DBAccess : IDisposable {

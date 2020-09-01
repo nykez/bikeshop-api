@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Oracle.EntityFrameworkCore;
 using System.Linq;
 
 namespace SQLServer_Setup {
 	class Program {
 		static void Main(string[] args) {
 			using(DBAccess database = new DBAccess()) {
+				// Currently no data is loaded, working on that ASAP
+				Console.WriteLine(database.OpenConnection());
 
 				// If you want to run a SQL query(does not work for commands like DESC)...
 				// WARNING THIS SPECIFIC QUERY BLEHS OUT A TON OF DATA THAT ISN'T REALLY FORMATTED
