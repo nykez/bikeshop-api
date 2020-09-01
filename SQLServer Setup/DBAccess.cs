@@ -12,20 +12,28 @@ namespace SQLServer_Setup {
 
 	class DBAccess : IDisposable {
 		private MySqlConnection connection;
-		private string server;
-		private string database;
-		private string uid;
-		private string password;
+		private String server;
+		private String database;
+		private String uid;
+		private String password;
 
 		public DBAccess() {
 			Initialize();
 		}
 		private void Initialize() {
+
+			/*
+			 Keep in mind that this is my personal server. The IP is one of mine, as the actual box is one of mine. Please be respectful.
+			 The user here was created and granted permissions for all IPs so there should be no problem in connecting. If you do have one, let me know ASAP.
+			
+			 - Michael Edwards
+			 */
+
 			server = "71.87.195.218";
 			database = "BIKE_SHOP";
 			uid = "BIKE_SHOP";
 			password = "TeamADatabase1!";
-			string connectionString;
+			String connectionString;
 			connectionString = $"datasource={server}; Database={database}; uid={uid}; pwd={password};";
 			connection = new MySqlConnection(connectionString);
 		}
