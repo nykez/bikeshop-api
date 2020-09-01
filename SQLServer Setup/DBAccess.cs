@@ -1,97 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
-using Oracle.ManagedDataAccess.Client;
-using System.Data;
-using Oracle.ManagedDataAccess.Types;
-using Oracle.EntityFrameworkCore;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using MySql.Data;
 
-namespace SQLServer_Setup {
+
+namespace DentistOffice {
 
 
-	// Calls to this object should be inside a using statement to automatically call Dispose() and close the connection
-	// Once the connection is no longer needed.
 	class DBAccess : IDisposable {
-		private OracleConnection Connection;
-		private string Server;
-		private string UID;
-		private string Password;
+		private MySqlConnection connection;
+		private string server;
+		private string database;
+		private string uid;
+		private string password;
 
 		public DBAccess() {
 			Initialize();
 		}
 		private void Initialize() {
-			Server = @"pythia.etsu.edu:1521/csdb.etsu.edu";
-			Console.Write("Username: ");
-			UID = Console.ReadLine();
-			Console.Write("Password: ");
-			Password = NoDisplayPassword();
-			String ConnectionString = $"Data Source={Server};User Id={UID};Password={Password};";
-			Connection = new OracleConnection(ConnectionString);
+			server = "71.87.195.218";
+			database = "BIKE_SHOP";
+			uid = "BIKE_SHOP";
+			password = "TeamADatabase1!";
+			string connectionString;
+			connectionString = $"datasource={server}; Database={database}; uid={uid}; pwd={password};";
+			connection = new MySqlConnection(connectionString);
 		}
 		public bool OpenConnection() {
 			try {
-				Connection.Open();
-				Console.WriteLine("Connection Successful");
+				connection.Open();
 				return true;
-			} catch(OracleException ex) {
-				switch(ex.ErrorCode) {
+			} catch(MySqlException ex) {
+				switch(ex.Number) {
 					case 0:
 						Console.WriteLine("Cannot connect to server.  Contact administrator");
 						break;
 
-					case -2147467259: // This error code represents an invalid username when trying to login to the database
+					case 1045:
 						Console.WriteLine("Invalid username/password, please try again");
 						break;
 				}
+				Console.WriteLine($"{ex.Code} {ex.Message}");
 				return false;
 			}
 		}
 		private bool CloseConnection() {
 			try {
-				Connection.Close();
-				Console.WriteLine("Connection closed");
+				connection.Close();
 				return true;
-			} catch(OracleException ex) {
+			} catch(MySqlException ex) {
 				Console.WriteLine(ex.Message);
 				return false;
 			}
 		}
-
-		public void ShowTables(String schema = "") {
-			if(schema == "") schema = this.UID.ToUpper();
-			if(OpenConnection()) {
-				OracleCommand cmd = new OracleCommand($"SELECT owner, table_name FROM all_tables WHERE OWNER = '{schema}'", Connection);
-				OracleDataReader dataReader = cmd.ExecuteReader();
-				while(dataReader.Read()) {
-					Console.WriteLine(dataReader[1]);
-				}
-				dataReader.Close();
-				cmd.Dispose();
-			}
-		}
-
-		public void Describe(String tableName) {
-			if(OpenConnection()) {
-				OracleCommand cmd = new OracleCommand($"SELECT * FROM {tableName}", Connection);
-				OracleDataReader dataReader = cmd.ExecuteReader();
-				DataTable st = dataReader.GetSchemaTable();
-				DataRow row;
-				for(int i = 0; i < st.Rows.Count; i++) {
-					row = st.Rows[i];
-					Console.WriteLine($"Column: {row["COLUMNNAME"]}");
-				}
-				dataReader.Close();
-
-			} else {
-			}
-
-		}
-
+		
+		// This is for general queries, probably going to use something like this mostly
 		public List<String[]> Query(String query) {
-			List<String[]> list = new List<String[]>();
-			if(OpenConnection()) {
-				OracleCommand cmd = new OracleCommand(query, Connection);
-				OracleDataReader dataReader = cmd.ExecuteReader();
+			//Create a list to store the result
+			List<string[]> list = new List<string[]>();
+
+			//Open connection
+			if(this.OpenConnection() == true) {
+				//Create Command
+				MySqlCommand cmd = new MySqlCommand(query, connection);
+				//Create a data reader and Execute the command
+				MySqlDataReader dataReader = cmd.ExecuteReader();
+
+				//Read the data and store them in the list
 				while(dataReader.Read()) {
 					String[] currObject = new String[dataReader.VisibleFieldCount];
 					for(int i = 0; i < dataReader.VisibleFieldCount; i++) {
@@ -99,22 +77,18 @@ namespace SQLServer_Setup {
 					}
 					list.Add(currObject);
 				}
+
+				//close Data Reader
 				dataReader.Close();
+
+				//close Connection
+				this.CloseConnection();
 				cmd.Dispose();
+				//return list to be displayed
 				return list;
 			} else {
 				return list;
 			}
-		}
-
-		private String NoDisplayPassword() {
-			String retPassword = "";
-			while(true) {
-				ConsoleKeyInfo key = Console.ReadKey(true);
-				if(key.Key == ConsoleKey.Enter) break;
-				retPassword += key.KeyChar;
-			}
-			return retPassword;
 		}
 
 		public void Dispose() {
