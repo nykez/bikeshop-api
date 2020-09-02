@@ -7,8 +7,10 @@ namespace SQLServer_Setup {
 		static void Main(string[] args) {
 			using(DBAccess database = new DBAccess()) {
 				// Currently no data is loaded, working on that ASAP
-				Console.WriteLine(database.OpenConnection());
-
+				//Console.WriteLine(database.OpenConnection());
+				database.RunScript("Bike_Shop.sql");
+				//Console.WriteLine(database.connection.State);
+				//database.DropAllTables();
 				
 
 			}

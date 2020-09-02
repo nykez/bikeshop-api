@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,12 @@ namespace SQLServer_Setup {
 
 
 	class DBAccess : IDisposable {
-		private MySqlConnection connection;
+		public MySqlConnection connection;
 		private String server;
 		private String database;
 		private String uid;
 		private String password;
+		private bool Open;
 
 		public DBAccess() {
 			Initialize();
@@ -55,7 +57,7 @@ namespace SQLServer_Setup {
 				return false;
 			}
 		}
-		private bool CloseConnection() {
+		public bool CloseConnection() {
 			try {
 				connection.Close();
 				return true;
@@ -64,14 +66,46 @@ namespace SQLServer_Setup {
 				return false;
 			}
 		}
-		
+
+		public void RunScript(String script) {
+			String scriptText = File.ReadAllText($"..\\..\\Scripts\\{script}");
+			if(OpenConnection()) {
+				MySqlCommand cmd = new MySqlCommand(scriptText, connection);
+				cmd.ExecuteNonQuery();
+				CloseConnection();
+			}
+			
+		}
+
+		public void DropAllTables() {
+			List<String[]> tableNames = Query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'BIKE_SHOP'");
+			MySqlCommand cmd = new MySqlCommand();
+
+			if(OpenConnection()) {
+				cmd.Connection = connection;
+				cmd.CommandTimeout = 86400;
+				cmd.CommandText = "SET FOREIGN_KEY_CHECKS = 0;";
+				cmd.ExecuteNonQuery();
+				
+				foreach(String[] tableName in tableNames) { 
+					cmd.CommandText = $"DROP TABLE IF EXISTS {tableName[0]};";
+					cmd.ExecuteNonQuery();
+				}
+
+				cmd.CommandText = "SET FOREIGN_KEY_CHECKS = 1;";
+				cmd.ExecuteNonQuery();
+
+				CloseConnection();
+			}
+		}
+
 		// This is for general queries, probably going to use something like this mostly
 		public List<String[]> Query(String query) {
 			//Create a list to store the result
 			List<string[]> list = new List<string[]>();
 
 			//Open connection
-			if(this.OpenConnection() == true) {
+			if(OpenConnection()) {
 				//Create Command
 				MySqlCommand cmd = new MySqlCommand(query, connection);
 				//Create a data reader and Execute the command
@@ -90,7 +124,7 @@ namespace SQLServer_Setup {
 				dataReader.Close();
 
 				//close Connection
-				this.CloseConnection();
+				CloseConnection();
 				cmd.Dispose();
 				//return list to be displayed
 				return list;
