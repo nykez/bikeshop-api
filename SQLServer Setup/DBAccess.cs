@@ -69,12 +69,76 @@ namespace SQLServer_Setup {
 
 		public void RunScript(String script) {
 			String scriptText = File.ReadAllText($"..\\..\\Scripts\\{script}");
+			try {
+				if(OpenConnection()) {
+					MySqlCommand cmd = new MySqlCommand(scriptText, connection);
+					Console.WriteLine(cmd.CommandText);
+					//Console.WriteLine($"Creating table {cmd.CommandText.Split(' ')[1]}");
+					cmd.ExecuteNonQuery();
+					CloseConnection();
+				}
+			} catch(Exception) {
+
+			}
+		}
+
+		public FileInfo[] GetFileInfo(String path) {
+			String[] fileNames = Directory.GetFiles(path);
+			FileInfo[] retFiles = new FileInfo[fileNames.Length];
+			for(int i = 0; i < fileNames.Length; i++) {
+				retFiles[i] = new FileInfo(fileNames[i]);
+			}
+			return retFiles;
+		}
+
+		public List<String> GetFileData(String file) {
+			List<String> data = new List<String>();
+			String[] text = File.ReadAllText(file).Split('\n');
+			foreach(String line in text) {
+				data.Add(line);
+			}
+			return data;
+		}
+
+		public void LoadData() {
+			FileInfo[] files = GetFileInfo(@"..\..\CSV");
+			MySqlCommand cmd = new MySqlCommand();
+			List<String> fileData;
+			String tableName;
+			String tableFields;
+			String[] currObject;
+			String values;
 			if(OpenConnection()) {
-				MySqlCommand cmd = new MySqlCommand(scriptText, connection);
-				cmd.ExecuteNonQuery();
+				cmd.Connection = connection;
+				foreach(FileInfo file in files) {
+					fileData = GetFileData(file.FullName);
+					tableName = file.Name.Replace(@"_DATA_TABLE.csv", "").Replace("\"", "");
+					tableFields = fileData[0].Trim().Replace("\"", "");
+
+					Console.WriteLine($"{tableName}\n{tableFields}");
+					Console.WriteLine();
+					cmd.CommandText = "START TRANSACTION;";
+					cmd.ExecuteNonQuery();
+
+					for(int i = 1; i < fileData.Count; i++) {
+						values = fileData[i].Trim();
+						if(values == "") break;
+						Console.WriteLine(values);
+						cmd.CommandText = $"INSERT INTO {tableName}({tableFields}) VALUES({values})";
+						cmd.ExecuteNonQuery();
+					}
+
+					cmd.CommandText = "COMMIT;";
+					cmd.ExecuteNonQuery();
+				}
 				CloseConnection();
 			}
-			
+		}
+
+		static void PrintArray(String[] arr) {
+			foreach(String i in arr) {
+				Console.Write($"{i} ");
+			}
 		}
 
 		public void DropAllTables() {
@@ -87,7 +151,8 @@ namespace SQLServer_Setup {
 				cmd.CommandText = "SET FOREIGN_KEY_CHECKS = 0;";
 				cmd.ExecuteNonQuery();
 				
-				foreach(String[] tableName in tableNames) { 
+				foreach(String[] tableName in tableNames) {
+					Console.WriteLine($"Dropping table {tableName[0]}");
 					cmd.CommandText = $"DROP TABLE IF EXISTS {tableName[0]};";
 					cmd.ExecuteNonQuery();
 				}

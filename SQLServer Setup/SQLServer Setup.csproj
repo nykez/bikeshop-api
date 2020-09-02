@@ -155,10 +155,41 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CSV\BICYCLETUBEUSAGE_DATA_TABLE.csv" />
+    <None Include="CSV\BICYCLE_DATA_TABLE.csv" />
+    <None Include="CSV\BIKEPARTS_DATA_TABLE.csv" />
+    <None Include="CSV\BIKETUBES_DATA_TABLE.csv" />
+    <None Include="CSV\CITY_DATA_TABLE.csv" />
+    <None Include="CSV\COMMONSIZES_DATA_TABLE.csv" />
+    <None Include="CSV\COMPONENTNAME_DATA_TABLE.csv" />
+    <None Include="CSV\COMPONENT_DATA_TABLE.csv" />
+    <None Include="CSV\CUSTOMERTRANSACTION_DATA_TABLE.csv" />
+    <None Include="CSV\CUSTOMER_DATA_TABLE.csv" />
+    <None Include="CSV\EMPLOYEE_DATA_TABLE.csv" />
+    <None Include="CSV\GROUPCOMPONENTS_DATA_TABLE.csv" />
+    <None Include="CSV\GROUPO_DATA_TABLE.csv" />
+    <None Include="CSV\LETTERSTYLE_DATA_TABLE.csv" />
+    <None Include="CSV\MANUFACTURERTRANSACTION_DATA_TABLE.csv" />
+    <None Include="CSV\MANUFACTURER_DATA_TABLE.csv" />
+    <None Include="CSV\MODELSIZE_DATA_TABLE.csv" />
+    <None Include="CSV\MODELTYPE_DATA_TABLE.csv" />
+    <None Include="CSV\PAINT_DATA_TABLE.csv" />
+    <None Include="CSV\PREFERENCE_DATA_TABLE.csv" />
+    <None Include="CSV\PURCHASEITEM_DATA_TABLE.csv" />
+    <None Include="CSV\PURCHASEORDER_DATA_TABLE.csv" />
+    <None Include="CSV\RETAILSTORE_DATA_TABLE.csv" />
+    <None Include="CSV\REVISIONHISTORY_DATA_TABLE.csv" />
+    <None Include="CSV\SAMPLENAME_DATA_TABLE.csv" />
+    <None Include="CSV\SAMPLESTREET_DATA_TABLE.csv" />
+    <None Include="CSV\STATETAXRATE_DATA_TABLE.csv" />
+    <None Include="CSV\TEMPDATEMADE_DATA_TABLE.csv" />
+    <None Include="CSV\TUBEMATERIAL_DATA_TABLE.csv" />
+    <None Include="CSV\WORKAREA_DATA_TABLE.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\Bike_Shop.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
