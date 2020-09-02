@@ -1,16 +1,16 @@
-"PAINTID","COLORNAME","COLORSTYLE","COLORLIST","DATEINTRODUCED","DATEDISCONTINUED"
-1,"Neon Blue","Solid","BLUE",12-DEC-93,
-2,"Arctic White","Solid","WHITE",15-NOV-91,
-3,"Sea Green Fade","Two Color","GREEN, WHITE",15-MAR-94,
-4,"Black Speckle","Two Color","BLACK, GREEN",12-FEB-92,15-MAR-97
-5,"Candy Stripe","Three Color","RED, BLUE, YELLOW",15-APR-93,15-MAR-97
-6,"Fire and Smoke","Two Color","RED, GREY",02-JAN-95,
-7,"Mountain Green","Solid","GREEN",20-DEC-94,
-8,"Purple Accent","Solid","PURPLE",12-FEB-93,
-9,"Hazard Flame","Two Color","ORANGE, YELLOW",18-JAN-95,
-10,"Morning Sun","Solid","YELLOW",30-JUN-93,
-11,"Grey Granite","Solid","GREY, BLACK",17-MAY-95,
-12,"Copper Haze","Solid","COPPER",17-MAY-95,
-13,"Sky Fire","Two Color","BLUE, RED",15-MAR-97,
-14,"Wine Country","Solid","RED",15-MAR-97,
-15,"Black Hole","Two Color","BLACK, CREAM",15-MAR-98,
+'PAINTID','COLORNAME','COLORSTYLE','COLORLIST',DATEINTRODUCED,DATEDISCONTINUED
+1,'Neon Blue','Solid','BLUE','1993-12-12','0000-00-00'
+2,'Arctic White','Solid','WHITE','1991-11-15','0000-00-00'
+3,'Sea Green Fade','Two Color',"'GREEN, WHITE'",'1994-03-15','0000-00-00'
+4,'Black Speckle','Two Color',"'BLACK, GREEN'",'1992-02-12','1997-03-15'
+5,'Candy Stripe','Three Color',"'RED, BLUE, YELLOW'",'1993-04-15','1997-03-15'
+6,'Fire and Smoke','Two Color',"'RED, GREY'",'1995-01-02','0000-00-00'
+7,'Mountain Green','Solid','GREEN','1994-12-20','0000-00-00'
+8,'Purple Accent','Solid','PURPLE','1993-02-12','0000-00-00'
+9,'Hazard Flame','Two Color',"'ORANGE, YELLOW'",'1995-01-18','0000-00-00'
+10,'Morning Sun','Solid','YELLOW','1993-06-30','0000-00-00'
+11,'Grey Granite','Solid',"'GREY, BLACK'",'1995-05-17','0000-00-00'
+12,'Copper Haze','Solid','COPPER','1995-05-17','0000-00-00'
+13,'Sky Fire','Two Color',"'BLUE, RED'",'1997-03-15','0000-00-00'
+14,'Wine Country','Solid','RED','1997-03-15','0000-00-00'
+15,'Black Hole','Two Color',"'BLACK, CREAM'",'1998-03-15','0000-00-00'

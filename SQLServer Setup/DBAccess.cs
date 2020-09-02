@@ -13,6 +13,7 @@ namespace SQLServer_Setup {
 
 	class DBAccess : IDisposable {
 		public MySqlConnection connection;
+
 		private String server;
 		private String database;
 		private String uid;
@@ -36,8 +37,9 @@ namespace SQLServer_Setup {
 			uid = "BIKE_SHOP";
 			password = "TeamADatabase1!";
 			String connectionString;
-			connectionString = $"datasource={server}; Database={database}; uid={uid}; pwd={password};";
+			connectionString = $"datasource={server}; Database={database}; uid={uid}; pwd={password}; AllowLoadLocalInfile=true;";
 			connection = new MySqlConnection(connectionString);
+
 		}
 		public bool OpenConnection() {
 			try {
@@ -72,8 +74,6 @@ namespace SQLServer_Setup {
 			try {
 				if(OpenConnection()) {
 					MySqlCommand cmd = new MySqlCommand(scriptText, connection);
-					Console.WriteLine(cmd.CommandText);
-					//Console.WriteLine($"Creating table {cmd.CommandText.Split(' ')[1]}");
 					cmd.ExecuteNonQuery();
 					CloseConnection();
 				}
@@ -105,29 +105,31 @@ namespace SQLServer_Setup {
 			MySqlCommand cmd = new MySqlCommand();
 			List<String> fileData;
 			String tableName;
-			String tableFields;
+			String tableFields = "";
 			String[] currObject;
-			String values;
+			String values = "";
+			String path = "";
 			if(OpenConnection()) {
 				cmd.Connection = connection;
 				foreach(FileInfo file in files) {
 					fileData = GetFileData(file.FullName);
 					tableName = file.Name.Replace(@"_DATA_TABLE.csv", "").Replace("\"", "");
-					tableFields = fileData[0].Trim().Replace("\"", "");
-
-					Console.WriteLine($"{tableName}\n{tableFields}");
-					Console.WriteLine();
+					tableFields = fileData[0].Trim().Replace("\"", "").Replace("'", "");
 					cmd.CommandText = "START TRANSACTION;";
 					cmd.ExecuteNonQuery();
-
-					for(int i = 1; i < fileData.Count; i++) {
-						values = fileData[i].Trim();
-						if(values == "") break;
-						Console.WriteLine(values);
-						cmd.CommandText = $"INSERT INTO {tableName}({tableFields}) VALUES({values})";
+					try {
+						Console.WriteLine($"Inserting into {tableName}");
+						Console.WriteLine($"{file.FullName.Replace("\\", "/")}");
+						cmd.CommandText = $"LOAD DATA LOCAL INFILE '{file.FullName.Replace("\\", "/")}' INTO TABLE {tableName} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY \"'\" LINES TERMINATED BY '\n' IGNORE 1 ROWS  ";
 						cmd.ExecuteNonQuery();
+					} catch(MySqlException ex) {
+						Console.WriteLine(ex.ErrorCode);
+						Console.WriteLine(ex.Message);
+						Console.WriteLine(cmd.CommandText);
+						Console.WriteLine();
+						Console.WriteLine();
+						break;
 					}
-
 					cmd.CommandText = "COMMIT;";
 					cmd.ExecuteNonQuery();
 				}
@@ -150,7 +152,7 @@ namespace SQLServer_Setup {
 				cmd.CommandTimeout = 86400;
 				cmd.CommandText = "SET FOREIGN_KEY_CHECKS = 0;";
 				cmd.ExecuteNonQuery();
-				
+
 				foreach(String[] tableName in tableNames) {
 					Console.WriteLine($"Dropping table {tableName[0]}");
 					cmd.CommandText = $"DROP TABLE IF EXISTS {tableName[0]};";

@@ -1,21 +1,21 @@
-"EMPLOYEEID","TAXPAYERID","LASTNAME","FIRSTNAME","HOMEPHONE","ADDRESS","ZIPCODE","CITYID","DATEHIRED","DATERELEASED","CURRENTMANAGER","SALARYGRADE","SALARY","TITLE","WORKAREA"
-0,"000-00-0000","Unknown","","","","",0,,,0,0,0,"","Unknown"
-12512,"888-22-5552","Cartom","Abdul","(603) 323-9893","252 South Street","03101",5862,11-JUL-89,,15293,8,22750,"Painter/Artist","Paint"
-15293,"222-55-3737","Venetiaan","Roland","(804) 888-6667","937 Paramaribo Lane","23320",5423,23-NOV-93,,87295,19,54000,"Production Manager",""
-22343,"293-87-4343","Johnson","John","(703) 222-9384","234 Main Street","22313",5402,02-FEB-93,,46583,9,23000,"Purchasing Assistant","Purchase"
-29387,"837-36-2933","Stenheim","Susan","(410) 330-9837","8934 W. Maple","21234",2540,02-NOV-93,,87295,16,39000,"Financial Manager",""
-34192,"383-73-9373","Schuba","Beatrix","(301) 967-6363","90 E. Ice Lane","21701",2573,29-APR-88,,46583,6,18000,"Marketing/Order Processing","Marketing"
-37453,"736-34-1198","Woolard","Edgar","(617) 774-1000","1007 Market Street","02109",2280,19-FEB-93,,15293,12,27000,"Frame Builder/Engineer","Frame"
-39571,"222-55-9760","Ballen","Sixto","(804) 515-2528","925 E. Calle Way","23232",5499,07-AUG-93,,15293,7,20500,"Assembler","Assembly"
-46583,"223-51-2358","Ochirbat","Punsalmaagiyn","(703) 973-6323","876 Darhan Road","22313",5402,15-MAR-89,,87295,18,42000,"Marketing Manager","Marketing"
-51512,"515-35-1512","Jugnauth","Aneerood","(410) 442-4114","192 Prime Avenue","21401",2539,23-SEP-93,,88873,4,11000,"Worker/Trainee",""
-63535,"272-62-3534","Trovoada","Miguel","(302) 736-3528","987 Tome Lane","19901",976,05-OCT-92,,15293,8,21000,"Assembler","Assembly"
-73735,"111-88-9292","Bergeron","Candace","(410) 555-2212","525 E. Oak","21234",2540,22-MAY-89,,29387,10,24000,"Purchasing Assistant","Purchase"
-76432,"887-36-2342","Slotzky","Mark","(301) 337-8492","487 Lois Lane","21701",2573,03-MAR-93,,15293,11,25500,"Frame Builder/Engineer","Frame"
-83736,"363-63-5367","Loucks","Vernon","(804) 948-2000","1 Baxter Parkway","23660",5909,29-DEC-93,,15293,6,18500,"Shipping Associate","Shipping"
-87295,"837-52-1135","Tudjman","Franjo","(202) 543-5586","2356 Massachusetts Avenue","20013",5927,23-MAY-90,,0,20,76000,"Chief Executive Officer",""
-88873,"222-33-8748","Corazon","Mia","(703) 333-3323","8732 Oak Lane","22313",5402,10-AUG-93,,87295,16,38500,"Inventory Manager","Inventory"
-89097,"986-73-9322","Dehaene","Jean-luc","(703) 909-7976","783 King's Road","22110",5476,03-JAN-93,,88873,4,13000,"Worker/Trainee",""
-90975,"331-51-5138","Bedie","Henri","(410) 666-4282","9782 Ivory Street","21234",2632,10-JUL-91,,15293,6,18250,"Shipping Associate","Shipping"
-93736,"837-36-2342","Green","John","(301) 763-3535","101 Prospect Avenue","20602",2649,24-AUG-88,,15293,9,23500,"Painter/Artist","Paint"
-98766,"768-77-6349","Korowi","Wiwa","(802) 764-2546","1615 New Hampshire Avenue","05401",5549,16-MAR-91,,46583,5,16500,"Marketing/Order Processing","Marketing"
+'EMPLOYEEID','TAXPAYERID','LASTNAME','FIRSTNAME','HOMEPHONE','ADDRESS','ZIPCODE','CITYID',DATEHIRED,DATERELEASED,'CURRENTMANAGER','SALARYGRADE','SALARY','TITLE','WORKAREA'
+0,'000-00-0000','Unknown',0,0,0,0,0,'0000-00-00','0000-00-00',0,0,0,0,'Unknown'
+12512,'888-22-5552','Cartom','Abdul','(603) 323-9893','252 South Street',3101,5862,'1989-07-11','0000-00-00',15293,8,22750,'Painter/Artist','Paint'
+15293,'222-55-3737','Venetiaan','Roland','(804) 888-6667','937 Paramaribo Lane',23320,5423,'1993-11-23','0000-00-00',87295,19,54000,'Production Manager',0
+22343,'293-87-4343','Johnson','John','(703) 222-9384','234 Main Street',22313,5402,'1993-02-02','0000-00-00',46583,9,23000,'Purchasing Assistant','Purchase'
+29387,'837-36-2933','Stenheim','Susan','(410) 330-9837','8934 W. Maple',21234,2540,'1993-11-02','0000-00-00',87295,16,39000,'Financial Manager',0
+34192,'383-73-9373','Schuba','Beatrix','(301) 967-6363','90 E. Ice Lane',21701,2573,'1988-04-29','0000-00-00',46583,6,18000,'Marketing/Order Processing','Marketing'
+37453,'736-34-1198','Woolard','Edgar','(617) 774-1000','1007 Market Street',2109,2280,'1993-02-19','0000-00-00',15293,12,27000,'Frame Builder/Engineer','Frame'
+39571,'222-55-9760','Ballen','Sixto','(804) 515-2528','925 E. Calle Way',23232,5499,'1993-08-07','0000-00-00',15293,7,20500,'Assembler','Assembly'
+46583,'223-51-2358','Ochirbat','Punsalmaagiyn','(703) 973-6323','876 Darhan Road',22313,5402,'1989-03-15','0000-00-00',87295,18,42000,'Marketing Manager','Marketing'
+51512,'515-35-1512','Jugnauth','Aneerood','(410) 442-4114','192 Prime Avenue',21401,2539,'1993-09-23','0000-00-00',88873,4,11000,'Worker/Trainee',0
+63535,'272-62-3534','Trovoada','Miguel','(302) 736-3528','987 Tome Lane',19901,976,'1992-10-05','0000-00-00',15293,8,21000,'Assembler','Assembly'
+73735,'111-88-9292','Bergeron','Candace','(410) 555-2212','525 E. Oak',21234,2540,'1989-05-22','0000-00-00',29387,10,24000,'Purchasing Assistant','Purchase'
+76432,'887-36-2342','Slotzky','Mark','(301) 337-8492','487 Lois Lane',21701,2573,'1993-03-03','0000-00-00',15293,11,25500,'Frame Builder/Engineer','Frame'
+83736,'363-63-5367','Loucks','Vernon','(804) 948-2000','1 Baxter Parkway',23660,5909,'1993-12-29','0000-00-00',15293,6,18500,'Shipping Associate','Shipping'
+87295,'837-52-1135','Tudjman','Franjo','(202) 543-5586','2356 Massachusetts Avenue',20013,5927,'1990-05-23','0000-00-00',0,20,76000,'Chief Executive Officer',0
+88873,'222-33-8748','Corazon','Mia','(703) 333-3323','8732 Oak Lane',22313,5402,'1993-08-10','0000-00-00',87295,16,38500,'Inventory Manager','Inventory'
+89097,'986-73-9322','Dehaene','Jean-luc','(703) 909-7976','783 King's Road',22110,5476,'1993-01-03','0000-00-00',88873,4,13000,'Worker/Trainee',0
+90975,'331-51-5138','Bedie','Henri','(410) 666-4282','9782 Ivory Street',21234,2632,'1991-07-10','0000-00-00',15293,6,18250,'Shipping Associate','Shipping'
+93736,'837-36-2342','Green','John','(301) 763-3535','101 Prospect Avenue',20602,2649,'1988-08-24','0000-00-00',15293,9,23500,'Painter/Artist','Paint'
+98766,'768-77-6349','Korowi','Wiwa','(802) 764-2546','1615 New Hampshire Avenue',5401,5549,'1991-03-16','0000-00-00',46583,5,16500,'Marketing/Order Processing','Marketing'
