@@ -12,26 +12,27 @@ namespace SQLServer_Setup {
 
 
 	class DBAccess : IDisposable {
-		public MySqlConnection connection;
-
+		/// <summary>
+		/// All private fields, set in the inizializer
+		/// </summary>
+		private MySqlConnection connection;
 		private String server;
 		private String database;
 		private String uid;
 		private String password;
-		private bool Open;
 
-		public DBAccess() {
-			Initialize();
-		}
-		private void Initialize() {
 
-			/*
+		/*
 			 Keep in mind that this is my personal server. The IP is one of mine, as the actual box is one of mine. Please be respectful.
 			 The user here was created and granted permissions for all IPs so there should be no problem in connecting. If you do have one, let me know ASAP.
 			
 			 - Michael Edwards
-			 */
+		*/
 
+		/// <summary>
+		/// Constructor, creates a connection to the database with our project user.
+		/// </summary>
+		public DBAccess() {
 			server = "71.87.195.218";
 			database = "BIKE_SHOP";
 			uid = "BIKE_SHOP";
@@ -39,8 +40,12 @@ namespace SQLServer_Setup {
 			String connectionString;
 			connectionString = $"datasource={server}; Database={database}; uid={uid}; pwd={password}; AllowLoadLocalInfile=true;";
 			connection = new MySqlConnection(connectionString);
-
 		}
+
+		/// <summary>
+		/// Opens the connection to the server
+		/// </summary>
+		/// <returns>true if connection passed, false if it failed.</returns>
 		public bool OpenConnection() {
 			try {
 				connection.Open();
@@ -59,6 +64,11 @@ namespace SQLServer_Setup {
 				return false;
 			}
 		}
+
+		/// <summary>
+		/// Closes the connection.
+		/// </summary>
+		/// <returns>True if close passed, false if failed.</returns>
 		public bool CloseConnection() {
 			try {
 				connection.Close();
@@ -69,6 +79,10 @@ namespace SQLServer_Setup {
 			}
 		}
 
+		/// <summary>
+		/// Allows the database to run an external script in the solution "script" folder.
+		/// </summary>
+		/// <param name="script">The file name of the script to be ran.</param>
 		public void RunScript(String script) {
 			String scriptText = File.ReadAllText($"..\\..\\Scripts\\{script}");
 			try {
@@ -82,6 +96,11 @@ namespace SQLServer_Setup {
 			}
 		}
 
+		/// <summary>
+		/// Gets info for files in the specified path.
+		/// </summary>
+		/// <param name="path">The path to be collected from.</param>
+		/// <returns>An array of FileInfo objects containing the files.</returns>
 		public FileInfo[] GetFileInfo(String path) {
 			String[] fileNames = Directory.GetFiles(path);
 			FileInfo[] retFiles = new FileInfo[fileNames.Length];
@@ -90,31 +109,18 @@ namespace SQLServer_Setup {
 			}
 			return retFiles;
 		}
-
-		public List<String> GetFileData(String file) {
-			List<String> data = new List<String>();
-			String[] text = File.ReadAllText(file).Split('\n');
-			foreach(String line in text) {
-				data.Add(line);
-			}
-			return data;
-		}
-
+		
+		/// <summary>
+		/// Loads all data from the CSV files in the CSV solution folder to the database, assuming the database is set up for those files.
+		/// </summary>
 		public void LoadData() {
 			FileInfo[] files = GetFileInfo(@"..\..\CSV");
 			MySqlCommand cmd = new MySqlCommand();
-			List<String> fileData;
 			String tableName;
-			String tableFields = "";
-			String[] currObject;
-			String values = "";
-			String path = "";
 			if(OpenConnection()) {
 				cmd.Connection = connection;
 				foreach(FileInfo file in files) {
-					fileData = GetFileData(file.FullName);
 					tableName = file.Name.Replace(@"_DATA_TABLE.csv", "").Replace("\"", "");
-					tableFields = fileData[0].Trim().Replace("\"", "").Replace("'", "");
 					cmd.CommandText = "START TRANSACTION;";
 					cmd.ExecuteNonQuery();
 					try {
@@ -137,12 +143,9 @@ namespace SQLServer_Setup {
 			}
 		}
 
-		static void PrintArray(String[] arr) {
-			foreach(String i in arr) {
-				Console.Write($"{i} ");
-			}
-		}
-
+		/// <summary>
+		/// Drops all tables from the project database.
+		/// </summary>
 		public void DropAllTables() {
 			List<String[]> tableNames = Query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'BIKE_SHOP'");
 			MySqlCommand cmd = new MySqlCommand();
@@ -166,7 +169,11 @@ namespace SQLServer_Setup {
 			}
 		}
 
-		// This is for general queries, probably going to use something like this mostly
+		/// <summary>
+		/// General query execution, pass in the entire query.
+		/// </summary>
+		/// <param name="query">The query to be executed.</param>
+		/// <returns>A list of all of the rows returned by the query.</returns>
 		public List<String[]> Query(String query) {
 			//Create a list to store the result
 			List<string[]> list = new List<string[]>();
@@ -200,6 +207,9 @@ namespace SQLServer_Setup {
 			}
 		}
 
+		/// <summary>
+		/// Closes the connection, gets called when using statements close.
+		/// </summary>
 		public void Dispose() {
 			CloseConnection();
 		}
