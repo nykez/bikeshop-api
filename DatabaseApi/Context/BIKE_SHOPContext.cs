@@ -46,14 +46,6 @@ namespace DatabaseApi
         public virtual DbSet<Tubematerial> Tubematerial { get; set; }
         public virtual DbSet<Workarea> Workarea { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseMySQL("server=71.87.195.218;User Id=BIKE_SHOP;database=BIKE_SHOP;password=TeamADatabase1!");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Bicycle>(entity =>
