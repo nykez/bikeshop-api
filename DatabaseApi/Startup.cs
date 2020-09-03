@@ -27,7 +27,7 @@ namespace DatabaseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ModelContext>(options => options.UseOracle("User Id=bike_shop;Password=root_password;Data Source=192.168.0.142:1521/xe;"));
+            services.AddDbContext<ModelContext>(options => options.UseOracle("User Id=BIKE_SHOP;Password=TeamADatabase1!;Data Source=71.87.195.218;"));
             services.AddControllers();
         }
 
