@@ -31,7 +31,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBike(int id)
         {
-            var bikeToReturn = _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
+            var bikeToReturn = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
 
             if (bikeToReturn == null)
             {
