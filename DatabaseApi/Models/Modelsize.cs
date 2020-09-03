@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Modelsize
     {
         public string Modeltype { get; set; }
-        public decimal? Msize { get; set; }
-        public decimal? Toptube { get; set; }
-        public decimal? Chainstay { get; set; }
-        public decimal? Totallength { get; set; }
-        public decimal? Groundclearance { get; set; }
-        public decimal? Headtubeangle { get; set; }
-        public decimal? Seattubeangle { get; set; }
+        public int Msize { get; set; }
+        public int? Toptube { get; set; }
+        public int? Chainstay { get; set; }
+        public int? Totallength { get; set; }
+        public int? Groundclearance { get; set; }
+        public int? Headtubeangle { get; set; }
+        public int? Seattubeangle { get; set; }
+
+        public virtual Modeltype ModeltypeNavigation { get; set; }
     }
 }

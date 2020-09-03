@@ -1,18 +1,16 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Oracle.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using DatabaseApi.Models;
 
-namespace DatabaseApi.Context
+namespace DatabaseApi
 {
-    public partial class ModelContext : DbContext
+    public partial class BIKE_SHOP_Context : DbContext
     {
-        public ModelContext()
+        public BIKE_SHOP_Context()
         {
         }
 
-        public ModelContext(DbContextOptions<ModelContext> options)
+        public BIKE_SHOP_Context(DbContextOptions<BIKE_SHOP_Context> options)
             : base(options)
         {
         }
@@ -52,34 +50,50 @@ namespace DatabaseApi.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseOracle("User Id=bike_shop;Password=root_password;Data Source=192.168.0.142:1521/xe;");
+                optionsBuilder.UseMySQL("server=71.87.195.218;User Id=BIKE_SHOP;database=BIKE_SHOP;password=TeamADatabase1!");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:DefaultSchema", "BIKE_SHOP");
-
             modelBuilder.Entity<Bicycle>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Serialnumber)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("BICYCLE");
+
+                entity.HasIndex(e => e.Customerid)
+                    .HasName("FK_BIKECUSTOMER");
+
+                entity.HasIndex(e => e.Employeeid)
+                    .HasName("FK_BIKEEMPLOYEE");
+
+                entity.HasIndex(e => e.Letterstyleid)
+                    .HasName("FK_BIKELETTER");
+
+                entity.HasIndex(e => e.Modeltype)
+                    .HasName("FK_BIKEMODELTYPE");
+
+                entity.HasIndex(e => e.Paintid)
+                    .HasName("FK_BIKEPAINT");
 
                 entity.HasIndex(e => e.Serialnumber)
                     .HasName("PK_BICYCLE")
                     .IsUnique();
 
+                entity.HasIndex(e => e.Storeid)
+                    .HasName("FK_BIKERETAIL");
+
+                entity.Property(e => e.Serialnumber).HasColumnName("SERIALNUMBER");
+
                 entity.Property(e => e.Chainstay)
                     .HasColumnName("CHAINSTAY")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Componentlist)
                     .HasColumnName("COMPONENTLIST")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Construction)
                     .HasColumnName("CONSTRUCTION")
@@ -89,8 +103,7 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Customerid)
                     .HasColumnName("CUSTOMERID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Customname)
                     .HasColumnName("CUSTOMNAME")
@@ -99,28 +112,23 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Employeeid)
                     .HasColumnName("EMPLOYEEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Frameassembler)
                     .HasColumnName("FRAMEASSEMBLER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Frameprice)
                     .HasColumnName("FRAMEPRICE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Framesize)
                     .HasColumnName("FRAMESIZE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Headtubeangle)
                     .HasColumnName("HEADTUBEANGLE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Letterstyleid)
                     .HasColumnName("LETTERSTYLEID")
@@ -129,8 +137,7 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Listprice)
                     .HasColumnName("LISTPRICE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Modeltype)
                     .HasColumnName("MODELTYPE")
@@ -139,22 +146,19 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Orderdate)
                     .HasColumnName("ORDERDATE")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Painter)
                     .HasColumnName("PAINTER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Paintid)
                     .HasColumnName("PAINTID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Saleprice)
                     .HasColumnName("SALEPRICE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Salestate)
                     .HasColumnName("SALESTATE")
@@ -163,103 +167,134 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Salestax)
                     .HasColumnName("SALESTAX")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Seattubeangle)
                     .HasColumnName("SEATTUBEANGLE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Serialnumber)
-                    .HasColumnName("SERIALNUMBER")
-                    .HasColumnType("NUMBER(38)");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Shipdate)
                     .HasColumnName("SHIPDATE")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Shipemployee)
                     .HasColumnName("SHIPEMPLOYEE")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Shipprice)
                     .HasColumnName("SHIPPRICE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Startdate)
                     .HasColumnName("STARTDATE")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Storeid)
                     .HasColumnName("STOREID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Toptube)
                     .HasColumnName("TOPTUBE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Waterbottlebrazeons)
                     .HasColumnName("WATERBOTTLEBRAZEONS")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("4");
+                    .HasDefaultValueSql("'4'");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Bicycle)
+                    .HasForeignKey(d => d.Customerid)
+                    .HasConstraintName("FK_BIKECUSTOMER");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Bicycle)
+                    .HasForeignKey(d => d.Employeeid)
+                    .HasConstraintName("FK_BIKEEMPLOYEE");
+
+                entity.HasOne(d => d.Letterstyle)
+                    .WithMany(p => p.Bicycle)
+                    .HasForeignKey(d => d.Letterstyleid)
+                    .HasConstraintName("FK_BIKELETTER");
+
+                entity.HasOne(d => d.ModeltypeNavigation)
+                    .WithMany(p => p.Bicycle)
+                    .HasForeignKey(d => d.Modeltype)
+                    .HasConstraintName("FK_BIKEMODELTYPE");
+
+                entity.HasOne(d => d.Paint)
+                    .WithMany(p => p.Bicycle)
+                    .HasForeignKey(d => d.Paintid)
+                    .HasConstraintName("FK_BIKEPAINT");
+
+                entity.HasOne(d => d.Store)
+                    .WithMany(p => p.Bicycle)
+                    .HasForeignKey(d => d.Storeid)
+                    .HasConstraintName("FK_BIKERETAIL");
             });
 
             modelBuilder.Entity<Bicycletubeusage>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Serialnumber, e.Tubeid })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("BICYCLETUBEUSAGE");
+
+                entity.HasIndex(e => e.Tubeid)
+                    .HasName("FK_REFERENCE27");
 
                 entity.HasIndex(e => new { e.Serialnumber, e.Tubeid })
                     .HasName("PK_BICYCLETUBEUSAGE")
                     .IsUnique();
 
+                entity.Property(e => e.Serialnumber).HasColumnName("SERIALNUMBER");
+
+                entity.Property(e => e.Tubeid).HasColumnName("TUBEID");
+
                 entity.Property(e => e.Quantity)
                     .HasColumnName("QUANTITY")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
-                entity.Property(e => e.Serialnumber)
-                    .HasColumnName("SERIALNUMBER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                entity.HasOne(d => d.SerialnumberNavigation)
+                    .WithMany(p => p.Bicycletubeusage)
+                    .HasForeignKey(d => d.Serialnumber)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE26");
 
-                entity.Property(e => e.Tubeid)
-                    .HasColumnName("TUBEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                entity.HasOne(d => d.Tube)
+                    .WithMany(p => p.Bicycletubeusage)
+                    .HasForeignKey(d => d.Tubeid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE27");
             });
 
             modelBuilder.Entity<Bikeparts>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Serialnumber, e.Componentid })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("BIKEPARTS");
+
+                entity.HasIndex(e => e.Componentid)
+                    .HasName("FK_REFERENCE5");
+
+                entity.HasIndex(e => e.Employeeid)
+                    .HasName("FK_REFERENCE4");
 
                 entity.HasIndex(e => new { e.Serialnumber, e.Componentid })
                     .HasName("PK_BIKEPARTS")
                     .IsUnique();
 
-                entity.Property(e => e.Componentid)
-                    .HasColumnName("COMPONENTID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                entity.Property(e => e.Serialnumber).HasColumnName("SERIALNUMBER");
+
+                entity.Property(e => e.Componentid).HasColumnName("COMPONENTID");
 
                 entity.Property(e => e.Dateinstalled)
                     .HasColumnName("DATEINSTALLED")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Employeeid)
                     .HasColumnName("EMPLOYEEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Location)
                     .HasColumnName("LOCATION")
@@ -268,61 +303,80 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Quantity)
                     .HasColumnName("QUANTITY")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Serialnumber)
-                    .HasColumnName("SERIALNUMBER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Substituteid)
                     .HasColumnName("SUBSTITUTEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
+
+                entity.HasOne(d => d.Component)
+                    .WithMany(p => p.Bikeparts)
+                    .HasForeignKey(d => d.Componentid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE5");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Bikeparts)
+                    .HasForeignKey(d => d.Employeeid)
+                    .HasConstraintName("FK_REFERENCE4");
+
+                entity.HasOne(d => d.SerialnumberNavigation)
+                    .WithMany(p => p.Bikeparts)
+                    .HasForeignKey(d => d.Serialnumber)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE24");
             });
 
             modelBuilder.Entity<Biketubes>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Serialnumber, e.Tubename })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("BIKETUBES");
+
+                entity.HasIndex(e => e.Tubeid)
+                    .HasName("FK_TUBEMATERIALBIKETUBES");
 
                 entity.HasIndex(e => new { e.Serialnumber, e.Tubename })
                     .HasName("PK_BIKETUBES")
                     .IsUnique();
 
-                entity.Property(e => e.Length)
-                    .HasColumnName("LENGTH")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
-
-                entity.Property(e => e.Serialnumber)
-                    .HasColumnName("SERIALNUMBER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Tubeid)
-                    .HasColumnName("TUBEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                entity.Property(e => e.Serialnumber).HasColumnName("SERIALNUMBER");
 
                 entity.Property(e => e.Tubename)
                     .HasColumnName("TUBENAME")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Length)
+                    .HasColumnName("LENGTH")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Tubeid)
+                    .HasColumnName("TUBEID")
+                    .HasDefaultValueSql("'0'");
+
+                entity.HasOne(d => d.SerialnumberNavigation)
+                    .WithMany(p => p.Biketubes)
+                    .HasForeignKey(d => d.Serialnumber)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE6");
+
+                entity.HasOne(d => d.Tube)
+                    .WithMany(p => p.Biketubes)
+                    .HasForeignKey(d => d.Tubeid)
+                    .HasConstraintName("FK_TUBEMATERIALBIKETUBES");
             });
 
             modelBuilder.Entity<City>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("CITY");
 
                 entity.HasIndex(e => e.Cityid)
                     .HasName("PK_CITY")
                     .IsUnique();
+
+                entity.Property(e => e.Cityid).HasColumnName("CITYID");
 
                 entity.Property(e => e.Areacode)
                     .HasColumnName("AREACODE")
@@ -334,10 +388,6 @@ namespace DatabaseApi.Context
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Cityid)
-                    .HasColumnName("CITYID")
-                    .HasColumnType("NUMBER(38)");
-
                 entity.Property(e => e.Country)
                     .HasColumnName("COUNTRY")
                     .HasMaxLength(50)
@@ -345,29 +395,23 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Latitude)
                     .HasColumnName("LATITUDE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Longitude)
                     .HasColumnName("LONGITUDE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Population1980)
                     .HasColumnName("POPULATION1980")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Population1990)
                     .HasColumnName("POPULATION1990")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Populationcdf)
                     .HasColumnName("POPULATIONCDF")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.State)
                     .HasColumnName("STATE")
@@ -382,7 +426,8 @@ namespace DatabaseApi.Context
 
             modelBuilder.Entity<Commonsizes>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Modeltype, e.Framesize })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("COMMONSIZES");
 
@@ -390,82 +435,70 @@ namespace DatabaseApi.Context
                     .HasName("PK_COMMONSIZES")
                     .IsUnique();
 
-                entity.Property(e => e.Framesize)
-                    .HasColumnName("FRAMESIZE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
-
                 entity.Property(e => e.Modeltype)
                     .HasColumnName("MODELTYPE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Framesize).HasColumnName("FRAMESIZE");
             });
 
             modelBuilder.Entity<Component>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("COMPONENT");
+
+                entity.HasIndex(e => e.Category)
+                    .HasName("FK_REFERENCE");
 
                 entity.HasIndex(e => e.Componentid)
                     .HasName("PK_COMPONENT")
                     .IsUnique();
+
+                entity.HasIndex(e => e.Manufacturerid)
+                    .HasName("FK_REFERENCE16");
+
+                entity.Property(e => e.Componentid).HasColumnName("COMPONENTID");
 
                 entity.Property(e => e.Category)
                     .HasColumnName("CATEGORY")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Componentid)
-                    .HasColumnName("COMPONENTID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
-
                 entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Endyear)
-                    .HasColumnName("ENDYEAR")
-                    .HasColumnType("NUMBER(38)");
+                entity.Property(e => e.Endyear).HasColumnName("ENDYEAR");
 
                 entity.Property(e => e.Estimatedcost)
                     .HasColumnName("ESTIMATEDCOST")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Height)
                     .HasColumnName("HEIGHT")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Length)
                     .HasColumnName("LENGTH")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Listprice)
                     .HasColumnName("LISTPRICE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Manufacturerid)
                     .HasColumnName("MANUFACTURERID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
-                entity.Property(e => e.Productnumber)
-                    .HasColumnName("PRODUCTNUMBER")
+                entity.Property(e => e.Productint)
+                    .HasColumnName("PRODUCTINT")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Quantityonhand)
                     .HasColumnName("QUANTITYONHAND")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"10
-   ");
+                    .HasDefaultValueSql("'10'");
 
                 entity.Property(e => e.Road)
                     .HasColumnName("ROAD")
@@ -474,22 +507,29 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Weight)
                     .HasColumnName("WEIGHT")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Width)
                     .HasColumnName("WIDTH")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
-                entity.Property(e => e.Year)
-                    .HasColumnName("YEAR")
-                    .HasColumnType("NUMBER(38)");
+                entity.Property(e => e.Year).HasColumnName("YEAR");
+
+                entity.HasOne(d => d.CategoryNavigation)
+                    .WithMany(p => p.Component)
+                    .HasForeignKey(d => d.Category)
+                    .HasConstraintName("FK_REFERENCE");
+
+                entity.HasOne(d => d.Manufacturer)
+                    .WithMany(p => p.Component)
+                    .HasForeignKey(d => d.Manufacturerid)
+                    .HasConstraintName("FK_REFERENCE16");
             });
 
             modelBuilder.Entity<Componentname>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Componentname1)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("COMPONENTNAME");
 
@@ -497,15 +537,14 @@ namespace DatabaseApi.Context
                     .HasName("PK_COMPONENTNAME")
                     .IsUnique();
 
-                entity.Property(e => e.Assemblyorder)
-                    .HasColumnName("ASSEMBLYORDER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
-
                 entity.Property(e => e.Componentname1)
                     .HasColumnName("COMPONENTNAME")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Assemblyorder)
+                    .HasColumnName("ASSEMBLYORDER")
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
@@ -515,13 +554,16 @@ namespace DatabaseApi.Context
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("CUSTOMER");
+
+                entity.HasIndex(e => e.Cityid)
+                    .HasName("FK_CITYCUSTOMER");
 
                 entity.HasIndex(e => e.Customerid)
                     .HasName("PK_CUSTOMER")
                     .IsUnique();
+
+                entity.Property(e => e.Customerid).HasColumnName("CUSTOMERID");
 
                 entity.Property(e => e.Address)
                     .HasColumnName("ADDRESS")
@@ -530,18 +572,11 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Balancedue)
                     .HasColumnName("BALANCEDUE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Cityid)
                     .HasColumnName("CITYID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Customerid)
-                    .HasColumnName("CUSTOMERID")
-                    .HasColumnType("NUMBER(38)");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Firstname)
                     .HasColumnName("FIRSTNAME")
@@ -562,11 +597,17 @@ namespace DatabaseApi.Context
                     .HasColumnName("ZIPCODE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Customer)
+                    .HasForeignKey(d => d.Cityid)
+                    .HasConstraintName("FK_CITYCUSTOMER");
             });
 
             modelBuilder.Entity<Customertransaction>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Customerid, e.Transactiondate })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("CUSTOMERTRANSACTION");
 
@@ -574,15 +615,15 @@ namespace DatabaseApi.Context
                     .HasName("PK_CUSTOMERTRANSACTION")
                     .IsUnique();
 
+                entity.Property(e => e.Customerid).HasColumnName("CUSTOMERID");
+
+                entity.Property(e => e.Transactiondate)
+                    .HasColumnName("TRANSACTIONDATE")
+                    .HasColumnType("date");
+
                 entity.Property(e => e.Amount)
                     .HasColumnName("AMOUNT")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Customerid)
-                    .HasColumnName("CUSTOMERID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
@@ -591,29 +632,31 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Employeeid)
                     .HasColumnName("EMPLOYEEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Reference)
                     .HasColumnName("REFERENCE")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
-                entity.Property(e => e.Transactiondate)
-                    .HasColumnName("TRANSACTIONDATE")
-                    .HasColumnType("DATE");
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Customertransaction)
+                    .HasForeignKey(d => d.Customerid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE18");
             });
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("EMPLOYEE");
+
+                entity.HasIndex(e => e.Cityid)
+                    .HasName("FK_CITYEMPLOYEE");
 
                 entity.HasIndex(e => e.Employeeid)
                     .HasName("PK_EMPLOYEE")
                     .IsUnique();
+
+                entity.Property(e => e.Employeeid).HasColumnName("EMPLOYEEID");
 
                 entity.Property(e => e.Address)
                     .HasColumnName("ADDRESS")
@@ -622,26 +665,19 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Cityid)
                     .HasColumnName("CITYID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Currentmanager)
                     .HasColumnName("CURRENTMANAGER")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Datehired)
                     .HasColumnName("DATEHIRED")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Datereleased)
                     .HasColumnName("DATERELEASED")
-                    .HasColumnType("DATE");
-
-                entity.Property(e => e.Employeeid)
-                    .HasColumnName("EMPLOYEEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Firstname)
                     .HasColumnName("FIRSTNAME")
@@ -660,13 +696,11 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Salary)
                     .HasColumnName("SALARY")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Salarygrade)
                     .HasColumnName("SALARYGRADE")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Taxpayerid)
                     .HasColumnName("TAXPAYERID")
@@ -687,33 +721,48 @@ namespace DatabaseApi.Context
                     .HasColumnName("ZIPCODE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Employee)
+                    .HasForeignKey(d => d.Cityid)
+                    .HasConstraintName("FK_CITYEMPLOYEE");
             });
 
             modelBuilder.Entity<Groupcomponents>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Groupid, e.Componentid })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("GROUPCOMPONENTS");
+
+                entity.HasIndex(e => e.Componentid)
+                    .HasName("FK_REFERENCE14");
 
                 entity.HasIndex(e => new { e.Groupid, e.Componentid })
                     .HasName("PK_GROUPCOMPONENTS")
                     .IsUnique();
 
-                entity.Property(e => e.Componentid)
-                    .HasColumnName("COMPONENTID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql(@"0
-   ");
+                entity.Property(e => e.Groupid).HasColumnName("GROUPID");
 
-                entity.Property(e => e.Groupid)
-                    .HasColumnName("GROUPID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                entity.Property(e => e.Componentid).HasColumnName("COMPONENTID");
+
+                entity.HasOne(d => d.Component)
+                    .WithMany(p => p.Groupcomponents)
+                    .HasForeignKey(d => d.Componentid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE14");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.Groupcomponents)
+                    .HasForeignKey(d => d.Groupid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE15");
             });
 
             modelBuilder.Entity<Groupo>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Componentgroupid)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("GROUPO");
 
@@ -721,36 +770,29 @@ namespace DatabaseApi.Context
                     .HasName("PK_GROUPO")
                     .IsUnique();
 
+                entity.Property(e => e.Componentgroupid).HasColumnName("COMPONENTGROUPID");
+
                 entity.Property(e => e.Biketype)
                     .HasColumnName("BIKETYPE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Componentgroupid)
-                    .HasColumnName("COMPONENTGROUPID")
-                    .HasColumnType("NUMBER(38)");
-
-                entity.Property(e => e.Endyear)
-                    .HasColumnName("ENDYEAR")
-                    .HasColumnType("NUMBER(38)");
+                entity.Property(e => e.Endyear).HasColumnName("ENDYEAR");
 
                 entity.Property(e => e.Groupname)
                     .HasColumnName("GROUPNAME")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Weight)
-                    .HasColumnName("WEIGHT")
-                    .HasColumnType("NUMBER(15,4)");
+                entity.Property(e => e.Weight).HasColumnName("WEIGHT");
 
-                entity.Property(e => e.Year)
-                    .HasColumnName("YEAR")
-                    .HasColumnType("NUMBER(38)");
+                entity.Property(e => e.Year).HasColumnName("YEAR");
             });
 
             modelBuilder.Entity<Letterstyle>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Letterstyle1)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("LETTERSTYLE");
 
@@ -758,26 +800,29 @@ namespace DatabaseApi.Context
                     .HasName("PK_LETTERSTYLE")
                     .IsUnique();
 
-                entity.Property(e => e.Description)
-                    .HasColumnName("DESCRIPTION")
+                entity.Property(e => e.Letterstyle1)
+                    .HasColumnName("LETTERSTYLE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Letterstyle1)
-                    .HasColumnName("LETTERSTYLE")
+                entity.Property(e => e.Description)
+                    .HasColumnName("DESCRIPTION")
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
             modelBuilder.Entity<Manufacturer>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("MANUFACTURER");
+
+                entity.HasIndex(e => e.Cityid)
+                    .HasName("FK_CITYMANUFACTURER");
 
                 entity.HasIndex(e => e.Manufacturerid)
                     .HasName("PK_MANUFACTURER")
                     .IsUnique();
+
+                entity.Property(e => e.Manufacturerid).HasColumnName("MANUFACTURERID");
 
                 entity.Property(e => e.Address)
                     .HasColumnName("ADDRESS")
@@ -786,23 +831,16 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Balancedue)
                     .HasColumnName("BALANCEDUE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Cityid)
                     .HasColumnName("CITYID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Contactname)
                     .HasColumnName("CONTACTNAME")
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Manufacturerid)
-                    .HasColumnName("MANUFACTURERID")
-                    .HasColumnType("NUMBER(38)");
 
                 entity.Property(e => e.Manufacturername)
                     .HasColumnName("MANUFACTURERNAME")
@@ -818,11 +856,17 @@ namespace DatabaseApi.Context
                     .HasColumnName("ZIPCODE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Manufacturer)
+                    .HasForeignKey(d => d.Cityid)
+                    .HasConstraintName("FK_CITYMANUFACTURER");
             });
 
             modelBuilder.Entity<Manufacturertransaction>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Manufacturerid, e.Transactiondate, e.Reference })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("MANUFACTURERTRANSACTION");
 
@@ -830,10 +874,17 @@ namespace DatabaseApi.Context
                     .HasName("PK_MANUFTRANSACTION")
                     .IsUnique();
 
+                entity.Property(e => e.Manufacturerid).HasColumnName("MANUFACTURERID");
+
+                entity.Property(e => e.Transactiondate)
+                    .HasColumnName("TRANSACTIONDATE")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.Reference).HasColumnName("REFERENCE");
+
                 entity.Property(e => e.Amount)
                     .HasColumnName("AMOUNT")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
@@ -842,28 +893,19 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Employeeid)
                     .HasColumnName("EMPLOYEEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
-                entity.Property(e => e.Manufacturerid)
-                    .HasColumnName("MANUFACTURERID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Reference)
-                    .HasColumnName("REFERENCE")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql(@"0
-   ");
-
-                entity.Property(e => e.Transactiondate)
-                    .HasColumnName("TRANSACTIONDATE")
-                    .HasColumnType("DATE");
+                entity.HasOne(d => d.Manufacturer)
+                    .WithMany(p => p.Manufacturertransaction)
+                    .HasForeignKey(d => d.Manufacturerid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MANUFTRANS");
             });
 
             modelBuilder.Entity<Modelsize>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Modeltype, e.Msize })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("MODELSIZE");
 
@@ -871,51 +913,48 @@ namespace DatabaseApi.Context
                     .HasName("PK_MODELSIZE")
                     .IsUnique();
 
-                entity.Property(e => e.Chainstay)
-                    .HasColumnName("CHAINSTAY")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Groundclearance)
-                    .HasColumnName("GROUNDCLEARANCE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Headtubeangle)
-                    .HasColumnName("HEADTUBEANGLE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
-
                 entity.Property(e => e.Modeltype)
                     .HasColumnName("MODELTYPE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Msize)
-                    .HasColumnName("MSIZE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                entity.Property(e => e.Msize).HasColumnName("MSIZE");
+
+                entity.Property(e => e.Chainstay)
+                    .HasColumnName("CHAINSTAY")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Groundclearance)
+                    .HasColumnName("GROUNDCLEARANCE")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.Headtubeangle)
+                    .HasColumnName("HEADTUBEANGLE")
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Seattubeangle)
                     .HasColumnName("SEATTUBEANGLE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Toptube)
                     .HasColumnName("TOPTUBE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Totallength)
                     .HasColumnName("TOTALLENGTH")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
+
+                entity.HasOne(d => d.ModeltypeNavigation)
+                    .WithMany(p => p.Modelsize)
+                    .HasForeignKey(d => d.Modeltype)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MODELTYPE");
             });
 
             modelBuilder.Entity<Modeltype>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Modeltype1)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("MODELTYPE");
 
@@ -923,30 +962,28 @@ namespace DatabaseApi.Context
                     .HasName("PK_MODELTYPE")
                     .IsUnique();
 
-                entity.Property(e => e.Componentid)
-                    .HasColumnName("COMPONENTID")
-                    .HasColumnType("NUMBER(38)");
-
-                entity.Property(e => e.Description)
-                    .HasColumnName("DESCRIPTION")
+                entity.Property(e => e.Modeltype1)
+                    .HasColumnName("MODELTYPE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Modeltype1)
-                    .HasColumnName("MODELTYPE")
+                entity.Property(e => e.Componentid).HasColumnName("COMPONENTID");
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("DESCRIPTION")
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
             modelBuilder.Entity<Paint>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("PAINT");
 
                 entity.HasIndex(e => e.Paintid)
                     .HasName("PK_PAINT")
                     .IsUnique();
+
+                entity.Property(e => e.Paintid).HasColumnName("PAINTID");
 
                 entity.Property(e => e.Colorlist)
                     .HasColumnName("COLORLIST")
@@ -966,20 +1003,17 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Datediscontinued)
                     .HasColumnName("DATEDISCONTINUED")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Dateintroduced)
                     .HasColumnName("DATEINTRODUCED")
-                    .HasColumnType("DATE");
-
-                entity.Property(e => e.Paintid)
-                    .HasColumnName("PAINTID")
-                    .HasColumnType("NUMBER(38)");
+                    .HasColumnType("date");
             });
 
             modelBuilder.Entity<Preference>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Itemname)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("PREFERENCE");
 
@@ -987,126 +1021,145 @@ namespace DatabaseApi.Context
                     .HasName("PK_PREFERENCE")
                     .IsUnique();
 
+                entity.Property(e => e.Itemname)
+                    .HasColumnName("ITEMNAME")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Datechanged)
                     .HasColumnName("DATECHANGED")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Itemname)
-                    .HasColumnName("ITEMNAME")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Value)
                     .HasColumnName("VALUE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
             });
 
             modelBuilder.Entity<Purchaseitem>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.Purchaseid, e.Componentid })
+                    .HasName("PRIMARY");
 
                 entity.ToTable("PURCHASEITEM");
+
+                entity.HasIndex(e => e.Componentid)
+                    .HasName("FK_REFERENCE21");
 
                 entity.HasIndex(e => new { e.Purchaseid, e.Componentid })
                     .HasName("PK_PURCHASEITEM")
                     .IsUnique();
 
-                entity.Property(e => e.Componentid)
-                    .HasColumnName("COMPONENTID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                entity.Property(e => e.Purchaseid).HasColumnName("PURCHASEID");
+
+                entity.Property(e => e.Componentid).HasColumnName("COMPONENTID");
 
                 entity.Property(e => e.Pricepaid)
                     .HasColumnName("PRICEPAID")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Purchaseid)
-                    .HasColumnName("PURCHASEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Quantity)
                     .HasColumnName("QUANTITY")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Quantityreceived)
                     .HasColumnName("QUANTITYRECEIVED")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
+
+                entity.HasOne(d => d.Component)
+                    .WithMany(p => p.Purchaseitem)
+                    .HasForeignKey(d => d.Componentid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE21");
+
+                entity.HasOne(d => d.Purchase)
+                    .WithMany(p => p.Purchaseitem)
+                    .HasForeignKey(d => d.Purchaseid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REFERENCE20");
             });
 
             modelBuilder.Entity<Purchaseorder>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Purchaseid)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("PURCHASEORDER");
+
+                entity.HasIndex(e => e.Employeeid)
+                    .HasName("FK_REFERENCE23");
+
+                entity.HasIndex(e => e.Manufacturerid)
+                    .HasName("FK_REFERENCE22");
 
                 entity.HasIndex(e => e.Purchaseid)
                     .HasName("PK_PURCHASEORDER")
                     .IsUnique();
 
+                entity.Property(e => e.Purchaseid).HasColumnName("PURCHASEID");
+
                 entity.Property(e => e.Amountdue)
                     .HasColumnName("AMOUNTDUE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Discount)
                     .HasColumnName("DISCOUNT")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Employeeid)
                     .HasColumnName("EMPLOYEEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Manufacturerid)
                     .HasColumnName("MANUFACTURERID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Orderdate)
                     .HasColumnName("ORDERDATE")
-                    .HasColumnType("DATE");
-
-                entity.Property(e => e.Purchaseid)
-                    .HasColumnName("PURCHASEID")
-                    .HasColumnType("NUMBER(38)");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Receivedate)
                     .HasColumnName("RECEIVEDATE")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Shippingcost)
                     .HasColumnName("SHIPPINGCOST")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Totallist)
                     .HasColumnName("TOTALLIST")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Purchaseorder)
+                    .HasForeignKey(d => d.Employeeid)
+                    .HasConstraintName("FK_REFERENCE23");
+
+                entity.HasOne(d => d.Manufacturer)
+                    .WithMany(p => p.Purchaseorder)
+                    .HasForeignKey(d => d.Manufacturerid)
+                    .HasConstraintName("FK_REFERENCE22");
             });
 
             modelBuilder.Entity<Retailstore>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Storeid)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("RETAILSTORE");
+
+                entity.HasIndex(e => e.Cityid)
+                    .HasName("FK_CITYRETAILSTORE");
 
                 entity.HasIndex(e => e.Storeid)
                     .HasName("PK_RETAILSTORE")
                     .IsUnique();
+
+                entity.Property(e => e.Storeid).HasColumnName("STOREID");
 
                 entity.Property(e => e.Address)
                     .HasColumnName("ADDRESS")
@@ -1115,9 +1168,7 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Cityid)
                     .HasColumnName("CITYID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Contactfirstname)
                     .HasColumnName("CONTACTFIRSTNAME")
@@ -1134,10 +1185,6 @@ namespace DatabaseApi.Context
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Storeid)
-                    .HasColumnName("STOREID")
-                    .HasColumnType("NUMBER(38)");
-
                 entity.Property(e => e.Storename)
                     .HasColumnName("STORENAME")
                     .HasMaxLength(50)
@@ -1147,25 +1194,26 @@ namespace DatabaseApi.Context
                     .HasColumnName("ZIPCODE")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.City)
+                    .WithMany(p => p.Retailstore)
+                    .HasForeignKey(d => d.Cityid)
+                    .HasConstraintName("FK_CITYRETAILSTORE");
             });
 
             modelBuilder.Entity<Revisionhistory>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("REVISIONHISTORY");
 
                 entity.HasIndex(e => e.Id)
                     .HasName("PK_REVISIONHISTORY")
                     .IsUnique();
 
+                entity.Property(e => e.Id).HasColumnName("ID");
+
                 entity.Property(e => e.Changedate)
                     .HasColumnName("CHANGEDATE")
-                    .HasColumnType("DATE");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasColumnType("NUMBER(38)");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Name)
                     .HasColumnName("NAME")
@@ -1185,13 +1233,13 @@ namespace DatabaseApi.Context
 
             modelBuilder.Entity<Samplename>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("SAMPLENAME");
 
                 entity.HasIndex(e => e.Id)
                     .HasName("PK_SAMPLENAME")
                     .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Firstname)
                     .HasColumnName("FIRSTNAME")
@@ -1203,10 +1251,6 @@ namespace DatabaseApi.Context
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasColumnType("NUMBER(38)");
-
                 entity.Property(e => e.Lastname)
                     .HasColumnName("LASTNAME")
                     .HasMaxLength(50)
@@ -1215,27 +1259,24 @@ namespace DatabaseApi.Context
 
             modelBuilder.Entity<Samplestreet>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("SAMPLESTREET");
 
                 entity.HasIndex(e => e.Id)
                     .HasName("PK_SAMPLESTREET")
                     .IsUnique();
 
+                entity.Property(e => e.Id).HasColumnName("ID");
+
                 entity.Property(e => e.Baseaddress)
                     .HasColumnName("BASEADDRESS")
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasColumnType("NUMBER(38)");
             });
 
             modelBuilder.Entity<Statetaxrate>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.State)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("STATETAXRATE");
 
@@ -1250,14 +1291,13 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Taxrate)
                     .HasColumnName("TAXRATE")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
             });
 
             modelBuilder.Entity<Tempdatemade>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Datevalue)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("TEMPDATEMADE");
 
@@ -1267,18 +1307,17 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Datevalue)
                     .HasColumnName("DATEVALUE")
-                    .HasColumnType("DATE");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Madecount)
                     .HasColumnName("MADECOUNT")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql(@"0
-   ");
+                    .HasDefaultValueSql("'0'");
             });
 
             modelBuilder.Entity<Tubematerial>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Tubeid)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("TUBEMATERIAL");
 
@@ -1286,12 +1325,13 @@ namespace DatabaseApi.Context
                     .HasName("PK_TUBEMATERIAL")
                     .IsUnique();
 
+                entity.Property(e => e.Tubeid).HasColumnName("TUBEID");
+
                 entity.Property(e => e.Construction)
                     .HasColumnName("CONSTRUCTION")
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasDefaultValueSql(@"'Bonded'
-   ");
+                    .HasDefaultValueSql("'Bonded'");
 
                 entity.Property(e => e.Description)
                     .HasColumnName("DESCRIPTION")
@@ -1300,13 +1340,11 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Diameter)
                     .HasColumnName("DIAMETER")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Listprice)
                     .HasColumnName("LISTPRICE")
-                    .HasColumnType("NUMBER(38,4)")
-                    .HasDefaultValueSql("1");
+                    .HasDefaultValueSql("'1'");
 
                 entity.Property(e => e.Material)
                     .HasColumnName("MATERIAL")
@@ -1320,28 +1358,21 @@ namespace DatabaseApi.Context
 
                 entity.Property(e => e.Stiffness)
                     .HasColumnName("STIFFNESS")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Thickness)
                     .HasColumnName("THICKNESS")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
-
-                entity.Property(e => e.Tubeid)
-                    .HasColumnName("TUBEID")
-                    .HasColumnType("NUMBER(38)")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
 
                 entity.Property(e => e.Weight)
                     .HasColumnName("WEIGHT")
-                    .HasColumnType("NUMBER")
-                    .HasDefaultValueSql("0");
+                    .HasDefaultValueSql("'0'");
             });
 
             modelBuilder.Entity<Workarea>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Workarea1)
+                    .HasName("PRIMARY");
 
                 entity.ToTable("WORKAREA");
 
@@ -1349,13 +1380,13 @@ namespace DatabaseApi.Context
                     .HasName("PK_WORKAREA")
                     .IsUnique();
 
-                entity.Property(e => e.Description)
-                    .HasColumnName("DESCRIPTION")
+                entity.Property(e => e.Workarea1)
+                    .HasColumnName("WORKAREA")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Workarea1)
-                    .HasColumnName("WORKAREA")
+                entity.Property(e => e.Description)
+                    .HasColumnName("DESCRIPTION")
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });

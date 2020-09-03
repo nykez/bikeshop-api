@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Workarea
     {

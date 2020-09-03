@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Bikeparts
     {
-        public decimal? Serialnumber { get; set; }
-        public decimal? Componentid { get; set; }
-        public decimal? Substituteid { get; set; }
+        public int Serialnumber { get; set; }
+        public int Componentid { get; set; }
+        public int? Substituteid { get; set; }
         public string Location { get; set; }
-        public decimal? Quantity { get; set; }
+        public int? Quantity { get; set; }
         public DateTime? Dateinstalled { get; set; }
-        public decimal? Employeeid { get; set; }
+        public int? Employeeid { get; set; }
+
+        public virtual Component Component { get; set; }
+        public virtual Employee Employee { get; set; }
+        public virtual Bicycle SerialnumberNavigation { get; set; }
     }
 }

@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Manufacturertransaction
     {
-        public decimal? Manufacturerid { get; set; }
-        public DateTime? Transactiondate { get; set; }
-        public decimal? Employeeid { get; set; }
-        public decimal? Amount { get; set; }
+        public int Manufacturerid { get; set; }
+        public DateTime Transactiondate { get; set; }
+        public int? Employeeid { get; set; }
+        public int? Amount { get; set; }
         public string Description { get; set; }
-        public decimal? Reference { get; set; }
+        public int Reference { get; set; }
+
+        public virtual Manufacturer Manufacturer { get; set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Commonsizes
     {
         public string Modeltype { get; set; }
-        public decimal? Framesize { get; set; }
+        public int Framesize { get; set; }
     }
 }

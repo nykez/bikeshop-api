@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Tempdatemade
     {
-        public DateTime? Datevalue { get; set; }
-        public decimal? Madecount { get; set; }
+        public DateTime Datevalue { get; set; }
+        public int? Madecount { get; set; }
     }
 }

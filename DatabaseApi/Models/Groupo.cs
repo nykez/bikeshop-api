@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Groupo
     {
-        public decimal? Componentgroupid { get; set; }
+        public Groupo()
+        {
+            Groupcomponents = new HashSet<Groupcomponents>();
+        }
+
+        public int Componentgroupid { get; set; }
         public string Groupname { get; set; }
         public string Biketype { get; set; }
-        public decimal? Year { get; set; }
-        public decimal? Endyear { get; set; }
-        public decimal? Weight { get; set; }
+        public int? Year { get; set; }
+        public int? Endyear { get; set; }
+        public int? Weight { get; set; }
+
+        public virtual ICollection<Groupcomponents> Groupcomponents { get; set; }
     }
 }

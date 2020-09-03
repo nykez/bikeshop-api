@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Bicycletubeusage
     {
-        public decimal? Serialnumber { get; set; }
-        public decimal? Tubeid { get; set; }
-        public decimal? Quantity { get; set; }
+        public int Serialnumber { get; set; }
+        public int Tubeid { get; set; }
+        public int? Quantity { get; set; }
+
+        public virtual Bicycle SerialnumberNavigation { get; set; }
+        public virtual Tubematerial Tube { get; set; }
     }
 }

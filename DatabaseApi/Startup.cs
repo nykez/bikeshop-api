@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DatabaseApi.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +26,7 @@ namespace DatabaseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ModelContext>(options => options.UseOracle("User Id=BIKE_SHOP;Password=TeamADatabase1!;Data Source=71.87.195.218;"));
+            services.AddDbContext<BIKE_SHOP_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
         }
 

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Groupcomponents
     {
-        public decimal? Groupid { get; set; }
-        public decimal? Componentid { get; set; }
+        public int Groupid { get; set; }
+        public int Componentid { get; set; }
+
+        public virtual Component Component { get; set; }
+        public virtual Groupo Group { get; set; }
     }
 }

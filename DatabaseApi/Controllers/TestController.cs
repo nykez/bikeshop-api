@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DatabaseApi.Models;
-using DatabaseApi.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseApi.Controllers
@@ -14,9 +12,9 @@ namespace DatabaseApi.Controllers
     [Route("api/[controller]")]
     public class TestController : ControllerBase
     {
-        // inject our db
-        private readonly ModelContext _context;
-        public TestController(ModelContext context)
+        //inject our db
+        private readonly BIKE_SHOP_Context _context;
+        public TestController(BIKE_SHOP_Context context)
         {
             _context = context;
 

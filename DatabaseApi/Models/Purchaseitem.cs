@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DatabaseApi.Models
+namespace DatabaseApi
 {
     public partial class Purchaseitem
     {
-        public decimal? Purchaseid { get; set; }
-        public decimal? Componentid { get; set; }
-        public decimal? Pricepaid { get; set; }
-        public decimal? Quantity { get; set; }
-        public decimal? Quantityreceived { get; set; }
+        public int Purchaseid { get; set; }
+        public int Componentid { get; set; }
+        public int? Pricepaid { get; set; }
+        public int? Quantity { get; set; }
+        public int? Quantityreceived { get; set; }
+
+        public virtual Component Component { get; set; }
+        public virtual Purchaseorder Purchase { get; set; }
     }
 }
