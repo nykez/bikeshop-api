@@ -2,6 +2,7 @@ using System;
 
 namespace DatabaseApi
 {
+    //HI
     public class WeatherForecast
     {
         public DateTime Date { get; set; }
