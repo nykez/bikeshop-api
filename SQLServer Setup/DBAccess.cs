@@ -85,15 +85,20 @@ namespace SQLServer_Setup {
 		/// <param name="script">The file name of the script to be ran.</param>
 		public void RunScript(String script) {
 			String scriptText = File.ReadAllText($"..\\..\\Scripts\\{script}");
-			try {
+			MySqlCommand cmd = new MySqlCommand(scriptText);
+			cmd.CommandTimeout = 3600;
+			//try {
 				if(OpenConnection()) {
-					MySqlCommand cmd = new MySqlCommand(scriptText, connection);
+					cmd.Connection = connection;
 					cmd.ExecuteNonQuery();
 					CloseConnection();
 				}
-			} catch(Exception) {
-
-			}
+			/*} catch(MySqlException ex) {
+				Console.WriteLine(ex.InnerException);
+*//*				Console.WriteLine(ex.Number);
+				Console.WriteLine(ex.Message);*//*
+				Console.WriteLine(ex);
+			}*/
 		}
 
 		/// <summary>
@@ -125,7 +130,6 @@ namespace SQLServer_Setup {
 					cmd.ExecuteNonQuery();
 					try {
 						Console.WriteLine($"Inserting into {tableName}");
-						Console.WriteLine($"{file.FullName.Replace("\\", "/")}");
 						cmd.CommandText = $"LOAD DATA LOCAL INFILE '{file.FullName.Replace("\\", "/")}' INTO TABLE {tableName} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY \"'\" LINES TERMINATED BY '\n' IGNORE 1 ROWS  ";
 						cmd.ExecuteNonQuery();
 					} catch(MySqlException ex) {
