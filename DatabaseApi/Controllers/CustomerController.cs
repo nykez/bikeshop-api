@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi.Dtos;
+using AutoMapper;
 
 namespace DatabaseApi.Controllers
 {
@@ -15,8 +16,10 @@ namespace DatabaseApi.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly BikeShop_Context _context;
-        public CustomerController(BikeShop_Context context)
+        private readonly IMapper _mapper;
+        public CustomerController(BikeShop_Context context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -29,7 +32,7 @@ namespace DatabaseApi.Controllers
         {
             return Ok(await _context.Customer.ToListAsync());
         }
-        
+
         /// <summary>
         /// Returns a customer by their CustomerId
         /// </summary>
@@ -103,7 +106,15 @@ namespace DatabaseApi.Controllers
                 return BadRequest();
             }
 
-            return Ok(customer);
+            // map the customer model
+            // USES: automapper instead of handtyped
+            var newCustomer = _mapper.Map<Customer>(customer);
+
+            _context.Add(newCustomer);
+
+            await _context.SaveChangesAsync();
+ 
+            return Ok(newCustomer);
         }
     }
 }
