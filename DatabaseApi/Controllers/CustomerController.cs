@@ -95,7 +95,7 @@ namespace DatabaseApi.Controllers
         /// Creates a new customer
         /// </summary>
         /// <param name="customer"></param>
-        /// <returns></returns>
+        /// <returns>customer</returns>
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromForm] CustomerToCreate customer)
         {
@@ -115,6 +115,29 @@ namespace DatabaseApi.Controllers
             await _context.SaveChangesAsync();
  
             return Ok(newCustomer);
+        }
+
+        /// <summary>
+        /// Updates a existing customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToCreate customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes an existing customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
