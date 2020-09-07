@@ -137,7 +137,17 @@ namespace DatabaseApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            throw new NotImplementedException();
+            var customerToDelete = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
+
+            if (customerToDelete != null)
+            {
+                _context.Remove(customerToDelete);
+                return Ok(await _context.SaveChangesAsync());
+            }
+            else
+            {
+                return NoContent();
+            }
         }
     }
 }
