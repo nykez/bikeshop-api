@@ -1,6 +1,8 @@
 # Software Engineering II
+***
 
-### Documentation 
+## Documentation 
+***
 
 Documentation Url (once appliation is running) is: hostingUrl/swagger (Example: localhost:5001/swagger)
 
