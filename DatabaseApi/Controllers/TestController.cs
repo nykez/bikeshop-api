@@ -20,25 +20,31 @@ namespace DatabaseApi.Controllers
 
         }
 
-        // Route: api/test/
-        [HttpGet]
-        public async Task<IActionResult> GetAllBikes()
-        {
-            
-            return Ok(await _context.Bicycle.ToListAsync());
-        }
+		// Route: api/test/
+		[HttpGet]
+		public async Task<IActionResult> GetAllBikes() {
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBike(int id)
-        {
-            var bikeToReturn = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
+			return Ok(await _context.Bicycle.ToListAsync());
+		}
 
-            if (bikeToReturn == null)
-            {
-                return NotFound();
-            }
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetBike(int id) {
+			var bikeToReturn = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
 
-            return Ok(bikeToReturn);
-        }
-    }
+			if(bikeToReturn == null) {
+				return NotFound();
+			}
+
+			return Ok(bikeToReturn);
+		}
+
+		// https://localhost:44349/api/test/bycustid?custid=15
+		[HttpGet("bycustid")]
+		public async Task<IActionResult> GetBikeByCustID(int custID) {
+			var bikeToReturn = await _context.Bicycle.FirstOrDefaultAsync(b => b.Customerid == custID);
+			if(bikeToReturn == null) return NotFound();
+			return Ok(bikeToReturn);
+		}
+
+	}
 }
