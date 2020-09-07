@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-
+using DatabaseApi.Dtos;
 
 namespace DatabaseApi.Controllers
 {
@@ -83,6 +83,24 @@ namespace DatabaseApi.Controllers
             if (customer == null)
             {
                 return NoContent();
+            }
+
+            return Ok(customer);
+        }
+
+        /// <summary>
+        /// Creates a new customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomer([FromForm] CustomerToCreate customer)
+        {
+            // Missing parameters
+            // More info in response
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
             }
 
             return Ok(customer);
