@@ -14,8 +14,8 @@ namespace DatabaseApi.Controllers
     public class TestController : ControllerBase
     {
         //inject our db
-        private readonly BIKE_SHOP_Context _context;
-        public TestController(BIKE_SHOP_Context context)
+        private readonly BikeShop_Context _context;
+        public TestController(BikeShop_Context context)
         {
             _context = context;
 

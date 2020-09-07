@@ -32,6 +32,7 @@ namespace DatabaseApi
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 // Set the comments path for the Swagger JSON and UI.
+                // ENABLES xml comments to also be generated
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
