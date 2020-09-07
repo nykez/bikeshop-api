@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace DatabaseApi
 {
@@ -29,6 +30,7 @@ namespace DatabaseApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 // Set the comments path for the Swagger JSON and UI.
