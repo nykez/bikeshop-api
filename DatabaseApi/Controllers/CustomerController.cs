@@ -61,7 +61,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("zipcode/{zipcode}")]
         public async Task<IActionResult> GetByZipcode(string zipcode)
         {
-            var customer = await _context.Customer.FirstOrDefaultAsync(b => b.Zipcode == zipcode);
+            var customer = await _context.Customer.Where(c => c.Zipcode == zipcode).ToListAsync();
 
             if (customer == null)
             {
@@ -81,7 +81,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("city/{cityid}")]
         public async Task<IActionResult> GetByCityId(int cityid)
         {
-            var customer = await _context.Customer.FirstOrDefaultAsync(b => b.Cityid == cityid);
+            var customer = await _context.Customer.Where(b => b.Cityid == cityid).ToListAsync();
 
             if (customer == null)
             {
