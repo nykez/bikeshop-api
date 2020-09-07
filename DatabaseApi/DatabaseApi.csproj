@@ -5,7 +5,7 @@
   <ItemGroup>
     <Folder Include="Models\"/>
   </ItemGroup>
-  <ItemGroup>&#xD;
+  <ItemGroup>&#xD;&#xD;
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7"/>
@@ -17,5 +17,7 @@
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.80"/>
     <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.0-beta2"/>
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.21"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.5.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1"/>
   </ItemGroup>
 </Project>

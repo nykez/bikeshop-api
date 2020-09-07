@@ -28,6 +28,7 @@ namespace DatabaseApi
         {
             services.AddDbContext<BIKE_SHOP_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +38,13 @@ namespace DatabaseApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Website/Database API");
+            });
+
 
             app.UseHttpsRedirection();
 
