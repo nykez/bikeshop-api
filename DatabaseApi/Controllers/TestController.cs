@@ -21,7 +21,9 @@ namespace DatabaseApi.Controllers
 
         }
 
-		// Route: api/test/
+		/// <summary>
+		/// Returns all Bicycles
+		/// </summary>
 		[HttpGet]
 		public async Task<IActionResult> GetAllBikes() {
 
