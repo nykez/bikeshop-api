@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace DatabaseApi
 {
@@ -56,6 +57,11 @@ namespace DatabaseApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Website API");
             });
 
+            //Allow for forwarding with ngnix
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseHttpsRedirection();
 
