@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseApi.Controllers
 {
+	[Produces("application/json")]
     [ApiController]
     [Route("api/[controller]")]
     public class TestController : ControllerBase
