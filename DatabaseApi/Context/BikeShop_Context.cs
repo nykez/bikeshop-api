@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DatabaseApi
 {
-    public partial class BIKE_SHOP_Context : DbContext
+    public partial class BikeShop_Context : DbContext
     {
-        public BIKE_SHOP_Context()
+        public BikeShop_Context()
         {
         }
 
-        public BIKE_SHOP_Context(DbContextOptions<BIKE_SHOP_Context> options)
+        public BikeShop_Context(DbContextOptions<BikeShop_Context> options)
             : base(options)
         {
         }
