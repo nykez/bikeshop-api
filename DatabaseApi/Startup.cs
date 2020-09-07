@@ -51,7 +51,7 @@ namespace DatabaseApi
             //Route: hostingUrl/swagger
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Website/Database API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Website API");
             });
 
 
