@@ -112,6 +112,15 @@ namespace DatabaseApi.Controllers
 								expression = Expression.And(expression, Expression.Equal(prop, cons));
 								break;
 							}
+							
+						case "%3C": { //If the operator is lessthan
+									//Check for nullable columns
+								int? consInt = Int32.Parse(value);
+								cons = Expression.Constant(consInt);
+																				//Convernt Expressions to both be nullable
+                                expression = Expression.And(expression, Expression.LessThan(prop, Expression.Convert(cons, prop.Type)));
+								break;
+							}
 					}
 				}
 			}
