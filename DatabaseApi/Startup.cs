@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace DatabaseApi
 {
@@ -29,6 +31,7 @@ namespace DatabaseApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 // Set the comments path for the Swagger JSON and UI.
@@ -54,6 +57,11 @@ namespace DatabaseApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Website API");
             });
 
+            //Allow for forwarding with ngnix
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseHttpsRedirection();
 

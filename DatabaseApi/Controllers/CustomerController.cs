@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi.Dtos;
+using AutoMapper;
 
 namespace DatabaseApi.Controllers
 {
@@ -15,8 +16,10 @@ namespace DatabaseApi.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly BikeShop_Context _context;
-        public CustomerController(BikeShop_Context context)
+        private readonly IMapper _mapper;
+        public CustomerController(BikeShop_Context context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -29,7 +32,7 @@ namespace DatabaseApi.Controllers
         {
             return Ok(await _context.Customer.ToListAsync());
         }
-        
+
         /// <summary>
         /// Returns a customer by their CustomerId
         /// </summary>
@@ -58,7 +61,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("zipcode/{zipcode}")]
         public async Task<IActionResult> GetByZipcode(string zipcode)
         {
-            var customer = await _context.Customer.FirstOrDefaultAsync(b => b.Zipcode == zipcode);
+            var customer = await _context.Customer.Where(c => c.Zipcode == zipcode).ToListAsync();
 
             if (customer == null)
             {
@@ -78,7 +81,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("city/{cityid}")]
         public async Task<IActionResult> GetByCityId(int cityid)
         {
-            var customer = await _context.Customer.FirstOrDefaultAsync(b => b.Cityid == cityid);
+            var customer = await _context.Customer.Where(b => b.Cityid == cityid).ToListAsync();
 
             if (customer == null)
             {
@@ -92,7 +95,7 @@ namespace DatabaseApi.Controllers
         /// Creates a new customer
         /// </summary>
         /// <param name="customer"></param>
-        /// <returns></returns>
+        /// <returns>customer</returns>
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromForm] CustomerToCreate customer)
         {
@@ -103,7 +106,48 @@ namespace DatabaseApi.Controllers
                 return BadRequest();
             }
 
-            return Ok(customer);
+            // map the customer model
+            // USES: automapper instead of handtyped
+            var newCustomer = _mapper.Map<Customer>(customer);
+
+            _context.Add(newCustomer);
+
+            await _context.SaveChangesAsync();
+ 
+            return Ok(newCustomer);
+        }
+
+        /// <summary>
+        /// Updates a existing customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToCreate customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes an existing customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            var customerToDelete = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
+
+            if (customerToDelete != null)
+            {
+                _context.Remove(customerToDelete);
+                return Ok(await _context.SaveChangesAsync());
+            }
+            else
+            {
+                return NoContent();
+            }
         }
     }
 }
