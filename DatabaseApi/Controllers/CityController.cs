@@ -15,10 +15,14 @@ namespace DatabaseApi.Controllers {
 			_context = context;
 		}
 
+		/// <summary>
+		/// Returns all or requested cities
+		/// </summary>
+		/// <returns>A list of cities based on URL query</returns>
 		[HttpGet]
 		[HttpGet("q")]
 		public async Task<IActionResult> GetCities() {
-			var lambda = LambdaBuilder<City>.Builder(Request.QueryString.Value, typeof(City), "city");
+			var lambda = LambdaBuilder<City>.Builder(Request.QueryString.Value, "city");
 			if(lambda != null) {
 				return Ok(_context.City.Where(lambda));
 			}

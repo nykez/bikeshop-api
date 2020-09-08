@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Linq.Expressions;
-using static System.Linq.Expressions.LambdaExpression;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 
 namespace DatabaseApi {
+	/// <summary>
+	/// Builds a lambda function to allow CRUD operations to be implemented easily.
+	/// </summary>
+	/// <typeparam name="T">The type of the object currently being operated with.</typeparam>
 	public static class LambdaBuilder<T> {
-		public static Expression<Func<T, bool>> Builder(String queryString, Type type, String name) {
+		/// <summary>
+		/// Creates a lambda function based on the type and query passed in.
+		/// </summary>
+		/// <param name="queryString">Querystring from URL containing requested conditions.</param>
+		/// <param name="name">The name wished to represent the returned expression.</param>
+		/// <returns></returns>
+		public static Expression<Func<T, bool>> Builder(String queryString, String name) {
 			String[] selections = queryString.Replace("?", "").Split("&");
-			var parameters = Expression.Parameter(type, name);
-			Debug.WriteLine(parameters.Type);
+			var parameters = Expression.Parameter(typeof(T), name);
 			MemberExpression prop;
 			ConstantExpression cons;
 			Expression expression = Expression.Empty();
@@ -20,8 +24,6 @@ namespace DatabaseApi {
 
 				// A bit of hackery, the default bool expression is FALSE, so in order to create a bool expression, it must be notted
 				expression = Expression.Not(Expression.Default(typeof(bool)));
-				// A list for all of the expressions to be stored in for later Anding with the original expression(maybe just and them instead of this?)
-				List<Expression> expressionList = new List<Expression>();
 				// The field to the expression being extracted
 				String field;
 				// The operator to the expression being extracted

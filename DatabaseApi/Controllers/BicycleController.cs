@@ -27,7 +27,7 @@ namespace DatabaseApi.Controllers
 		[HttpGet]
 		[HttpGet("q")]
 		public async Task<IActionResult> GetAllBikes() {
-			var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value, typeof(Bicycle), "bicycle");
+			var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value, "bicycle");
 			if(lambda != null) {
 				return Ok(_context.Bicycle.Where(lambda));
 			} 
