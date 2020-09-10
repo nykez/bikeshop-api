@@ -71,5 +71,45 @@ namespace DatabaseApi {
 				return null;
 			}
 		}
+
+		private static Expression SelectOperation(
+	  string[] selections,
+	  ParameterExpression parameters) {
+			Expression left = (Expression)Expression.Not((Expression)Expression.Default(typeof(bool)));
+			for(int index = 0; index < selections.Length - 1; index += 2) {
+				string selection = selections[index];
+				try {
+					string str = selections[index + 1].Replace("%20", " ");
+					MemberExpression memberExpression = Expression.Property((Expression)parameters, selection);
+					ConstantExpression constantExpression = Expression.Constant((object)str);
+					left = (Expression)Expression.And(left, (Expression)Expression.Equal((Expression)memberExpression, (Expression)constantExpression));
+				} catch(IndexOutOfRangeException ex) {
+					return (Expression)Expression.Empty();
+				}
+			}
+			return left;
+		}
+
+		public static Expression<Func<T, bool>> URIBuilder(
+		  string queryString,
+		  string name,
+		  string operationType = "select") {
+			string[] selections = queryString.Split("/");
+			ParameterExpression parameters = Expression.Parameter(typeof(T), name);
+			Expression body = (Expression)Expression.Empty();
+			if(selections.Length != 0 && selections[0] != "") {
+				switch(operationType) {
+					case "select":
+						body = LambdaBuilder<T>.SelectOperation(selections, parameters);
+						break;
+					case "purchase":
+						body = LambdaBuilder<T>.SelectOperation(selections, parameters);
+						break;
+				}
+			}
+			if(!(body.Type != typeof(void)))
+				return (Expression<Func<T, bool>>)null;
+			return Expression.Lambda<Func<T, bool>>(body, parameters);
+		}
 	}
 }

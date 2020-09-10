@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseApi.Controllers
@@ -28,9 +29,29 @@ namespace DatabaseApi.Controllers
 		[HttpGet("q")]
 		public async Task<IActionResult> GetAllBikes() {
 			var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value, "bicycle");
+			Debug.WriteLine(Request.Path.Value);
 			if(lambda != null) {
 				return Ok(_context.Bicycle.Where(lambda));
 			} 
+			return Ok(await _context.Bicycle.ToListAsync());
+		}
+
+		[HttpGet("purchase")]
+		public async Task<IActionResult> Purchase() {
+			// If wanting to do things not via a query string, you replace the route from the path(Or get it however else) and then pass in the rest of the data, as well as whatever expression "type"(defined by us) you want back.
+			// It doesn't mess with routing, nor does anything with HTTP. It just builds lambda expressions.
+			// This will allow you to access some things past queries as well, such as 
+			var lambda = LambdaBuilder<Bicycle>.URIBuilder(Request.Path.Value.Replace("/api/test/purchase", ""), "purchase");
+			return Ok(_context.Bicycle.Where(b => b.Serialnumber == 7));
+		}
+
+		[HttpGet("{**.}")]
+		public async Task<IActionResult> GetBikes() {
+			var lambda = LambdaBuilder<Bicycle>.URIBuilder(Request.Path.Value.Replace("/api/test/", ""), "bicycle");
+			//Debug.WriteLine(Request.Path.Value.Replace("/api/test/", ""));
+			if(lambda != null) {
+				return Ok(_context.Bicycle.Where(lambda));
+			}
 			return Ok(await _context.Bicycle.ToListAsync());
 		}
 
@@ -42,34 +63,6 @@ namespace DatabaseApi.Controllers
 				return NotFound();
 			}
 
-			return Ok(bikeToReturn);
-		}
-
-		// https://localhost:44349/api/test/bycustid?custid=15
-		[HttpGet("bycustid")]
-		public async Task<IActionResult> GetBikeByCustID(int custID) {
-			var bikeToReturn = await _context.Bicycle.Where(b => b.Customerid == custID).ToListAsync();
-			if(bikeToReturn == null) return NotFound();
-			return Ok(bikeToReturn);
-		}
-		[HttpGet("byid")]
-		public async Task<IActionResult> GetBikeByID(int ID) {
-			var bikeToReturn = await _context.Bicycle.Where(b => b.Serialnumber == ID).ToListAsync();
-			if(bikeToReturn == null) return NotFound();
-			return Ok(bikeToReturn);
-		}
-
-		[HttpGet("framesize")]
-		public async Task<IActionResult> GetBikeByFrameSize(int frameSize) {
-			var bikeToReturn = await _context.Bicycle.Where(b => b.Framesize == frameSize).ToListAsync();
-			if(bikeToReturn == null) return NotFound();
-			return Ok(bikeToReturn);
-		}
-
-		[HttpGet("modeltype")]
-		public async Task<IActionResult> GetBikeByModelType(String modeltype) {
-			var bikeToReturn = await _context.Bicycle.Where(b => b.Modeltype== modeltype).ToListAsync();
-			if(bikeToReturn == null) return NotFound();
 			return Ok(bikeToReturn);
 		}
 	}
