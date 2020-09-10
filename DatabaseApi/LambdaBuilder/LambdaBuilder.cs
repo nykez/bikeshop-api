@@ -72,9 +72,7 @@ namespace DatabaseApi {
 			}
 		}
 
-		private static Expression SelectOperation(
-	  string[] selections,
-	  ParameterExpression parameters) {
+		private static Expression SelectOperation(String[] selections, ParameterExpression parameters) {
 			Expression left = (Expression)Expression.Not((Expression)Expression.Default(typeof(bool)));
 			for(int index = 0; index < selections.Length - 1; index += 2) {
 				string selection = selections[index];
@@ -91,10 +89,10 @@ namespace DatabaseApi {
 		}
 
 		public static Expression<Func<T, bool>> URIBuilder(
-		  string queryString,
-		  string name,
-		  string operationType = "select") {
-			string[] selections = queryString.Split("/");
+			String queryString,
+			String name,
+			String operationType = "select") {
+			String[] selections = queryString.Split("/");
 			ParameterExpression parameters = Expression.Parameter(typeof(T), name);
 			Expression body = (Expression)Expression.Empty();
 			if(selections.Length != 0 && selections[0] != "") {
