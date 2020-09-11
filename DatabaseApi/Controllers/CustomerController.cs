@@ -124,9 +124,19 @@ namespace DatabaseApi.Controllers
         /// <param name="customer"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToCreate customer)
+        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToUpdate customer)
         {
-            throw new NotImplementedException();
+            var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
+
+            if (toUpdateCustomer == null)
+                return NoContent();
+
+            // map our form data to our updated model
+            _mapper.Map<Customer, CustomerToUpdate>(toUpdateCustomer);
+
+            _context.Customer.Update(toUpdateCustomer);
+            
+            return Ok(await _context.SaveChangesAsync());
         }
 
         /// <summary>
@@ -138,7 +148,6 @@ namespace DatabaseApi.Controllers
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             var customerToDelete = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
-
             if (customerToDelete != null)
             {
                 _context.Remove(customerToDelete);
@@ -151,3 +160,5 @@ namespace DatabaseApi.Controllers
         }
     }
 }
+
+
