@@ -6,54 +6,55 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
+using AutoMapper;
 
 namespace DatabaseApi.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : ControllerBase
+    public class BicyclesController : ControllerBase
     {
         private readonly BikeShop_Context _context;
-
-        public CitiesController(BikeShop_Context context)
+        private readonly IMapper _mapper;
+        public BicyclesController(BikeShop_Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/Cities
+        // GET: api/Bicycles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCity()
+        public async Task<ActionResult<IEnumerable<Bicycle>>> GetBicycle()
         {
-            return await _context.City.ToListAsync();
+            return await _context.Bicycle.ToListAsync();
         }
 
-        // GET: api/Cities/5
+        // GET: api/Bicycles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<ActionResult<Bicycle>> GetBicycle(int id)
         {
-            var city = await _context.City.FindAsync(id);
+            var bicycle = await _context.Bicycle.FindAsync(id);
 
-            if (city == null)
+            if (bicycle == null)
             {
                 return NotFound();
             }
 
-            return city;
+            return bicycle;
         }
 
-        // PUT: api/Cities/5
+        // PUT: api/Bicycles/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<IActionResult> PutBicycle(int id, Bicycle bicycle)
         {
-            if (id != city.Cityid)
+            if (id != bicycle.Serialnumber)
             {
                 return BadRequest();
             }
 
-            _context.Entry(city).State = EntityState.Modified;
+            _context.Entry(bicycle).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +62,7 @@ namespace DatabaseApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CityExists(id))
+                if (!BicycleExists(id))
                 {
                     return NotFound();
                 }
@@ -74,37 +75,44 @@ namespace DatabaseApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Cities
+        // POST: api/Bicycles
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<IActionResult> PostBicycle([FromForm] BicycleToCreate bicycle)
         {
-            _context.City.Add(city);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var newBicycle = _mapper.Map<Bicycle>(bicycle);
+            _context.Bicycle.Add(newBicycle);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Cityid }, city);
+            return Ok(newBicycle);
         }
 
-        // DELETE: api/Cities/5
+        // DELETE: api/Bicycles/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<City>> DeleteCity(int id)
+        public async Task<ActionResult<Bicycle>> DeleteBicycle(int id)
         {
-            var city = await _context.City.FindAsync(id);
-            if (city == null)
+            var bicycle = await _context.Bicycle.FindAsync(id);
+            if (bicycle == null)
             {
                 return NotFound();
             }
 
-            _context.City.Remove(city);
+            _context.Bicycle.Remove(bicycle);
             await _context.SaveChangesAsync();
 
-            return city;
+            return bicycle;
         }
 
-        private bool CityExists(int id)
+        private bool BicycleExists(int id)
         {
-            return _context.City.Any(e => e.Cityid == id);
+            return _context.Bicycle.Any(e => e.Serialnumber == id);
         }
     }
 }

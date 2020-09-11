@@ -9,51 +9,50 @@ using DatabaseApi;
 
 namespace DatabaseApi.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : ControllerBase
+    public class RetailstoresController : ControllerBase
     {
         private readonly BikeShop_Context _context;
 
-        public CitiesController(BikeShop_Context context)
+        public RetailstoresController(BikeShop_Context context)
         {
             _context = context;
         }
 
-        // GET: api/Cities
+        // GET: api/Retailstores
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCity()
+        public async Task<ActionResult<IEnumerable<Retailstore>>> GetRetailstore()
         {
-            return await _context.City.ToListAsync();
+            return await _context.Retailstore.ToListAsync();
         }
 
-        // GET: api/Cities/5
+        // GET: api/Retailstores/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<ActionResult<Retailstore>> GetRetailstore(int id)
         {
-            var city = await _context.City.FindAsync(id);
+            var retailstore = await _context.Retailstore.FindAsync(id);
 
-            if (city == null)
+            if (retailstore == null)
             {
                 return NotFound();
             }
 
-            return city;
+            return retailstore;
         }
 
-        // PUT: api/Cities/5
+        // PUT: api/Retailstores/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<IActionResult> PutRetailstore(int id, Retailstore retailstore)
         {
-            if (id != city.Cityid)
+            if (id != retailstore.Storeid)
             {
                 return BadRequest();
             }
 
-            _context.Entry(city).State = EntityState.Modified;
+            _context.Entry(retailstore).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +60,7 @@ namespace DatabaseApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CityExists(id))
+                if (!RetailstoreExists(id))
                 {
                     return NotFound();
                 }
@@ -74,37 +73,37 @@ namespace DatabaseApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Cities
+        // POST: api/Retailstores
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<ActionResult<Retailstore>> PostRetailstore(Retailstore retailstore)
         {
-            _context.City.Add(city);
+            _context.Retailstore.Add(retailstore);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Cityid }, city);
+            return CreatedAtAction("GetRetailstore", new { id = retailstore.Storeid }, retailstore);
         }
 
-        // DELETE: api/Cities/5
+        // DELETE: api/Retailstores/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<City>> DeleteCity(int id)
+        public async Task<ActionResult<Retailstore>> DeleteRetailstore(int id)
         {
-            var city = await _context.City.FindAsync(id);
-            if (city == null)
+            var retailstore = await _context.Retailstore.FindAsync(id);
+            if (retailstore == null)
             {
                 return NotFound();
             }
 
-            _context.City.Remove(city);
+            _context.Retailstore.Remove(retailstore);
             await _context.SaveChangesAsync();
 
-            return city;
+            return retailstore;
         }
 
-        private bool CityExists(int id)
+        private bool RetailstoreExists(int id)
         {
-            return _context.City.Any(e => e.Cityid == id);
+            return _context.Retailstore.Any(e => e.Storeid == id);
         }
     }
 }

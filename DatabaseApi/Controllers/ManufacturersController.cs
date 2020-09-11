@@ -9,51 +9,50 @@ using DatabaseApi;
 
 namespace DatabaseApi.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : ControllerBase
+    public class ManufacturersController : ControllerBase
     {
         private readonly BikeShop_Context _context;
 
-        public CitiesController(BikeShop_Context context)
+        public ManufacturersController(BikeShop_Context context)
         {
             _context = context;
         }
 
-        // GET: api/Cities
+        // GET: api/Manufacturers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCity()
+        public async Task<ActionResult<IEnumerable<Manufacturer>>> GetManufacturer()
         {
-            return await _context.City.ToListAsync();
+            return await _context.Manufacturer.ToListAsync();
         }
 
-        // GET: api/Cities/5
+        // GET: api/Manufacturers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<ActionResult<Manufacturer>> GetManufacturer(int id)
         {
-            var city = await _context.City.FindAsync(id);
+            var manufacturer = await _context.Manufacturer.FindAsync(id);
 
-            if (city == null)
+            if (manufacturer == null)
             {
                 return NotFound();
             }
 
-            return city;
+            return manufacturer;
         }
 
-        // PUT: api/Cities/5
+        // PUT: api/Manufacturers/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<IActionResult> PutManufacturer(int id, Manufacturer manufacturer)
         {
-            if (id != city.Cityid)
+            if (id != manufacturer.Manufacturerid)
             {
                 return BadRequest();
             }
 
-            _context.Entry(city).State = EntityState.Modified;
+            _context.Entry(manufacturer).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +60,7 @@ namespace DatabaseApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CityExists(id))
+                if (!ManufacturerExists(id))
                 {
                     return NotFound();
                 }
@@ -74,37 +73,37 @@ namespace DatabaseApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Cities
+        // POST: api/Manufacturers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<ActionResult<Manufacturer>> PostManufacturer(Manufacturer manufacturer)
         {
-            _context.City.Add(city);
+            _context.Manufacturer.Add(manufacturer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Cityid }, city);
+            return CreatedAtAction("GetManufacturer", new { id = manufacturer.Manufacturerid }, manufacturer);
         }
 
-        // DELETE: api/Cities/5
+        // DELETE: api/Manufacturers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<City>> DeleteCity(int id)
+        public async Task<ActionResult<Manufacturer>> DeleteManufacturer(int id)
         {
-            var city = await _context.City.FindAsync(id);
-            if (city == null)
+            var manufacturer = await _context.Manufacturer.FindAsync(id);
+            if (manufacturer == null)
             {
                 return NotFound();
             }
 
-            _context.City.Remove(city);
+            _context.Manufacturer.Remove(manufacturer);
             await _context.SaveChangesAsync();
 
-            return city;
+            return manufacturer;
         }
 
-        private bool CityExists(int id)
+        private bool ManufacturerExists(int id)
         {
-            return _context.City.Any(e => e.Cityid == id);
+            return _context.Manufacturer.Any(e => e.Manufacturerid == id);
         }
     }
 }
