@@ -9,13 +9,9 @@ namespace DatabaseApi
         public AutoMapperProfiles()
         {
             CreateMap<CustomerToCreate, Customer>();
-<<<<<<< Updated upstream
             CreateMap<CustomerToUpdate, Customer>();
             CreateMap<Customer, CustomerToUpdate>();
-=======
             CreateMap<BicycleToCreate, Bicycle>();
-            
->>>>>>> Stashed changes
         }
     }
 }
