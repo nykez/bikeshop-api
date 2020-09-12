@@ -9,6 +9,7 @@ namespace DatabaseApi
         public AutoMapperProfiles()
         {
             CreateMap<CustomerToCreate, Customer>();
+            CreateMap<BicycleToCreate, Bicycle>();
         }
     }
 }

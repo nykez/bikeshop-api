@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DatabaseApi.Controllers
+namespace DatabaseApi.Dtos
 {
     public class BicycleToCreate
     {
