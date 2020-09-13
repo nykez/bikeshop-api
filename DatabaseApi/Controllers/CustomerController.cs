@@ -37,8 +37,8 @@ namespace DatabaseApi.Controllers
         /// Returns a customer by their CustomerId
         /// </summary>
         /// <param name="id"></param>
-        /// <response code="200">Ok</response>
-        /// <response code="204">No customers could be found</response>
+        /// <response code="200">returns a Customer</response>
+        /// <response code="204">Customer is nill</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -56,8 +56,8 @@ namespace DatabaseApi.Controllers
         /// Returns all customers matching the given zipcode
         /// </summary>
         /// <param name="zipcode"></param>
-        /// <response code="200">Ok</response>
-        /// <response code="204">No customers could be found</response>
+        /// <response code="200">List of customers</response>
+        /// <response code="204">Customer list is null/empty</response>
         [HttpGet("zipcode/{zipcode}")]
         public async Task<IActionResult> GetByZipcode(string zipcode)
         {
@@ -76,8 +76,8 @@ namespace DatabaseApi.Controllers
         /// </summary>
         /// <param name="cityid"></param>
         /// <returns>Customer</returns>
-        /// <response code="200">Ok</response>
-        /// <response code="204">No customers could be found</response>
+        /// <response code="200">List of customers</response>
+        /// <response code="204">Customer list is null</response>
         [HttpGet("city/{cityid}")]
         public async Task<IActionResult> GetByCityId(int cityid)
         {
@@ -95,7 +95,8 @@ namespace DatabaseApi.Controllers
         /// Creates a new customer
         /// </summary>
         /// <param name="customer"></param>
-        /// <returns>customer</returns>
+        /// <response code="200">the newly created customer</response>
+        /// <response code="204">ModelState error</response>
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromForm] CustomerToCreate customer)
         {
@@ -122,7 +123,8 @@ namespace DatabaseApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <param name="customer"></param>
-        /// <returns></returns>
+        /// <response code="200">the updated cistomer</response>
+        /// <response code="204">Customer to update is null</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToUpdate customer)
         {
@@ -143,7 +145,8 @@ namespace DatabaseApi.Controllers
         /// Deletes an existing customer
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <response code="200">success</response>
+        /// <response code="204">Customer is null</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
@@ -155,7 +158,7 @@ namespace DatabaseApi.Controllers
             }
             else
             {
-                return NoContent();
+                return BadRequest();
             }
         }
     }
