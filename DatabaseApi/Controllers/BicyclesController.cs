@@ -56,9 +56,7 @@ namespace DatabaseApi.Controllers
                 return NoContent();
 
             // map our form data to our updated model
-            _mapper.Map<Bicycle, BicycleToUpdate>(toUpdateBicycle);
-
-            _context.Bicycle.Update(toUpdateBicycle);
+            _mapper.Map(toUpdateBicycle, bicycle);
 
             return Ok(await _context.SaveChangesAsync());
         }

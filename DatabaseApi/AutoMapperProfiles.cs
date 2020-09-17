@@ -14,10 +14,10 @@ namespace DatabaseApi
             CreateMap<BicycleToCreate, Bicycle>();
             CreateMap<BicycleToUpdate, Bicycle>();
             CreateMap<Bicycle, BicycleToUpdate>();
-            // Bicycles CRUD
+            // Bicycles D
             // Bike Parts CRUD
             // Cities CRUD
-            // Customer CRUD
+            // Customer D
             // Manufacturers CRUD
             // Retail Stores CRUD
             // Model Table CRUD
