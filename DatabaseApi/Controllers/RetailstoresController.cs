@@ -6,17 +6,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
+using AutoMapper;
+using DatabaseApi.Dtos;
 
 namespace DatabaseApi.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class RetailstoresController : ControllerBase
     {
         private readonly BikeShop_Context _context;
+        private readonly IMapper _mapper;
 
-        public RetailstoresController(BikeShop_Context context)
+        public RetailstoresController(BikeShop_Context context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -44,45 +49,43 @@ namespace DatabaseApi.Controllers
         // PUT: api/Retailstores/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRetailstore(int id, Retailstore retailstore)
+        [HttpPut("retailstore obj")]
+        public async Task<IActionResult> UpdateRetailstore( [FromForm] RetailstoreToUpdate retailstore)
         {
-            if (id != retailstore.Storeid)
-            {
-                return BadRequest();
-            }
+            var toUpdateRetailstore = await _context.Retailstore.FirstOrDefaultAsync(r => r.Storeid == retailstore.Storeid);
 
-            _context.Entry(retailstore).State = EntityState.Modified;
+            if (toUpdateRetailstore == null)
+                return NoContent();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RetailstoreExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            // map our form data to our updated model
+             _mapper.Map<RetailstoreToUpdate, Retailstore>(retailstore, toUpdateRetailstore);
 
-            return NoContent();
+
+            return Ok(await _context.SaveChangesAsync());
         }
 
         // POST: api/Retailstores
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Retailstore>> PostRetailstore(Retailstore retailstore)
+        public async Task<IActionResult> CreateRetailstore([FromForm] RetailstoreToCreate retailstore)
         {
-            _context.Retailstore.Add(retailstore);
+            // Missing parameters
+            // More info in response
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            // map the customer model
+            // USES: automapper instead of handtyped
+            var newRetailstore = _mapper.Map<Retailstore>(retailstore);
+
+            _context.Add(newRetailstore);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRetailstore", new { id = retailstore.Storeid }, retailstore);
+            return Ok(newRetailstore);
         }
 
         // DELETE: api/Retailstores/5
