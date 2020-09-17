@@ -12,6 +12,13 @@ namespace DatabaseApi
             CreateMap<CustomerToUpdate, Customer>();
             CreateMap<Customer, CustomerToUpdate>();
             CreateMap<BicycleToCreate, Bicycle>();
+            // Bicycles CRUD
+            // Bike Parts CRUD
+            // Cities CRUD
+            // Customer CRUD
+            // Manufacturers CRUD
+            // Retail Stores CRUD
+            // Model Table CRUD
         }
     }
 }
