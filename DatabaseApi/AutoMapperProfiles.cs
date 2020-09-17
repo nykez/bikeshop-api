@@ -12,13 +12,13 @@ namespace DatabaseApi
             CreateMap<CustomerToUpdate, Customer>();
             CreateMap<Customer, CustomerToUpdate>();
             CreateMap<BicycleToCreate, Bicycle>();
+            CreateMap<RetailstoreToCreate, Retailstore>();
+            CreateMap<RetailstoreToUpdate, Retailstore>();
             // Bicycles CRUD
             // Bike Parts CRUD
             // Cities CRUD
             // Customer CRUD
             // Manufacturers CRUD
-            CreateMap<RetailstoreToCreate, Retailstore>();
-            CreateMap<RetailstoreToUpdate, Retailstore>();
             // For sprint 2. Model Table CRUD
         }
     }
