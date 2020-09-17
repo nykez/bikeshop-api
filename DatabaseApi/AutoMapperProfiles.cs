@@ -17,8 +17,9 @@ namespace DatabaseApi
             // Cities CRUD
             // Customer CRUD
             // Manufacturers CRUD
-            // Retail Stores CRUD
-            // Model Table CRUD
+            CreateMap<RetailstoreToCreate, Retailstore>();
+            CreateMap<RetailstoreToUpdate, Retailstore>();
+            // For sprint 2. Model Table CRUD
         }
     }
 }
