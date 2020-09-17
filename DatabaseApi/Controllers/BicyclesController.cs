@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
 using DatabaseApi.Dtos;
 using AutoMapper;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace DatabaseApi.Controllers
 {
@@ -50,15 +52,29 @@ namespace DatabaseApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBicycle(int id, [FromForm] BicycleToUpdate bicycle)
         {
+           
             var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
-
             if(toUpdateBicycle == null)
                 return NoContent();
-
             // map our form data to our updated model
-            _mapper.Map(toUpdateBicycle, bicycle);
-
-            return Ok(await _context.SaveChangesAsync());
+            //_mapper.Map(toUpdateBicycle, bicycle);
+            var config = new MapperConfiguration(
+                conf => {
+                    conf.ForAllMaps((obj, cfg) => cfg.ForAllMembers(options => options.Condition((source, dest, sourceMember) => sourceMember != null)));
+                    conf.CreateMap<BicycleToUpdate, Bicycle>().ForMember(toUpdateBicycle => toUpdateBicycle.Serialnumber, map => map.MapFrom(bicycle => bicycle));
+            });
+            
+            _mapper.Map(bicycle, toUpdateBicycle);
+/*			foreach(PropertyInfo p in typeof(Bicycle).GetProperties()) {
+				// Debug.WriteLine(p.Name);
+				PropertyInfo p2;
+				if((p2 = typeof(BicycleToUpdate).GetProperty(p.Name)) != null) {
+					var change = typeof(BicycleToUpdate).GetProperty(p.Name).GetValue(bicycle);
+					if(change != null)
+						typeof(Bicycle).GetProperty(p.Name).SetValue(toUpdateBicycle, change);
+				}
+			}*/
+			return Ok(await _context.SaveChangesAsync());
         }
 
         // POST: api/Bicycles
@@ -72,7 +88,6 @@ namespace DatabaseApi.Controllers
             {
                 return BadRequest();
             }
-
             var newBicycle = _mapper.Map<Bicycle>(bicycle);
             _context.Bicycle.Add(newBicycle);
             await _context.SaveChangesAsync();
