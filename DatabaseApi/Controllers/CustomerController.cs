@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi.Dtos;
 using AutoMapper;
+using System.Diagnostics;
 
 namespace DatabaseApi.Controllers
 {
@@ -129,15 +130,14 @@ namespace DatabaseApi.Controllers
         public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToUpdate customer)
         {
             var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
-
+            
             if (toUpdateCustomer == null)
                 return NoContent();
 
             // map our form data to our updated model
-            _mapper.Map<Customer, CustomerToUpdate>(toUpdateCustomer);
-
-            _context.Customer.Update(toUpdateCustomer);
-            
+            _mapper.Map(customer, toUpdateCustomer);
+           // Debug.WriteLine(toUpdateCustomer.City);
+           // _context.Customer.Update(toUpdateCustomer);
             return Ok(await _context.SaveChangesAsync());
         }
 

@@ -48,32 +48,19 @@ namespace DatabaseApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBicycle(int id, Bicycle bicycle)
+        public async Task<IActionResult> UpdateBicycle(int id, [FromForm] BicycleToUpdate bicycle)
         {
-            if (id != bicycle.Serialnumber)
-            {
-                return BadRequest();
-            }
+            var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
 
-            _context.Entry(bicycle).State = EntityState.Modified;
+            if(toUpdateBicycle == null)
+                return NoContent();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BicycleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            // map our form data to our updated model
+            _mapper.Map<Bicycle, BicycleToUpdate>(toUpdateBicycle);
 
-            return NoContent();
+            _context.Bicycle.Update(toUpdateBicycle);
+
+            return Ok(await _context.SaveChangesAsync());
         }
 
         // POST: api/Bicycles
