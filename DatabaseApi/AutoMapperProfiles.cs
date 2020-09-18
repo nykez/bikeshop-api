@@ -24,11 +24,8 @@ namespace DatabaseApi
             CreateMap<City, CityToUpdate>();
             CreateMap<BikepartsToCreate, Bikeparts>();
             CreateMap<BikepartsToUpdate, Bikeparts>();
-            // Bicycles D
-            // Bike Parts CRUD
-            // Cities CRUD
-            // Customer D
-            // Manufacturers CRUD
+            CreateMap<ManufacturerToCreate, Manufacturer>();
+            CreateMap<ManufacturerToUpdate, Manufacturer>();
             // For sprint 2. Model Table CRU;
         }
 
