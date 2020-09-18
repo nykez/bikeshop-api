@@ -18,8 +18,13 @@ namespace DatabaseApi
             CreateMap<BicycleToUpdate, Bicycle>();
             CreateMap<RetailstoreToCreate, Retailstore>();
             CreateMap<RetailstoreToUpdate, Retailstore>();
+            CreateMap<Retailstore, RetailstoreToUpdate>();
+            CreateMap<CityToCreate, City>();
+            CreateMap<CityToUpdate, City>();
+            CreateMap<City, CityToUpdate>();
             CreateMap<BikepartsToCreate, Bikeparts>();
             CreateMap<BikepartsToUpdate, Bikeparts>();
+            // Bicycles D
             // Bike Parts CRUD
             // Cities CRUD
             // Customer D

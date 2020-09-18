@@ -24,15 +24,22 @@ namespace DatabaseApi.Controllers
             _mapper = mapper;
             _context = context;
         }
-
-        // GET: api/Retailstores
+        /// <summary>
+        /// Returns all retailstores in the database
+        /// </summary>
+        /// <response code="200">Ok</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Retailstore>>> GetRetailstore()
         {
             return await _context.Retailstore.ToListAsync();
         }
 
-        // GET: api/Retailstores/5
+        /// <summary>
+        /// Returns a retailstore by their StoreId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">returns a Retailstore</response>
+        /// <response code="204">Retailstore is null</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<Retailstore>> GetRetailstore(int id)
         {
@@ -46,27 +53,29 @@ namespace DatabaseApi.Controllers
             return retailstore;
         }
 
-        // PUT: api/Retailstores/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("retailstore obj")]
-        public async Task<IActionResult> UpdateRetailstore( [FromForm] RetailstoreToUpdate retailstore)
+        /// <summary>
+        /// Updates a existing retailstore
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="retailstore"></param>
+        /// <response code="200">the updated retailstore</response>
+        /// <response code="204">Retailstore to update is null</response>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] RetailstoreToUpdate retailstore)
         {
-            var toUpdateRetailstore = await _context.Retailstore.FirstOrDefaultAsync(r => r.Storeid == retailstore.Storeid);
-
+            var toUpdateRetailstore = await _context.Retailstore.FirstOrDefaultAsync(r => r.Storeid == id);
             if (toUpdateRetailstore == null)
                 return NoContent();
-
             // map our form data to our updated model
-             _mapper.Map<RetailstoreToUpdate, Retailstore>(retailstore, toUpdateRetailstore);
-
-
+            _mapper.Map(retailstore, toUpdateRetailstore);
             return Ok(await _context.SaveChangesAsync());
         }
-
-        // POST: api/Retailstores
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Creates a new retailstore
+        /// </summary>
+        /// <param name="retailstore"></param>
+        /// <response code="200">the newly created retail</response>
+        /// <response code="204">ModelState error</response>
         [HttpPost]
         public async Task<IActionResult> CreateRetailstore([FromForm] RetailstoreToCreate retailstore)
         {
@@ -88,7 +97,12 @@ namespace DatabaseApi.Controllers
             return Ok(newRetailstore);
         }
 
-        // DELETE: api/Retailstores/5
+        /// <summary>
+        /// Deletes an existing retailstore
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">success</response>
+        /// <response code="204">Retailstore is null</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Retailstore>> DeleteRetailstore(int id)
         {

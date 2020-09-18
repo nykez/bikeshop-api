@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
+using DatabaseApi.Dtos;
+using AutoMapper;
 
 namespace DatabaseApi.Controllers
 {
@@ -15,91 +17,106 @@ namespace DatabaseApi.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly BikeShop_Context _context;
+        private readonly IMapper _mapper;
 
-        public CitiesController(BikeShop_Context context)
+        public CitiesController(BikeShop_Context context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
-        // GET: api/Cities
+        /// <summary>
+        /// Returns all city in the database
+        /// </summary>
+        /// <response code="200">Ok</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCity()
+        public async Task<IActionResult> GetAll()
         {
-            return await _context.City.ToListAsync();
+            return Ok(await _context.City.ToListAsync());
         }
-
-        // GET: api/Cities/5
+        /// <summary>
+        /// Returns a city by their CityId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">returns a City</response>
+        /// <response code="204">City is nill</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<IActionResult> GetCity(int id)
         {
-            var city = await _context.City.FindAsync(id);
+            var city = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
 
             if (city == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return city;
+            return Ok(city);
         }
 
-        // PUT: api/Cities/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Updates a existing city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="city"></param>
+        /// <response code="200">the updated city</response>
+        /// <response code="204">City to update is null</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CityToUpdate city)
         {
-            if (id != city.Cityid)
+            var toUpdateCity = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
+            if (toUpdateCity == null)
+                return NoContent();
+            // map our form data to our updated model
+            _mapper.Map(city, toUpdateCity);
+            return Ok(await _context.SaveChangesAsync());
+        }
+
+        /// <summary>
+        /// Creates a new city
+        /// </summary>
+        /// <param name="city"></param>
+        /// <response code="200">the newly created city</response>
+        /// <response code="204">ModelState error</response>
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomer([FromForm] CityToCreate city)
+        {
+            // Missing parameters
+            // More info in response
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            _context.Entry(city).State = EntityState.Modified;
+            // map the customer model
+            // USES: automapper instead of handtyped
+            var newCity = _mapper.Map<City>(city);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.Add(newCity);
 
-            return NoContent();
-        }
-
-        // POST: api/Cities
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
-        {
-            _context.City.Add(city);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Cityid }, city);
+            return Ok(newCity);
         }
 
-        // DELETE: api/Cities/5
+        /// <summary>
+        /// Deletes an existing city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">success</response>
+        /// <response code="204">City is null</response>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<City>> DeleteCity(int id)
+        public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await _context.City.FindAsync(id);
-            if (city == null)
+            var cityToDelete = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
+            if (cityToDelete != null)
             {
-                return NotFound();
+                _context.Remove(cityToDelete);
+                return Ok(await _context.SaveChangesAsync());
             }
-
-            _context.City.Remove(city);
-            await _context.SaveChangesAsync();
-
-            return city;
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private bool CityExists(int id)
