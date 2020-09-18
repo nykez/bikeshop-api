@@ -30,8 +30,13 @@ namespace DatabaseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = new MapperConfiguration(conf => {
+                conf.ForAllMaps((obj, cfg) => cfg.ForAllMembers(options => options.Condition((source, dest, sourceMember) => sourceMember != null)));
+                conf.AddProfile(new AutoMapperProfiles());
+            });
+            services.AddSingleton<IMapper>(mapServ => config.CreateMapper());
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddAutoMapper(typeof(Startup));
+            //services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 // Set the comments path for the Swagger JSON and UI.
@@ -73,6 +78,8 @@ namespace DatabaseApi
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }
