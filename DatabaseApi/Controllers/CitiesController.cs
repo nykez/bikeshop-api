@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
+using DatabaseApi.Dtos;
+using AutoMapper;
 
 namespace DatabaseApi.Controllers
 {
@@ -15,9 +17,11 @@ namespace DatabaseApi.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly BikeShop_Context _context;
+        private readonly IMapper _mapper;
 
-        public CitiesController(BikeShop_Context context)
+        public CitiesController(BikeShop_Context context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -74,16 +78,31 @@ namespace DatabaseApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Cities
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Creates a new city
+        /// </summary>
+        /// <param name="city"></param>
+        /// <response code="200">the newly created city</response>
+        /// <response code="204">ModelState error</response>
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<IActionResult> CreateCustomer([FromForm] CityToCreate city)
         {
-            _context.City.Add(city);
+            // Missing parameters
+            // More info in response
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            // map the customer model
+            // USES: automapper instead of handtyped
+            var newCity = _mapper.Map<City>(city);
+
+            _context.Add(newCity);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Cityid }, city);
+            return Ok(newCity);
         }
 
         /// <summary>
