@@ -24,6 +24,8 @@ namespace DatabaseApi
             CreateMap<City, CityToUpdate>();
             CreateMap<BikepartsToCreate, Bikeparts>();
             CreateMap<BikepartsToUpdate, Bikeparts>();
+            CreateMap<ManufacturerToCreate, Manufacturer>();
+            CreateMap<ManufacturerToUpdate, Manufacturer>();
             // Bicycles D
             // Bike Parts CRUD
             // Cities CRUD

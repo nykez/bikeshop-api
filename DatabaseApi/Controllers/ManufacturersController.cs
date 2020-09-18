@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
+using AutoMapper;
+using DatabaseApi.Dtos;
+
 
 namespace DatabaseApi.Controllers
 {
@@ -14,10 +17,11 @@ namespace DatabaseApi.Controllers
     public class ManufacturersController : ControllerBase
     {
         private readonly BikeShop_Context _context;
-
-        public ManufacturersController(BikeShop_Context context)
+        private readonly IMapper _mapper;
+        public ManufacturersController(BikeShop_Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Manufacturers
@@ -45,44 +49,30 @@ namespace DatabaseApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutManufacturer(int id, Manufacturer manufacturer)
+        public async Task<IActionResult> UpdateManufacturer(int id, [FromForm]ManufacturerToUpdate manufacturer)
         {
-            if (id != manufacturer.Manufacturerid)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(manufacturer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ManufacturerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var toUpdateManufacturer = await _context.Manufacturer.FirstOrDefaultAsync(m => m.Manufacturerid == id);
+            if(toUpdateManufacturer == null)
+                return NoContent();
+            // map our form data to our updated model
+            _mapper.Map(manufacturer, toUpdateManufacturer);
+            return Ok(await _context.SaveChangesAsync());
         }
 
         // POST: api/Manufacturers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Manufacturer>> PostManufacturer(Manufacturer manufacturer)
+        public async Task<ActionResult<Manufacturer>> PostManufacturer([FromForm]ManufacturerToCreate manufacturer)
         {
-            _context.Manufacturer.Add(manufacturer);
+            if(!ModelState.IsValid) {
+                return BadRequest();
+            }
+            var newManufacturer = _mapper.Map<Manufacturer>(manufacturer);
+            _context.Manufacturer.Add(newManufacturer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetManufacturer", new { id = manufacturer.Manufacturerid }, manufacturer);
+            return Ok(newManufacturer);
         }
 
         // DELETE: api/Manufacturers/5
@@ -99,11 +89,6 @@ namespace DatabaseApi.Controllers
             await _context.SaveChangesAsync();
 
             return manufacturer;
-        }
-
-        private bool ManufacturerExists(int id)
-        {
-            return _context.Manufacturer.Any(e => e.Manufacturerid == id);
         }
     }
 }
