@@ -52,23 +52,11 @@ namespace DatabaseApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBicycle(int id, [FromForm] BicycleToUpdate bicycle)
         {
-           
             var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
             if(toUpdateBicycle == null)
                 return NoContent();
             // map our form data to our updated model
-            //_mapper.Map(toUpdateBicycle, bicycle);
-
             _mapper.Map(bicycle, toUpdateBicycle);
-/*			foreach(PropertyInfo p in typeof(Bicycle).GetProperties()) {
-				// Debug.WriteLine(p.Name);
-				PropertyInfo p2;
-				if((p2 = typeof(BicycleToUpdate).GetProperty(p.Name)) != null) {
-					var change = typeof(BicycleToUpdate).GetProperty(p.Name).GetValue(bicycle);
-					if(change != null)
-						typeof(Bicycle).GetProperty(p.Name).SetValue(toUpdateBicycle, change);
-				}
-			}*/
 			return Ok(await _context.SaveChangesAsync());
         }
 
