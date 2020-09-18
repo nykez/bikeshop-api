@@ -61,7 +61,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the updated city</response>
         /// <response code="204">City to update is null</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CityToUpdate city)
+        public async Task<IActionResult> UpdateCity(int id, [FromForm] CityToUpdate city)
         {
             var toUpdateCity = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
             if (toUpdateCity == null)
@@ -78,7 +78,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the newly created city</response>
         /// <response code="204">ModelState error</response>
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromForm] CityToCreate city)
+        public async Task<IActionResult> CreateCity([FromForm] CityToCreate city)
         {
             // Missing parameters
             // More info in response
