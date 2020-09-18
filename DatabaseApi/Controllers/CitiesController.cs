@@ -86,20 +86,25 @@ namespace DatabaseApi.Controllers
             return CreatedAtAction("GetCity", new { id = city.Cityid }, city);
         }
 
-        // DELETE: api/Cities/5
+        /// <summary>
+        /// Deletes an existing city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">success</response>
+        /// <response code="204">City is null</response>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<City>> DeleteCity(int id)
+        public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await _context.City.FindAsync(id);
-            if (city == null)
+            var cityToDelete = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
+            if (cityToDelete != null)
             {
-                return NotFound();
+                _context.Remove(cityToDelete);
+                return Ok(await _context.SaveChangesAsync());
             }
-
-            _context.City.Remove(city);
-            await _context.SaveChangesAsync();
-
-            return city;
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private bool CityExists(int id)
