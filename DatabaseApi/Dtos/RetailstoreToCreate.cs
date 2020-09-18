@@ -16,7 +16,7 @@ namespace DatabaseApi.Dtos
         public string Contactlastname { get; set; }
         public string Address { get; set; }
         public string Zipcode { get; set; }
-        [Required]
+        
         public int? Cityid { get; set; }
 
     }

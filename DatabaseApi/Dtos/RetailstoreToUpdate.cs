@@ -6,7 +6,7 @@
         /// Customer DTO (Data transfer object)
         /// </summary>
         /// 
-        public int Storeid { get; set; }
+        
         public string Storename { get; set; }
         public string Phone { get; set; }
         public string Contactfirstname { get; set; }
