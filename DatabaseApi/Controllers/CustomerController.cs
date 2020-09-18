@@ -134,7 +134,7 @@ namespace DatabaseApi.Controllers
                 return NoContent();
 
             // map our form data to our updated model
-            _mapper.Map<Customer, CustomerToUpdate>(toUpdateCustomer);
+            _mapper.Map<CustomerToUpdate, Customer>(customer,toUpdateCustomer);
 
             _context.Customer.Update(toUpdateCustomer);
             
