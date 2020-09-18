@@ -25,57 +25,50 @@ namespace DatabaseApi.Controllers
             _context = context;
         }
 
-        // GET: api/Cities
+        /// <summary>
+        /// Returns all city in the database
+        /// </summary>
+        /// <response code="200">Ok</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCity()
+        public async Task<IActionResult> GetAll()
         {
-            return await _context.City.ToListAsync();
+            return Ok(await _context.City.ToListAsync());
         }
-
-        // GET: api/Cities/5
+        /// <summary>
+        /// Returns a city by their CityId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">returns a City</response>
+        /// <response code="204">City is nill</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<IActionResult> GetCity(int id)
         {
-            var city = await _context.City.FindAsync(id);
+            var city = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
 
             if (city == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
-            return city;
+            return Ok(city);
         }
 
-        // PUT: api/Cities/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Updates a existing city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="city"></param>
+        /// <response code="200">the updated city</response>
+        /// <response code="204">City to update is null</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CityToUpdate city)
         {
-            if (id != city.Cityid)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(city).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var toUpdateCity = await _context.City.FirstOrDefaultAsync(c => c.Cityid == id);
+            if (toUpdateCity == null)
+                return NoContent();
+            // map our form data to our updated model
+            _mapper.Map(city, toUpdateCity);
+            return Ok(await _context.SaveChangesAsync());
         }
 
         /// <summary>
