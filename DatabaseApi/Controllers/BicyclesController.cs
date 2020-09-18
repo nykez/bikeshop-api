@@ -58,12 +58,7 @@ namespace DatabaseApi.Controllers
                 return NoContent();
             // map our form data to our updated model
             //_mapper.Map(toUpdateBicycle, bicycle);
-            var config = new MapperConfiguration(
-                conf => {
-                    conf.ForAllMaps((obj, cfg) => cfg.ForAllMembers(options => options.Condition((source, dest, sourceMember) => sourceMember != null)));
-                    conf.CreateMap<BicycleToUpdate, Bicycle>().ForMember(toUpdateBicycle => toUpdateBicycle.Serialnumber, map => map.MapFrom(bicycle => bicycle));
-            });
-            
+
             _mapper.Map(bicycle, toUpdateBicycle);
 /*			foreach(PropertyInfo p in typeof(Bicycle).GetProperties()) {
 				// Debug.WriteLine(p.Name);
