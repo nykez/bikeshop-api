@@ -31,10 +31,10 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Bikeparts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Bikeparts>> GetBikeparts(int id, int componenentid)
+        [HttpGet("{serialnumber}/{componentid}")]
+        public async Task<ActionResult<Bikeparts>> GetBikeparts(int serialnumber, int componentid)
         {
-            var bikeparts = await _context.Bikeparts.FindAsync(id, componenentid);
+            var bikeparts = await _context.Bikeparts.FindAsync(serialnumber, componentid);
 
             if (bikeparts == null)
             {
@@ -47,10 +47,10 @@ namespace DatabaseApi.Controllers
         // PUT: api/Bikeparts/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBikeparts(int id, [FromForm]BikepartsToUpdate bikeparts)
+        [HttpPut("{serialnumber}/{componentid}")]
+        public async Task<IActionResult> UpdateBikeparts(int serialnumber, int componentid,[FromForm]BikepartsToUpdate bikeparts)
         {
-            var toUpdateBikeParts = await _context.Bikeparts.FirstOrDefaultAsync(b => b.Serialnumber == id);
+            var toUpdateBikeParts = await _context.Bikeparts.FirstOrDefaultAsync(b => b.Serialnumber == serialnumber && b.Componentid == componentid);
             if(toUpdateBikeParts == null)
                 return NoContent();
             // map our form data to our updated model
@@ -75,10 +75,10 @@ namespace DatabaseApi.Controllers
         }
 
         // DELETE: api/Bikeparts/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Bikeparts>> DeleteBikeparts(int id)
+        [HttpDelete("{serialnumber}/{componentid}")]
+        public async Task<ActionResult<Bikeparts>> DeleteBikeparts(int serialnumber, int componentid)
         {
-            var bikeparts = await _context.Bikeparts.FindAsync(id);
+            var bikeparts = await _context.Bikeparts.FindAsync(serialnumber, componentid);
             if (bikeparts == null)
             {
                 return NotFound();
@@ -90,9 +90,9 @@ namespace DatabaseApi.Controllers
             return bikeparts;
         }
 
-        private bool BikepartsExists(int id)
+        private bool BikepartsExists(int serialnumber, int componentid)
         {
-            return _context.Bikeparts.Any(e => e.Serialnumber == id);
+            return _context.Bikeparts.Any(b => b.Serialnumber == serialnumber && b.Componentid == componentid);
         }
     }
 }
