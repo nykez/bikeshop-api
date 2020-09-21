@@ -25,6 +25,7 @@ namespace DatabaseApi.Controllers
             _context = context;
         }
 
+        // GET: api/Cities
         /// <summary>
         /// Returns all city in the database
         /// </summary>
@@ -34,6 +35,7 @@ namespace DatabaseApi.Controllers
         {
             return Ok(await _context.City.ToListAsync());
         }
+
         /// <summary>
         /// Returns a city by their CityId
         /// </summary>
@@ -119,6 +121,11 @@ namespace DatabaseApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns true if City exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>boolean</returns>
         private bool CityExists(int id)
         {
             return _context.City.Any(e => e.Cityid == id);
