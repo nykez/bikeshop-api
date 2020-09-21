@@ -24,6 +24,10 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Bikeparts
+        /// <summary>
+        /// Returns all Bikeparts
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bikeparts>>> GetBikeparts()
         {
@@ -31,6 +35,12 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Bikeparts/5
+        /// <summary>
+        /// Returns bikeparts by serial number and componentid
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        /// <param name="componentid"></param>
+        /// <returns></returns>
         [HttpGet("{serialnumber}/{componentid}")]
         public async Task<ActionResult<Bikeparts>> GetBikeparts(int serialnumber, int componentid)
         {
@@ -44,9 +54,13 @@ namespace DatabaseApi.Controllers
             return bikeparts;
         }
 
-        // PUT: api/Bikeparts/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Adds existing bikeparts
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        /// <param name="componentid"></param>
+        /// <param name="bikeparts"></param>
+        /// <returns>error if encountered</returns>
         [HttpPut("{serialnumber}/{componentid}")]
         public async Task<IActionResult> UpdateBikeparts(int serialnumber, int componentid,[FromForm]BikepartsToUpdate bikeparts)
         {
@@ -58,9 +72,11 @@ namespace DatabaseApi.Controllers
             return Ok(await _context.SaveChangesAsync());
         }
 
-        // POST: api/Bikeparts
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Adds Bikeparts provided bikeparts object
+        /// </summary>
+        /// <param name="bikeparts"></param>
+        /// <returns>new bikeparts</returns>
         [HttpPost]
         public async Task<ActionResult<Bikeparts>> PostBikeparts([FromForm] BikepartsToCreate bikeparts)
         {
@@ -75,6 +91,12 @@ namespace DatabaseApi.Controllers
         }
 
         // DELETE: api/Bikeparts/5
+        /// <summary>
+        /// Deletes bikeparts provided id as param
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        /// <param name="componentid"></param>
+        /// <returns>bikeparts</returns>
         [HttpDelete("{serialnumber}/{componentid}")]
         public async Task<ActionResult<Bikeparts>> DeleteBikeparts(int serialnumber, int componentid)
         {
@@ -90,6 +112,12 @@ namespace DatabaseApi.Controllers
             return bikeparts;
         }
 
+        /// <summary>
+        /// Check if bikeparts exist
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        /// <param name="componentid"></param>
+        /// <returns>boolean</returns>
         private bool BikepartsExists(int serialnumber, int componentid)
         {
             return _context.Bikeparts.Any(b => b.Serialnumber == serialnumber && b.Componentid == componentid);

@@ -118,6 +118,11 @@ namespace DatabaseApi.Controllers
             return retailstore;
         }
 
+        /// <summary>
+        /// Verify id exists in database for RetailStore
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>boolean</returns>
         private bool RetailstoreExists(int id)
         {
             return _context.Retailstore.Any(e => e.Storeid == id);
