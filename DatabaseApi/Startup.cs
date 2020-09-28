@@ -32,6 +32,7 @@ namespace DatabaseApi
         {
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAutoMapper(typeof(Startup));
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 // Set the comments path for the Swagger JSON and UI.
@@ -45,10 +46,15 @@ namespace DatabaseApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+    
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(
+                options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
 
             app.UseSwagger();
             //Route: hostingUrl/swagger
