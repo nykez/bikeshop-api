@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DatabaseApi.Dtos;
 using AutoMapper;
 using System.Diagnostics;
+using DatabaseApi.Helpers;
 
 namespace DatabaseApi.Controllers
 {
@@ -29,9 +30,15 @@ namespace DatabaseApi.Controllers
         /// </summary>
         /// <response code="200">Ok</response>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] UserParams userParams)
         {
-            return Ok(await _context.Customer.ToListAsync());
+            var customers = _context.Customer.OrderByDescending(u => u.Customerid).AsQueryable();
+
+            // do some filtering...
+            // ...
+            // ..
+
+            return Ok(await PageList<Customer>.CreateAsync(customers, userParams.PageNumber, userParams.PageSize));
         }
 
         /// <summary>
