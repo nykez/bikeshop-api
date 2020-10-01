@@ -32,8 +32,12 @@ namespace DatabaseApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] UserParams userParams)
         {
+            var lambda = LambdaBuilder<Customer>.Builder(Request.QueryString.Value);
             var customers = _context.Customer.OrderByDescending(u => u.Customerid).AsQueryable();
-
+            if(lambda != null) {
+                Debug.WriteLine(lambda.ToString());
+                customers = customers.Where(lambda);
+			}
             // do some filtering...
             // ...
             // ..

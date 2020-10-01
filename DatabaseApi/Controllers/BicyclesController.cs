@@ -10,6 +10,7 @@ using DatabaseApi.Dtos;
 using AutoMapper;
 using System.Reflection;
 using System.Diagnostics;
+using DatabaseApi.Helpers;
 
 namespace DatabaseApi.Controllers
 {
@@ -31,9 +32,19 @@ namespace DatabaseApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bicycle>>> GetBicycle()
+        public async Task<ActionResult<IEnumerable<Bicycle>>> GetAll([FromQuery] UserParams userParams)
         {
-            return await _context.Bicycle.ToListAsync();
+            var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value);
+            var bicycles = _context.Bicycle.OrderByDescending(u => u.Customerid).AsQueryable();
+            if(lambda != null) {
+                Debug.WriteLine(lambda.ToString());
+                bicycles = bicycles.Where(lambda);
+            }
+            // do some filtering...
+            // ...
+            // ..
+
+            return Ok(await PageList<Bicycle>.CreateAsync(bicycles, userParams.PageNumber, userParams.PageSize));
         }
 
         // GET: api/Bicycles/5
