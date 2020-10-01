@@ -53,11 +53,15 @@ namespace DatabaseApi {
 							}
 
 						case "%3C": { //If the operator is lessthan
-									  //Check for nullable columns
 								int? consInt = Int32.Parse(value);
 								cons = Expression.Constant(consInt);
-								//Convernt Expressions to both be nullable
-								expression = Expression.And(expression, Expression.LessThan(prop, Expression.Convert(cons, prop.Type)));
+								expression = Expression.And(expression, Expression.LessThanOrEqual(prop, Expression.Convert(cons, prop.Type)));
+								break;
+							}
+						case "%3E": { //If the operator is greaterthan
+								int? consInt = Int32.Parse(value);
+								cons = Expression.Constant(consInt);
+								expression = Expression.And(expression, Expression.GreaterThanOrEqual(prop, Expression.Convert(cons, prop.Type)));
 								break;
 							}
 					}
