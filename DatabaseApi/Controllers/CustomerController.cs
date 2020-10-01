@@ -106,7 +106,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the newly created customer</response>
         /// <response code="204">ModelState error</response>
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromForm] CustomerToCreate customer)
+        public async Task<IActionResult> CreateCustomer([FromBody] CustomerToCreate customer)
         {
             // Missing parameters
             // More info in response
@@ -134,7 +134,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the updated cistomer</response>
         /// <response code="204">Customer to update is null</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] CustomerToUpdate customer)
+        public async Task<IActionResult> UpdateCustomer(int id, [FromBody] CustomerToUpdate customer)
         {
             var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
             if (toUpdateCustomer == null)
