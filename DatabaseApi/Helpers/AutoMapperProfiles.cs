@@ -8,6 +8,9 @@ namespace DatabaseApi
 {
     public class AutoMapperProfiles: Profile
     {
+        /// <summary>
+        /// Maps models to Dtos
+        /// </summary>
         public AutoMapperProfiles()
         {
             

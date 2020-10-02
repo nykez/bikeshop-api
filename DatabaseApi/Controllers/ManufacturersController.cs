@@ -25,6 +25,10 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Manufacturers
+        /// <summary>
+        /// Returns all Manufacturers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Manufacturer>>> GetManufacturer()
         {
@@ -32,6 +36,11 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Manufacturers/5
+        /// <summary>
+        /// Returns Manufacturer by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>manufacturer</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Manufacturer>> GetManufacturer(int id)
         {
@@ -48,6 +57,12 @@ namespace DatabaseApi.Controllers
         // PUT: api/Manufacturers/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Adds existing manufacturer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="manufacturer"></param>
+        /// <returns>error if encountered</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateManufacturer(int id, [FromForm]ManufacturerToUpdate manufacturer)
         {
@@ -62,6 +77,11 @@ namespace DatabaseApi.Controllers
         // POST: api/Manufacturers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Adds Manufacturer provided manufacturer object
+        /// </summary>
+        /// <param name="manufacturer"></param>
+        /// <returns>new manufacturer</returns>
         [HttpPost]
         public async Task<ActionResult<Manufacturer>> PostManufacturer([FromForm]ManufacturerToCreate manufacturer)
         {
@@ -76,6 +96,11 @@ namespace DatabaseApi.Controllers
         }
 
         // DELETE: api/Manufacturers/5
+        /// <summary>
+        /// Deletes Manufacturer provided id as param
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>manufacturer</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Manufacturer>> DeleteManufacturer(int id)
         {

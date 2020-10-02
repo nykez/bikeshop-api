@@ -10,6 +10,7 @@ using DatabaseApi.Dtos;
 using AutoMapper;
 using System.Reflection;
 using System.Diagnostics;
+using DatabaseApi.Helpers;
 
 namespace DatabaseApi.Controllers
 {
@@ -26,13 +27,32 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Bicycles
+        /// <summary>
+        /// Returns all bicycles
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bicycle>>> GetBicycle()
+        public async Task<ActionResult<IEnumerable<Bicycle>>> GetAll([FromQuery] UserParams userParams)
         {
-            return await _context.Bicycle.ToListAsync();
+            var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value);
+            var bicycles = _context.Bicycle.OrderByDescending(u => u.Customerid).AsQueryable();
+            if(lambda != null) {
+                Debug.WriteLine(lambda.ToString());
+                bicycles = bicycles.Where(lambda);
+            }
+            // do some filtering...
+            // ...
+            // ..
+
+            return Ok(await PageList<Bicycle>.CreateAsync(bicycles, userParams.PageNumber, userParams.PageSize));
         }
 
         // GET: api/Bicycles/5
+        /// <summary>
+        /// Returns Bicycles by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Bicycle>> GetBicycle(int id)
         {
@@ -46,9 +66,12 @@ namespace DatabaseApi.Controllers
             return bicycle;
         }
 
-        // PUT: api/Bicycles/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        /// Adds existing bicycle
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="bicycle"></param>
+        /// <returns>error if encountered</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBicycle(int id, [FromForm] BicycleToUpdate bicycle)
         {
@@ -60,9 +83,12 @@ namespace DatabaseApi.Controllers
 			return Ok(await _context.SaveChangesAsync());
         }
 
-        // POST: api/Bicycles
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        
+        /// <summary>
+        /// Adds Bicycles provided Bicycles object
+        /// </summary>
+        /// <param name="bicycle"></param>
+        /// <returns>new Bicycle</returns>
         [HttpPost]
         public async Task<IActionResult> PostBicycle([FromForm] BicycleToCreate bicycle)
         {
@@ -79,6 +105,11 @@ namespace DatabaseApi.Controllers
         }
 
         // DELETE: api/Bicycles/5
+        /// <summary>
+        /// Deletes Bicycle provided id as param
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Bicycle</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Bicycle>> DeleteBicycle(int id)
         {
@@ -94,6 +125,11 @@ namespace DatabaseApi.Controllers
             return bicycle;
         }
 
+        /// <summary>
+        /// Verify id exists in database for Bicycle
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>boolean</returns>
         private bool BicycleExists(int id)
         {
             return _context.Bicycle.Any(e => e.Serialnumber == id);
