@@ -51,19 +51,31 @@ namespace DatabaseApi {
 						Expression tempEx = Expression.Default(typeof(bool));
 						String[] values = value.Split("|");
 						foreach(String v in values) {
-							cons = Expression.Constant(v);
-							tempEx = Expression.Or(tempEx, Expression.Equal(prop, cons));
+							int tempVal;
+							int? nullTemp = null;
+							if(int.TryParse(v, out tempVal)) {
+								nullTemp = int.Parse(v);
+								cons = Expression.Constant(nullTemp);
+							}else
+								cons = Expression.Constant(v);
+							tempEx = Expression.Or(tempEx, Expression.Equal(prop, Expression.Convert(cons, prop.Type)));
 						}
 						expression = Expression.And(expression, tempEx);
 					} else {
-						
+
 						// Create the expression Constant
-						cons = Expression.Constant(value);
+						int tempVal;
+						int? nullTemp = null;
+						if(int.TryParse(value, out tempVal)) {
+							nullTemp = int.Parse(value);
+							cons = Expression.Constant(nullTemp);
+						}else
+							cons = Expression.Constant(value);
 
 						switch(op) {
 							case "=": { // If the operator is an equals
 										// Add the expression to the original
-									expression = Expression.And(expression, Expression.Equal(prop, cons));
+									expression = Expression.And(expression, Expression.Equal(prop, Expression.Convert(cons, prop.Type)));
 									break;
 								}
 
