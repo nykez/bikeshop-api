@@ -15,6 +15,5 @@ namespace DatabaseApi
 
         public virtual Component Component { get; set; }
         public virtual Employee Employee { get; set; }
-        public virtual Bicycle SerialnumberNavigation { get; set; }
     }
 }
