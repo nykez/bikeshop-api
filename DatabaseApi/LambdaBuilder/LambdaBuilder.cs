@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace DatabaseApi {
 	/// <summary>
@@ -45,34 +46,46 @@ namespace DatabaseApi {
 					value = expressionSplit[2].ToLower().Replace("%20", " ");
 					// Create the expression property
 					prop = Expression.Property(parameters, field);
-					// Create the expression Constant
-					cons = Expression.Constant(value);
+					if(value.Contains("|") && op == "=") {
+						Expression tempEx = Expression.Default(typeof(bool));
+						String[] values = value.Split("|");
+						foreach(String v in values) {
+							cons = Expression.Constant(v);
+							tempEx = Expression.Or(tempEx, Expression.Equal(prop, cons));
+						}
+						expression = Expression.And(expression, tempEx);
+					} else {
+						
+						// Create the expression Constant
+						cons = Expression.Constant(value);
 
-					switch(op) {
-						case "=": { // If the operator is an equals
-									// Add the expression to the original
-								expression = Expression.And(expression, Expression.Equal(prop, cons));
-								break;
-							}
+						switch(op) {
+							case "=": { // If the operator is an equals
+										// Add the expression to the original
+									expression = Expression.And(expression, Expression.Equal(prop, cons));
+									break;
+								}
 
-						case "%3C": { //If the operator is lessthan
-								int? consInt = Int32.Parse(value);
-								cons = Expression.Constant(consInt);
-								expression = Expression.And(expression, Expression.LessThanOrEqual(prop, Expression.Convert(cons, prop.Type)));
-								break;
-							}
-						case "%3E": { //If the operator is greaterthan
-								int? consInt = Int32.Parse(value);
-								cons = Expression.Constant(consInt);
-								expression = Expression.And(expression, Expression.GreaterThanOrEqual(prop, Expression.Convert(cons, prop.Type)));
-								break;
-							}
+							case "%3C": { //If the operator is lessthan
+									int? consInt = Int32.Parse(value);
+									cons = Expression.Constant(consInt);
+									expression = Expression.And(expression, Expression.LessThanOrEqual(prop, Expression.Convert(cons, prop.Type)));
+									break;
+								}
+							case "%3E": { //If the operator is greaterthan
+									int? consInt = Int32.Parse(value);
+									cons = Expression.Constant(consInt);
+									expression = Expression.And(expression, Expression.GreaterThanOrEqual(prop, Expression.Convert(cons, prop.Type)));
+									break;
+								}
+						}
 					}
 				}
 			}
 			// If the expression never changed to the boolean type, we want to return all bikes(query was not specified)
 			if(expression.Type != typeof(void)) {
 				Expression<Func<T, bool>> ex = Expression.Lambda<Func<T, bool>>(expression, parameters);
+				Debug.WriteLine(ex);
 				return ex;
 			} else {// else(no query) return all bikes
 				return null;
