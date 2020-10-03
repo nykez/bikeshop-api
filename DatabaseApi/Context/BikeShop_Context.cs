@@ -213,10 +213,10 @@ namespace DatabaseApi
                     .HasForeignKey(d => d.Modeltype)
                     .HasConstraintName("FK_BIKEMODELTYPE");
 
-                entity.HasOne(d => d.Paint)
-                    .WithMany(p => p.Bicycle)
-                    .HasForeignKey(d => d.Paintid)
-                    .HasConstraintName("FK_BIKEPAINT");
+                // entity.HasOne(d => d.Paint)
+                //     .WithMany(p => p.Bicycle)
+                //     .HasForeignKey(d => d.Paintid)
+                //     .HasConstraintName("FK_BIKEPAINT");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Bicycle)
@@ -312,11 +312,11 @@ namespace DatabaseApi
                     .HasForeignKey(d => d.Employeeid)
                     .HasConstraintName("FK_REFERENCE4");
 
-                entity.HasOne(d => d.SerialnumberNavigation)
-                    .WithMany(p => p.Bikeparts)
-                    .HasForeignKey(d => d.Serialnumber)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_REFERENCE24");
+                // entity.HasOne(d => d.SerialnumberNavigation)
+                //     .WithMany(p => p.Bikeparts)
+                //     .HasForeignKey(d => d.Serialnumber)
+                //     .OnDelete(DeleteBehavior.ClientSetNull)
+                //     .HasConstraintName("FK_REFERENCE24");
             });
 
             modelBuilder.Entity<Biketubes>(entity =>
