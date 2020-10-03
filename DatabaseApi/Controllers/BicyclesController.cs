@@ -35,7 +35,7 @@ namespace DatabaseApi.Controllers
         public async Task<ActionResult<IEnumerable<Bicycle>>> GetAll([FromQuery] UserParams userParams)
         {
             var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value);
-            var bicycles = _context.Bicycle.OrderByDescending(u => u.Customerid).AsQueryable();
+            var bicycles = _context.Bicycle.Include(p => p.Paint).OrderByDescending(u => u.Customerid).AsQueryable();
             if(lambda != null) {
                 Debug.WriteLine(lambda.ToString());
                 bicycles = bicycles.Where(lambda);
@@ -56,7 +56,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Bicycle>> GetBicycle(int id)
         {
-            var bicycle = await _context.Bicycle.FindAsync(id);
+            var bicycle = await _context.Bicycle.Include(p => p.Paint).Where(b => b.Serialnumber == id).FirstOrDefaultAsync();
 
             if (bicycle == null)
             {

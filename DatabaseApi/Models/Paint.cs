@@ -5,10 +5,6 @@ namespace DatabaseApi
 {
     public partial class Paint
     {
-        public Paint()
-        {
-            Bicycle = new HashSet<Bicycle>();
-        }
 
         public int Paintid { get; set; }
         public string Colorname { get; set; }
@@ -17,6 +13,5 @@ namespace DatabaseApi
         public DateTime? Dateintroduced { get; set; }
         public DateTime? Datediscontinued { get; set; }
 
-        public virtual ICollection<Bicycle> Bicycle { get; set; }
     }
 }
