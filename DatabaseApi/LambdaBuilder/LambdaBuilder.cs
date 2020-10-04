@@ -15,7 +15,7 @@ namespace DatabaseApi {
 		/// </summary>
 		/// <param name="queryString">Querystring from URL containing requested conditions.</param>
 		/// <param name="name">The name wished to represent the returned expression.</param>
-		/// <returns></returns>
+		/// <returns>An expression build off the query string</returns>
 		public static Expression<Func<T, bool>> Builder(String queryString) {
 			String[] selections = queryString.Replace("?", "").Split("&");
 			var parameters = Expression.Parameter(typeof(T), typeof(T).Name);
@@ -46,23 +46,36 @@ namespace DatabaseApi {
 					value = expressionSplit[2].ToLower().Replace("%20", " ");
 					// Create the expression property
 					prop = Expression.Property(parameters, field);
+					// If the value has an OR in it, make an expression with an OR of all of those values then and that expression with the general one.
 					if(value.Contains("|") && op == "=") {
 						Expression tempEx = Expression.Default(typeof(bool));
 						String[] values = value.Split("|");
 						foreach(String v in values) {
-							cons = Expression.Constant(v);
-							tempEx = Expression.Or(tempEx, Expression.Equal(prop, cons));
+							int tempVal;
+							int? nullTemp = null;
+							if(int.TryParse(v, out tempVal)) {
+								nullTemp = int.Parse(v);
+								cons = Expression.Constant(nullTemp);
+							}else
+								cons = Expression.Constant(v);
+							tempEx = Expression.Or(tempEx, Expression.Equal(prop, Expression.Convert(cons, prop.Type)));
 						}
 						expression = Expression.And(expression, tempEx);
 					} else {
-						
+
 						// Create the expression Constant
-						cons = Expression.Constant(value);
+						int tempVal;
+						int? nullTemp = null;
+						if(int.TryParse(value, out tempVal)) {
+							nullTemp = int.Parse(value);
+							cons = Expression.Constant(nullTemp);
+						}else
+							cons = Expression.Constant(value);
 
 						switch(op) {
 							case "=": { // If the operator is an equals
 										// Add the expression to the original
-									expression = Expression.And(expression, Expression.Equal(prop, cons));
+									expression = Expression.And(expression, Expression.Equal(prop, Expression.Convert(cons, prop.Type)));
 									break;
 								}
 
@@ -92,6 +105,12 @@ namespace DatabaseApi {
 			}
 		}
 
+		/// <summary>
+		/// Used in URIBuilder, selects the operation to be done based on the request.
+		/// </summary>
+		/// <param name="selections"></param>
+		/// <param name="parameters"></param>
+		/// <returns></returns>
 		private static Expression SelectOperation(String[] selections, ParameterExpression parameters) {
 			Expression left = (Expression)Expression.Not((Expression)Expression.Default(typeof(bool)));
 			for(int index = 0; index < selections.Length - 1; index += 2) {
@@ -108,6 +127,13 @@ namespace DatabaseApi {
 			return left;
 		}
 
+		/// <summary>
+		/// Builds a lambda based on a normal URI.
+		/// </summary>
+		/// <param name="queryString">The part of the URI to be built from.</param>
+		/// <param name="name">The name of the table being selected from</param>
+		/// <param name="operationType">The type of the operation wishing to be completed.</param>
+		/// <returns></returns>
 		public static Expression<Func<T, bool>> URIBuilder(
 			String queryString,
 			String name,

@@ -37,7 +37,6 @@ namespace DatabaseApi.Controllers
             var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value);
             var bicycles = _context.Bicycle.Include(p => p.Paint).OrderByDescending(u => u.Customerid).AsQueryable();
             if(lambda != null) {
-                Debug.WriteLine(lambda.ToString());
                 bicycles = bicycles.Where(lambda);
             }
             // do some filtering...
