@@ -90,7 +90,7 @@ namespace DatabaseApi.Controllers
         /// <param name="bicycle"></param>
         /// <returns>new Bicycle</returns>
         [HttpPost]
-        public async Task<IActionResult> PostBicycle([FromForm] BicycleToCreate bicycle)
+        public async Task<IActionResult> PostBicycle([FromBody] BicycleToCreate bicycle)
         {
 
             if (!ModelState.IsValid)
