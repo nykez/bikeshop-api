@@ -73,7 +73,7 @@ namespace DatabaseApi.Controllers
         /// <param name="bicycle"></param>
         /// <returns>error if encountered</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBicycle(int id, [FromForm] BicycleToUpdate bicycle)
+        public async Task<IActionResult> UpdateBicycle(int id, [FromBody] BicycleToUpdate bicycle)
         {
             var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
             if(toUpdateBicycle == null)
