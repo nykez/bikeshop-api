@@ -41,9 +41,6 @@ namespace DatabaseApi.Controllers
             if(lambda != null) {
                 components = components.Where(lambda);
             }
-            // do some filtering...
-            // ...
-            // ..
 
             return Ok(await PageList<Component>.CreateAsync(components, userParams.PageNumber, userParams.PageSize));
         }
