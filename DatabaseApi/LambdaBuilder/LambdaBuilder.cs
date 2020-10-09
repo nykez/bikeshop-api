@@ -14,7 +14,6 @@ namespace DatabaseApi {
 		/// Creates a lambda function based on the type and query passed in.
 		/// </summary>
 		/// <param name="queryString">Querystring from URL containing requested conditions.</param>
-		/// <param name="name">The name wished to represent the returned expression.</param>
 		/// <returns>An expression build off the query string</returns>
 		public static Expression<Func<T, bool>> Builder(String queryString) {
 			String[] selections = queryString.Replace("?", "").Split("&");
@@ -120,7 +119,7 @@ namespace DatabaseApi {
 					MemberExpression memberExpression = Expression.Property((Expression)parameters, selection);
 					ConstantExpression constantExpression = Expression.Constant((object)str);
 					left = (Expression)Expression.And(left, (Expression)Expression.Equal((Expression)memberExpression, (Expression)constantExpression));
-				} catch(IndexOutOfRangeException ex) {
+				} catch(IndexOutOfRangeException) {
 					return (Expression)Expression.Empty();
 				}
 			}
