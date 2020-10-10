@@ -46,15 +46,7 @@ namespace DatabaseApi.Controllers
             return Ok(await PageList<Component>.CreateAsync(components, userParams.PageNumber, userParams.PageSize));
         }
 
-        /// <summary>
-        /// Returns all components in the database
-        /// </summary>
-        /// <response code="200">Ok</response>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Component>>> GetComponent()
-        {
-            return await _context.Component.ToListAsync();
-        }
+      
 
         /// <summary>
         /// Returns a component by their StoreId
