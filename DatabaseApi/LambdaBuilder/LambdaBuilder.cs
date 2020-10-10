@@ -38,7 +38,7 @@ namespace DatabaseApi {
 					expressionSplit = Regex.Split(q, "(=|%3C|%3E)");
 					// Store the field
 					field = expressionSplit[0].ToLower();
-					if(typeof(T).GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) == null) continue;
+					if(typeof(T).GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) == null || field.ToLower() == "paint") continue;
 					// Store the operator
 					op = expressionSplit[1];
 					// Store the value and convert space back into actual space char

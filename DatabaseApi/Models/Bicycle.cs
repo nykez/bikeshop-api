@@ -40,6 +40,7 @@ namespace DatabaseApi
         public int? Shipprice { get; set; }
         public int? Frameprice { get; set; }
         public int? Componentlist { get; set; }
+        
 
         public virtual Customer Customer { get; set; }
         public virtual Employee Employee { get; set; }
