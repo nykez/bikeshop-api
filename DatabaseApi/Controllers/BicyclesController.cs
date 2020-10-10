@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,10 +35,25 @@ namespace DatabaseApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bicycle>>> GetAll([FromQuery] UserParams userParams)
         {
+            String qString = Request.QueryString.Value;
             var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value);
             var bicycles = _context.Bicycle.Include(p => p.Paint).OrderByDescending(u => u.Customerid).AsQueryable();
             if(lambda != null) {
                 bicycles = bicycles.Where(lambda);
+                if(Request.Query["paint"].Count > 0) {
+                    Expression paintEx = Expression.Default(typeof(bool));
+                    var parameters = Expression.Parameter(typeof(Bicycle), typeof(Bicycle).Name);
+                    MemberExpression mem = Expression.Property(parameters, typeof(Bicycle).GetProperty("Paint"));
+                    var prop = Expression.Property(mem, "Colorlist");
+                    ConstantExpression cons;
+                    String[] paintFilters = Request.Query["paint"][0].Split("|");
+                    foreach(String f in paintFilters) {
+                        cons = Expression.Constant(f);
+                        paintEx = Expression.Or(paintEx, Expression.Equal(prop,cons));
+					}
+                    Expression<Func<Bicycle, bool>> ex = Expression.Lambda <Func<Bicycle, bool>>(paintEx, parameters);
+                    bicycles = bicycles.Where(ex);
+                }
             }
             // do some filtering...
             // ...
@@ -47,7 +63,7 @@ namespace DatabaseApi.Controllers
         }
 
         // GET: api/Bicycles/5
-        /// <summary>
+        /// <summary>S
         /// Returns Bicycles by id
         /// </summary>
         /// <param name="id"></param>
