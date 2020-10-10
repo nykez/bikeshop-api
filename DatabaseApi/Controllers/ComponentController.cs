@@ -75,7 +75,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the updated retailstore</response>
         /// <response code="204">Retailstore to update is null</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateComponent(int id, [FromForm] ComponetToUpdate component)
+        public async Task<IActionResult> UpdateComponent(int id, [FromBody] ComponetToUpdate component)
         {
             var toUpdateComponent = await _context.Component.FirstOrDefaultAsync(c => c.Componentid == id);
             if (toUpdateComponent == null)
@@ -92,7 +92,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the newly created retail</response>
         /// <response code="204">ModelState error</response>
         [HttpPost]
-        public async Task<IActionResult> CreateComponent([FromForm] ComponetToCreate component)
+        public async Task<IActionResult> CreateComponent([FromBody] ComponetToCreate component)
         {
             // Missing parameters
             // More info in response
