@@ -14,7 +14,6 @@ namespace DatabaseApi {
 		/// Creates a lambda function based on the type and query passed in.
 		/// </summary>
 		/// <param name="queryString">Querystring from URL containing requested conditions.</param>
-		/// <param name="name">The name wished to represent the returned expression.</param>
 		/// <returns>An expression build off the query string</returns>
 		public static Expression<Func<T, bool>> Builder(String queryString) {
 			String[] selections = queryString.Replace("?", "").Split("&");
@@ -39,7 +38,7 @@ namespace DatabaseApi {
 					expressionSplit = Regex.Split(q, "(=|%3C|%3E)");
 					// Store the field
 					field = expressionSplit[0].ToLower();
-					if(typeof(T).GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) == null) continue;
+					if(typeof(T).GetProperty(field, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance) == null || field.ToLower() == "paint") continue;
 					// Store the operator
 					op = expressionSplit[1];
 					// Store the value and convert space back into actual space char
@@ -120,7 +119,7 @@ namespace DatabaseApi {
 					MemberExpression memberExpression = Expression.Property((Expression)parameters, selection);
 					ConstantExpression constantExpression = Expression.Constant((object)str);
 					left = (Expression)Expression.And(left, (Expression)Expression.Equal((Expression)memberExpression, (Expression)constantExpression));
-				} catch(IndexOutOfRangeException ex) {
+				} catch(IndexOutOfRangeException) {
 					return (Expression)Expression.Empty();
 				}
 			}
