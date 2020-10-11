@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Net.Http;
 
 namespace DatabaseApi
 {
