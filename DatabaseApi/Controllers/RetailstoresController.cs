@@ -61,7 +61,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the updated retailstore</response>
         /// <response code="204">Retailstore to update is null</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomer(int id, [FromForm] RetailstoreToUpdate retailstore)
+        public async Task<IActionResult> UpdateRetailStore(int id, [FromForm] RetailstoreToUpdate retailstore)
         {
             var toUpdateRetailstore = await _context.Retailstore.FirstOrDefaultAsync(r => r.Storeid == id);
             if (toUpdateRetailstore == null)

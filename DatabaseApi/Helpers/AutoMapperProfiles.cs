@@ -29,6 +29,9 @@ namespace DatabaseApi
             CreateMap<BikepartsToUpdate, Bikeparts>();
             CreateMap<ManufacturerToCreate, Manufacturer>();
             CreateMap<ManufacturerToUpdate, Manufacturer>();
+            CreateMap<ComponetToCreate, Component>();
+            CreateMap<ComponetToUpdate, Component>();
+            CreateMap<Component, ComponetToUpdate>();
             // For sprint 2. Model Table CRU;
         }
 
