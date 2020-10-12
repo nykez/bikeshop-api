@@ -1,8 +1,8 @@
 'MODELTYPE','DESCRIPTION','COMPONENTID'
-'Hybrid',"'Cross bike, MTB geometry, road drive'",0
+'Hybrid','Cross bike, MTB geometry, road drive',0
 'Mountain','Standard mountain geometry',0
 'Mountain full','Full suspension mountain bike',800
-'Race',"'Road racing, steep angles'",0
-'Road',"'Slightly relaxed road frame, leans toward racing'",0
-'Tour',"'Road touring frame, low and relaxed'",0
-'Track',"'Fixed gear, ultralight'",0
+'Race','Road racing, steep angles',0
+'Road','Slightly relaxed road frame, leans toward racing',0
+'Tour','Road touring frame, low and relaxed',0
+'Track','Fixed gear, ultralight',0
