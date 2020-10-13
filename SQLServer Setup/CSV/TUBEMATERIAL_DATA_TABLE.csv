@@ -6,7 +6,7 @@
 340,'Aluminum','Easton ProGram butted',1.5,18,'Round',8.2,6,1.4,'TIG Welded'
 350,'Aluminum','Easton 7129 tapered alloy',1.25,14,'Round',8.4,6,1.5,'TIG Welded'
 410,'Carbon fiber','Base carbon fiber',1.125,22,'Round',7.1,8,2,'Bonded'
-420,'Carbon fiber',"'OCLV 65% carbon, 35% epoxy'",1,16,'Round',6.6,9,2.75,'Bonded'
+420,'Carbon fiber','OCLV 65% carbon, 35% epoxy',1,16,'Round',6.6,9,2.75,'Bonded'
 530,'Titanium','3AL-2.5V',1.25,4,'Round',7.2,8,3.8,'TIG Welded'
 540,'Titanium','3AL-2.5V',1,4,'Oval',7.4,7,4,'TIG Welded'
 610,'Metal matrix','Aluminum + Ceramic',1.5,7,'Round',7.4,8,1.75,'Bonded'

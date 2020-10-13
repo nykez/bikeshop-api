@@ -130,7 +130,7 @@ namespace SQLServer_Setup {
 					cmd.ExecuteNonQuery();
 					try {
 						Console.WriteLine($"Inserting into {tableName}");
-						cmd.CommandText = $"LOAD DATA LOCAL INFILE '{file.FullName.Replace("\\", "/")}' INTO TABLE {tableName} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY \"'\" LINES TERMINATED BY '\n' IGNORE 1 ROWS  ";
+						cmd.CommandText = $"LOAD DATA LOCAL INFILE '{file.FullName.Replace("\\", "/")}' INTO TABLE {tableName} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY \"'\" LINES TERMINATED BY '\n' IGNORE 1 ROWS;";
 						cmd.ExecuteNonQuery();
 					} catch(MySqlException ex) {
 						Console.WriteLine(ex.ErrorCode);

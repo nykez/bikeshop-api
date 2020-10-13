@@ -17,7 +17,7 @@
 'Front skewer',31,'Holds wheel on fork--only care if it\'s special'
 'Front spokes',30,'Spokes for front wheel'
 'Front tire',32,'Rubber tire on front wheel'
-'Front wheel',33,"'Hub, rim, spokes, nipples--listed by hub'"
+'Front wheel',33,'Hub, rim, spokes, nipples--listed by hub'
 'Handlebar',4,'There are different types but one name'
 'Headset',1,'Mounts the stem on the frame'
 'Nipples',21,'Hold spokes to rim--only care if special'
@@ -30,12 +30,12 @@
 'Rear skewer',25,'Holds wheel on frame--only care if it\'s special'
 'Rear spokes',21,'Spokes for rear wheel'
 'Rear tire',24,'Rubber tire on rear wheel'
-'Rear wheel',26,"'Hub, rim, spokes, nipples--listed by hub'"
+'Rear wheel',26,'Hub, rim, spokes, nipples--listed by hub'
 'Rim strips',23,'Tape to protect tubes from spokes'
 'Saddle',10,'Seat'
 'Seat post',9,'Holds the saddle'
 'Shift levers',11,'Just the shifters'
-'Spokes',0,"'Package of 20 spokes, various sizes (in mm)'"
+'Spokes',0,'Package of 20 spokes, various sizes (in mm)'
 'Stem',3,'Handle bar stem'
 'Tire',100,'Front or rear tire (rubber)'
 'Tire front',101,'Front tire'
