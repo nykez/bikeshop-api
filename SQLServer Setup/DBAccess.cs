@@ -10,7 +10,9 @@ using MySql.Data;
 
 namespace SQLServer_Setup {
 
-
+	/// <summary>
+	/// Database Access class. Connects to the MySQL database as well as contains functionality such as table dropping, querying, and loading data.
+	/// </summary>
 	class DBAccess : IDisposable {
 		/// <summary>
 		/// All private fields, set in the inizializer
@@ -87,18 +89,18 @@ namespace SQLServer_Setup {
 			String scriptText = File.ReadAllText($"..\\..\\Scripts\\{script}");
 			MySqlCommand cmd = new MySqlCommand(scriptText);
 			cmd.CommandTimeout = 3600;
-			//try {
+			try {
 				if(OpenConnection()) {
 					cmd.Connection = connection;
 					cmd.ExecuteNonQuery();
 					CloseConnection();
 				}
-			/*} catch(MySqlException ex) {
+			} catch(MySqlException ex) {
 				Console.WriteLine(ex.InnerException);
-*//*				Console.WriteLine(ex.Number);
-				Console.WriteLine(ex.Message);*//*
+				Console.WriteLine(ex.Number);
+				Console.WriteLine(ex.Message);
 				Console.WriteLine(ex);
-			}*/
+			}
 		}
 
 		/// <summary>
