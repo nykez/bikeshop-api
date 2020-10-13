@@ -125,12 +125,12 @@ namespace SQLServer_Setup {
 			if(OpenConnection()) {
 				cmd.Connection = connection;
 				foreach(FileInfo file in files) {
-					tableName = file.Name.Replace(@"_DATA_TABLE.csv", "").Replace("\"", "");
+					tableName = file.Name.Replace(@"_DATA_TABLE.dsv", "").Replace("\"", "");
 					cmd.CommandText = "START TRANSACTION;";
 					cmd.ExecuteNonQuery();
 					try {
 						Console.WriteLine($"Inserting into {tableName}");
-						cmd.CommandText = $"LOAD DATA LOCAL INFILE '{file.FullName.Replace("\\", "/")}' INTO TABLE {tableName} FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY \"'\" LINES TERMINATED BY '\n' IGNORE 1 ROWS;";
+						cmd.CommandText = $"LOAD DATA LOCAL INFILE '{file.FullName.Replace("\\", "/")}' INTO TABLE {tableName} FIELDS TERMINATED BY '|' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\r\n' IGNORE 1 LINES;";
 						cmd.ExecuteNonQuery();
 					} catch(MySqlException ex) {
 						Console.WriteLine(ex.ErrorCode);
