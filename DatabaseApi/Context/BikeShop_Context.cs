@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DatabaseApi
 {
+    /// <summary>
+    /// Auto generated class representing the BIKE_SHOP database.
+    /// </summary>
     public partial class BikeShop_Context : DbContext
     {
         public BikeShop_Context()

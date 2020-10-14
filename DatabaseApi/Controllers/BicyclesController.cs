@@ -15,6 +15,9 @@ using DatabaseApi.Helpers;
 
 namespace DatabaseApi.Controllers
 {
+    /// <summary>
+    /// Bicycle controller for the API. Contains all CRUD operations for the Bicycle table.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class BicyclesController : ControllerBase
@@ -29,7 +32,7 @@ namespace DatabaseApi.Controllers
 
         // GET: api/Bicycles
         /// <summary>
-        /// Returns all bicycles
+        /// Returns all bicycles or specified bicycles if the URI contains a query string.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -55,19 +58,15 @@ namespace DatabaseApi.Controllers
                     bicycles = bicycles.Where(ex);
                 }
             }
-            // do some filtering...
-            // ...
-            // ..
-
             return Ok(await PageList<Bicycle>.CreateAsync(bicycles, userParams.PageNumber, userParams.PageSize));
         }
 
         // GET: api/Bicycles/5
         /// <summary>S
-        /// Returns Bicycles by id
+        /// Returns a single Bicycle by serial number.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The requested serial number.</param>
+        /// <returns>A single bicycle of that serial number if the bicycle exists.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Bicycle>> GetBicycle(int id)
         {
@@ -82,11 +81,11 @@ namespace DatabaseApi.Controllers
         }
 
         /// <summary>
-        /// Adds existing bicycle
+        /// Updates an existing bicycle with the data bassed in through a BicycleToUpdate DTO.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="bicycle"></param>
-        /// <returns>error if encountered</returns>
+        /// <param name="id">The serial number of the bicycle wished to be changed.</param>
+        /// <param name="bicycle">Bicycle DTO passed in through the front end.</param>
+        /// <returns>A 201 message if the update was successful or an error if the update was not.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBicycle(int id, [FromBody] BicycleToUpdate bicycle)
         {
@@ -100,10 +99,10 @@ namespace DatabaseApi.Controllers
 
         
         /// <summary>
-        /// Adds Bicycles provided Bicycles object
+        /// Adds a bicycle to the database given that the data from a passed in DTO is valid.
         /// </summary>
-        /// <param name="bicycle"></param>
-        /// <returns>new Bicycle</returns>
+        /// <param name="bicycle">The bicycle DTO created by the front end.</param>
+        /// <returns>A 200 message if the post was successful or a BadRequest message if it was not.</returns>
         [HttpPost]
         public async Task<IActionResult> PostBicycle([FromBody] BicycleToCreate bicycle)
         {
@@ -121,10 +120,10 @@ namespace DatabaseApi.Controllers
 
         // DELETE: api/Bicycles/5
         /// <summary>
-        /// Deletes Bicycle provided id as param
+        /// Removes a bicycle from the database given a valid Serial Number.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Bicycle</returns>
+        /// <param name="id">Serial Number for the bicycle wished to be removed.</param>
+        /// <returns>The bicycle if the bicycle was deleted or a NotFound message if it was not found.</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<Bicycle>> DeleteBicycle(int id)
         {
