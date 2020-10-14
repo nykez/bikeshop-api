@@ -34,7 +34,7 @@ namespace DatabaseApi.Controllers
         /// <summary>
         /// Returns all bicycles or specified bicycles if the URI contains a query string.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of all bicycles or a list of requested bicycles based on a query.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bicycle>>> GetAll([FromQuery] UserParams userParams)
         {
