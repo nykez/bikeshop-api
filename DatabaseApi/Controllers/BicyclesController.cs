@@ -64,7 +64,8 @@ namespace DatabaseApi.Controllers
             // do some filtering...
             // ...
             // ..
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await PageList<Bicycle>.CreateAsync(bicycles, userParams.PageNumber, userParams.PageSize));
         }
 
@@ -84,6 +85,8 @@ namespace DatabaseApi.Controllers
                 return NotFound();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return bicycle;
         }
 
@@ -101,7 +104,9 @@ namespace DatabaseApi.Controllers
                 return NoContent();
             // map our form data to our updated model
             _mapper.Map(bicycle, toUpdateBicycle);
-			return Ok(await _context.SaveChangesAsync());
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            return Ok(await _context.SaveChangesAsync());
         }
 
         
@@ -121,7 +126,8 @@ namespace DatabaseApi.Controllers
             var newBicycle = _mapper.Map<Bicycle>(bicycle);
             _context.Bicycle.Add(newBicycle);
             await _context.SaveChangesAsync();
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(newBicycle);
         }
 
@@ -142,7 +148,8 @@ namespace DatabaseApi.Controllers
 
             _context.Bicycle.Remove(bicycle);
             await _context.SaveChangesAsync();
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return bicycle;
         }
 
