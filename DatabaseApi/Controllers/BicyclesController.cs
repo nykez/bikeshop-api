@@ -82,6 +82,8 @@ namespace DatabaseApi.Controllers
 
             if (bicycle == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NotFound();
             }
 
@@ -100,8 +102,12 @@ namespace DatabaseApi.Controllers
         public async Task<IActionResult> UpdateBicycle(int id, [FromBody] BicycleToUpdate bicycle)
         {
             var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
-            if(toUpdateBicycle == null)
+            if (toUpdateBicycle == null)
+            {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
+            }
             // map our form data to our updated model
             _mapper.Map(bicycle, toUpdateBicycle);
             t.time_Stamp = DateTime.Now;
@@ -121,6 +127,8 @@ namespace DatabaseApi.Controllers
 
             if (!ModelState.IsValid)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return BadRequest();
             }
             var newBicycle = _mapper.Map<Bicycle>(bicycle);
@@ -143,6 +151,8 @@ namespace DatabaseApi.Controllers
             var bicycle = await _context.Bicycle.FindAsync(id);
             if (bicycle == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NotFound();
             }
 
