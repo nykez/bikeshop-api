@@ -22,11 +22,17 @@ namespace DatabaseApi.Controllers
     {
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
+        private readonly MonitoringService _monitoringService;
+        private readonly MonitoringServiceModels.Transaction t;
+        private readonly MonitoringServiceModels.ErrorRate errorRate;
 
-        public ComponentController(BikeShop_Context context, IMapper mapper)
+        public ComponentController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _context = context;
             _mapper = mapper;
+            _monitoringService = monitoringService;
+            t = new MonitoringServiceModels.Transaction();
+            errorRate = new MonitoringServiceModels.ErrorRate();
         }
 
         /// <summary>
@@ -43,6 +49,8 @@ namespace DatabaseApi.Controllers
                 components = components.Where(lambda);
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await PageList<Component>.CreateAsync(components, userParams.PageNumber, userParams.PageSize));
         }
 
@@ -61,9 +69,13 @@ namespace DatabaseApi.Controllers
 
             if (component == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NotFound();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return component;
         }
 
@@ -79,9 +91,15 @@ namespace DatabaseApi.Controllers
         {
             var toUpdateComponent = await _context.Component.FirstOrDefaultAsync(c => c.Componentid == id);
             if (toUpdateComponent == null)
+            {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
+            }
             // map our form data to our updated model
             _mapper.Map(component, toUpdateComponent);
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -98,6 +116,8 @@ namespace DatabaseApi.Controllers
             // More info in response
             if (!ModelState.IsValid)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return BadRequest();
             }
 
@@ -108,7 +128,8 @@ namespace DatabaseApi.Controllers
             _context.Add(newComponent);
 
             await _context.SaveChangesAsync();
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(newComponent);
         }
 
@@ -124,12 +145,15 @@ namespace DatabaseApi.Controllers
             var component = await _context.Component.FindAsync(id);
             if (component == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NotFound();
             }
 
             _context.Component.Remove(component);
             await _context.SaveChangesAsync();
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return component;
         }
     }
