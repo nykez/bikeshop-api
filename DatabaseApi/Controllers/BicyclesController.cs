@@ -21,10 +21,14 @@ namespace DatabaseApi.Controllers
     {
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
-        public BicyclesController(BikeShop_Context context, IMapper mapper)
+        private readonly MonitoringService _monitoringService;
+        private readonly MonitoringServiceModels.Transaction t;
+        private readonly MonitoringServiceModels.ErrorRate errorRate;
+        public BicyclesController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _context = context;
             _mapper = mapper;
+            _monitoringService = monitoringService;
         }
 
         // GET: api/Bicycles
