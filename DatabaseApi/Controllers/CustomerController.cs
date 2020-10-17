@@ -19,10 +19,12 @@ namespace DatabaseApi.Controllers
     {
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
-        public CustomerController(BikeShop_Context context, IMapper mapper)
+        private readonly MonitoringService _monitoringService;
+        public CustomerController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _mapper = mapper;
             _context = context;
+            _monitoringService = monitoringService;
         }
 
         /// <summary>
