@@ -69,6 +69,8 @@ namespace DatabaseApi.Controllers
 
             if (component == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NotFound();
             }
 
@@ -89,7 +91,11 @@ namespace DatabaseApi.Controllers
         {
             var toUpdateComponent = await _context.Component.FirstOrDefaultAsync(c => c.Componentid == id);
             if (toUpdateComponent == null)
+            {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
+            }
             // map our form data to our updated model
             _mapper.Map(component, toUpdateComponent);
             t.time_Stamp = DateTime.Now;
@@ -110,6 +116,8 @@ namespace DatabaseApi.Controllers
             // More info in response
             if (!ModelState.IsValid)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return BadRequest();
             }
 
@@ -137,6 +145,8 @@ namespace DatabaseApi.Controllers
             var component = await _context.Component.FindAsync(id);
             if (component == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NotFound();
             }
 
