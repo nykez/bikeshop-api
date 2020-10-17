@@ -49,6 +49,8 @@ namespace DatabaseApi.Controllers
                 components = components.Where(lambda);
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await PageList<Component>.CreateAsync(components, userParams.PageNumber, userParams.PageSize));
         }
 
@@ -70,6 +72,8 @@ namespace DatabaseApi.Controllers
                 return NotFound();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return component;
         }
 
@@ -88,6 +92,8 @@ namespace DatabaseApi.Controllers
                 return NoContent();
             // map our form data to our updated model
             _mapper.Map(component, toUpdateComponent);
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -114,7 +120,8 @@ namespace DatabaseApi.Controllers
             _context.Add(newComponent);
 
             await _context.SaveChangesAsync();
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(newComponent);
         }
 
@@ -135,7 +142,8 @@ namespace DatabaseApi.Controllers
 
             _context.Component.Remove(component);
             await _context.SaveChangesAsync();
-
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return component;
         }
     }
