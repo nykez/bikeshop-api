@@ -9,6 +9,7 @@ using DatabaseApi.Dtos;
 using AutoMapper;
 using System.Diagnostics;
 using DatabaseApi.Helpers;
+using System.Data;
 
 namespace DatabaseApi.Controllers
 {
@@ -19,10 +20,16 @@ namespace DatabaseApi.Controllers
     {
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
-        public CustomerController(BikeShop_Context context, IMapper mapper)
+        private readonly MonitoringService _monitoringService;
+        private readonly MonitoringServiceModels.Transaction t;
+        private readonly MonitoringServiceModels.ErrorRate errorRate;
+        public CustomerController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _mapper = mapper;
             _context = context;
+            _monitoringService = monitoringService;
+             t = new MonitoringServiceModels.Transaction();
+            errorRate = new MonitoringServiceModels.ErrorRate();
         }
 
         /// <summary>
@@ -42,6 +49,9 @@ namespace DatabaseApi.Controllers
             // ...
             // ..
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+
             return Ok(await PageList<Customer>.CreateAsync(customers, userParams.PageNumber, userParams.PageSize));
         }
 
@@ -58,8 +68,14 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
+ 
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
             }
+            
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
 
             return Ok(customer);
         }
@@ -77,9 +93,13 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(customer);
         }
 
@@ -97,9 +117,13 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(customer);
         }
 
@@ -116,6 +140,8 @@ namespace DatabaseApi.Controllers
             // More info in response
             if (!ModelState.IsValid)
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return BadRequest();
             }
 
@@ -126,7 +152,9 @@ namespace DatabaseApi.Controllers
             _context.Add(newCustomer);
 
             await _context.SaveChangesAsync();
- 
+
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(newCustomer);
         }
 
@@ -142,9 +170,16 @@ namespace DatabaseApi.Controllers
         {
             var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
             if (toUpdateCustomer == null)
+            {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return NoContent();
+            }
             // map our form data to our updated model
             _mapper.Map(customer, toUpdateCustomer);
+
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -161,10 +196,14 @@ namespace DatabaseApi.Controllers
             if (customerToDelete != null)
             {
                 _context.Remove(customerToDelete);
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
                 return Ok(await _context.SaveChangesAsync());
             }
             else
             {
+                errorRate.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
                 return BadRequest();
             }
         }

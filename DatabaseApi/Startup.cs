@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Net.Http;
 
 namespace DatabaseApi
 {
@@ -35,6 +36,7 @@ namespace DatabaseApi
                 conf.AddProfile(new AutoMapperProfiles());
             });
             services.AddSingleton<IMapper>(mapServ => config.CreateMapper());
+            services.AddSingleton<Helpers.MonitoringService>(monServ => new Helpers.MonitoringService("https://metricsapi20201007030533.azurewebsites.net"));
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             //services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
