@@ -48,8 +48,17 @@ namespace DatabaseApi.Controllers
             // do some filtering...
             // ...
             // ..
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            try
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                
+            }
+           
 
             return Ok(await PageList<Customer>.CreateAsync(customers, userParams.PageNumber, userParams.PageSize));
         }
@@ -67,14 +76,30 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
- 
-                errorRate.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                try
+                {
+                    errorRate.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
+             
                 return NoContent();
             }
-            
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+
+            try
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
 
             return Ok(customer);
         }
@@ -92,13 +117,29 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
-                errorRate.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                try
+                {
+                    errorRate.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
                 return NoContent();
             }
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            try
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
             return Ok(customer);
         }
 
@@ -116,13 +157,29 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
-                errorRate.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                try
+                {
+                    errorRate.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
                 return NoContent();
             }
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            try
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
             return Ok(customer);
         }
 
@@ -139,8 +196,16 @@ namespace DatabaseApi.Controllers
             // More info in response
             if (!ModelState.IsValid)
             {
-                errorRate.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                try
+                {
+                    errorRate.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
                 return BadRequest();
             }
 
@@ -152,8 +217,16 @@ namespace DatabaseApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            try
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
             return Ok(newCustomer);
         }
 
@@ -170,15 +243,30 @@ namespace DatabaseApi.Controllers
             var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
             if (toUpdateCustomer == null)
             {
-                errorRate.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                try
+                {
+                    errorRate.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
                 return NoContent();
             }
             // map our form data to our updated model
             _mapper.Map(customer, toUpdateCustomer);
+            try
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            }
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -195,14 +283,30 @@ namespace DatabaseApi.Controllers
             if (customerToDelete != null)
             {
                 _context.Remove(customerToDelete);
-                t.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+                try
+                {
+                    t.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+
+                }
                 return Ok(await _context.SaveChangesAsync());
             }
             else
             {
-                errorRate.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                try
+                {
+                    errorRate.time_Stamp = DateTime.Now;
+                    await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+                }
                 return BadRequest();
             }
         }
