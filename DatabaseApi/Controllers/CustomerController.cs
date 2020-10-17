@@ -88,9 +88,13 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
                 return NoContent();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(customer);
         }
 
@@ -108,9 +112,13 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
                 return NoContent();
             }
 
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(customer);
         }
 
@@ -137,7 +145,9 @@ namespace DatabaseApi.Controllers
             _context.Add(newCustomer);
 
             await _context.SaveChangesAsync();
- 
+
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(newCustomer);
         }
 
@@ -153,9 +163,16 @@ namespace DatabaseApi.Controllers
         {
             var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
             if (toUpdateCustomer == null)
+            {
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
                 return NoContent();
+            }
             // map our form data to our updated model
             _mapper.Map(customer, toUpdateCustomer);
+
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -172,6 +189,8 @@ namespace DatabaseApi.Controllers
             if (customerToDelete != null)
             {
                 _context.Remove(customerToDelete);
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
                 return Ok(await _context.SaveChangesAsync());
             }
             else
