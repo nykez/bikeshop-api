@@ -21,11 +21,13 @@ namespace DatabaseApi.Controllers
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
         private readonly MonitoringService _monitoringService;
+        private readonly MonitoringServiceModels.Transaction t;
         public CustomerController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _mapper = mapper;
             _context = context;
             _monitoringService = monitoringService;
+             t = new MonitoringServiceModels.Transaction();
         }
 
         /// <summary>
@@ -61,12 +63,12 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
-                var t2 = new MonitoringServiceModels.Transaction();
-                t2.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/transaction/post", t2);
+ 
+                t.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
                 return NoContent();
             }
-            var t = new MonitoringServiceModels.Transaction();
+            
             t.time_Stamp = DateTime.Now;
             await _monitoringService.SendUpdateAsync("api/transaction/post", t);
 
