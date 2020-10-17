@@ -9,6 +9,7 @@ using DatabaseApi.Dtos;
 using AutoMapper;
 using System.Diagnostics;
 using DatabaseApi.Helpers;
+using System.Data;
 
 namespace DatabaseApi.Controllers
 {
@@ -62,6 +63,9 @@ namespace DatabaseApi.Controllers
             {
                 return NoContent();
             }
+            var t = new MonitoringServiceModels.Transaction();
+            t.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
 
             return Ok(customer);
         }
