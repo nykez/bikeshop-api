@@ -29,6 +29,8 @@ namespace DatabaseApi.Controllers
             _context = context;
             _mapper = mapper;
             _monitoringService = monitoringService;
+            t = new MonitoringServiceModels.Transaction();
+            errorRate = new MonitoringServiceModels.ErrorRate();
         }
 
         // GET: api/Bicycles
