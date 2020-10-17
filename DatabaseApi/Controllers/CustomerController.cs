@@ -61,6 +61,9 @@ namespace DatabaseApi.Controllers
 
             if (customer == null)
             {
+                var t2 = new MonitoringServiceModels.Transaction();
+                t2.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", t2);
                 return NoContent();
             }
             var t = new MonitoringServiceModels.Transaction();
