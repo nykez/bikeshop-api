@@ -19,7 +19,7 @@ namespace DatabaseApi.Helpers
    
         }
 
-        public async Task SendUpdateAsync(string path, Object obj) 
+        public async Task<bool> SendUpdateAsync(string path, Object obj) 
         {
             var status = new HttpResponseMessage();
             try
