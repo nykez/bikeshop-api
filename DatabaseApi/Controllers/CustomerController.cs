@@ -48,6 +48,7 @@ namespace DatabaseApi.Controllers
             // do some filtering...
             // ...
             // ..
+
             t.time_Stamp = DateTime.Now;
             await _monitoringService.SendUpdateAsync("api/transaction/post", t);
 
