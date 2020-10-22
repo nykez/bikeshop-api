@@ -71,12 +71,22 @@ namespace DatabaseApi.Controllers
             return Ok(new {Token = token, Message = "success"});
         }
 
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            // TODO: log user out
+            return Ok(new { Token = "", Message = "Logged Out" });
+        }
+
         private async Task<IdentityUser> ValidateUser(LoginCredentials credentials)
         {
+            // attempt to find the user by username
             var identityUser = await _userManager.FindByNameAsync(credentials.Username);
 
             if (identityUser != null)
             {
+                // do passwords match?
                 var result = _userManager.PasswordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, credentials.Password);
                 return result == PasswordVerificationResult.Failed ? null : identityUser;
             }
