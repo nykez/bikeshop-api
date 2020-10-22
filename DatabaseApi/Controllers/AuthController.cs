@@ -54,6 +54,35 @@ namespace DatabaseApi.Controllers
 
         }
 
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginCredentials credentials)
+        {
+            IdentityUser identityUser;
+
+            if (!ModelState.IsValid 
+                || credentials == null
+                || (identityUser = await ValidateUser(credentials)) == null)
+            {
+                return new BadRequestObjectResult(new { Message = "Login failed" });
+            }
+
+            var token = GenerateToken(identityUser);
+            return Ok(new {Token = token, Message = "success"});
+        }
+
+        private async Task<IdentityUser> ValidateUser(LoginCredentials credentials)
+        {
+            var identityUser = await _userManager.FindByNameAsync(credentials.Username);
+
+            if (identityUser != null)
+            {
+                var result = _userManager.PasswordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, credentials.Password);
+                return result == PasswordVerificationResult.Failed ? null : identityUser;
+            }
+
+            return null;
+        }
 
         private object GenerateToken(IdentityUser identityUser)
         {
