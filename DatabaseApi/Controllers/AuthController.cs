@@ -105,7 +105,6 @@ namespace DatabaseApi.Controllers
                 {
                     new Claim(ClaimTypes.Name, identityUser.UserName.ToString()),
                     new Claim(ClaimTypes.Email, identityUser.Email),
-                    new Claim(ClaimTypes.Role, "User")
                 }),
                 Expires = DateTime.UtcNow.AddSeconds(_jwtTokenOptions.ExpiryTimeInSeconds),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
