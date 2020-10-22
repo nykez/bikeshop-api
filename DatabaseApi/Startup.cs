@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Net.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace DatabaseApi
 {
@@ -31,13 +32,21 @@ namespace DatabaseApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // allow automapper to skip updating/mapping null values
             var config = new MapperConfiguration(conf => {
                 conf.ForAllMaps((obj, cfg) => cfg.ForAllMembers(options => options.Condition((source, dest, sourceMember) => sourceMember != null)));
                 conf.AddProfile(new AutoMapperProfiles());
             });
+            // create imapper
             services.AddSingleton<IMapper>(mapServ => config.CreateMapper());
+            // add monitoring service
             services.AddSingleton<Helpers.MonitoringService>(monServ => new Helpers.MonitoringService("https://metricsapi20201007030533.azurewebsites.net"));
+            // add db context
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            // add identity
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = true)
+                .AddEntityFrameworkStores<BikeShop_Context>();
+            // add auto mapper
             //services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerGen(c => {
