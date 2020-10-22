@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using DatabaseApi.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace DatabaseApi.Controllers
 {
@@ -13,10 +15,10 @@ namespace DatabaseApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IOptions<JwtBearerTokenSettings> _jwtTokenOptions;
+        private readonly JwtBearerTokenSettings _jwtTokenOptions;
         public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<IdentityUser> userManager)
         {
-            _jwtTokenOptions = jwtTokenOptions;
+            _jwtTokenOptions = jwtTokenOptions.Value;
             _userManager = userManager;
         }
 
@@ -47,6 +49,13 @@ namespace DatabaseApi.Controllers
 
             return Ok(new {Message = "Registration Successful"});
 
+        }
+
+
+        private object GenerateToken(IdentityUser identityUser)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes()
         }
     }
 }
