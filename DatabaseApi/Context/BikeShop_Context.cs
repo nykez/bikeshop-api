@@ -6,10 +6,6 @@ namespace DatabaseApi
 {
     public partial class BikeShop_Context : DbContext
     {
-        public BikeShop_Context()
-        {
-        }
-
         public BikeShop_Context(DbContextOptions<BikeShop_Context> options)
             : base(options)
         {
