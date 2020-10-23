@@ -12,6 +12,8 @@ using AutoMapper;
 using System.Reflection;
 using System.Diagnostics;
 using DatabaseApi.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace DatabaseApi.Controllers
 {
@@ -78,6 +80,7 @@ namespace DatabaseApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Bicycle>> GetBicycle(int id)
         {
+
             var bicycle = await _context.Bicycle.Include(p => p.Paint).Where(b => b.Serialnumber == id).FirstOrDefaultAsync();
 
             if (bicycle == null)
