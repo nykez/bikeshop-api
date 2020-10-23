@@ -21,6 +21,7 @@ using DatabaseApi.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using DatabaseApi.Helpers;
 
 namespace DatabaseApi
 {
@@ -49,7 +50,9 @@ namespace DatabaseApi
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             // add identity
             services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BikeShop_Context>();
+            
             // add auto mapper
             //services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
@@ -81,6 +84,7 @@ namespace DatabaseApi
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                 };
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,6 +124,7 @@ namespace DatabaseApi
             {
                 endpoints.MapControllers();
             });
+
 
 
         }
