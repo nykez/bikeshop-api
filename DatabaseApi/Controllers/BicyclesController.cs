@@ -102,6 +102,7 @@ namespace DatabaseApi.Controllers
         /// <param name="bicycle"></param>
         /// <returns>error if encountered</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> UpdateBicycle(int id, [FromBody] BicycleToUpdate bicycle)
         {
             var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
@@ -125,7 +126,8 @@ namespace DatabaseApi.Controllers
         /// <param name="bicycle"></param>
         /// <returns>new Bicycle</returns>
         [HttpPost]
-        public async Task<IActionResult> PostBicycle([FromBody] BicycleToCreate bicycle)
+        [Authorize(Roles="Admin")]
+        public async Task<IActionResult> CreateBicycle([FromBody] BicycleToCreate bicycle)
         {
 
             if (!ModelState.IsValid)
@@ -149,6 +151,7 @@ namespace DatabaseApi.Controllers
         /// <param name="id"></param>
         /// <returns>Bicycle</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult<Bicycle>> DeleteBicycle(int id)
         {
             var bicycle = await _context.Bicycle.FindAsync(id);

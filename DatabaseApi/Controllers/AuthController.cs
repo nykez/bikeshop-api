@@ -19,7 +19,7 @@ namespace DatabaseApi.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly JwtBearerTokenSettings _jwtTokenOptions;
-        
+
         public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<IdentityUser> userManager)
         {
             _jwtTokenOptions = jwtTokenOptions.Value;
@@ -77,7 +77,7 @@ namespace DatabaseApi.Controllers
 
     [HttpPost]
     [Route("logout")]
-    public async Task<IActionResult> Logout()
+    public IActionResult Logout()
     {
         // TODO: log user out
         return Ok(new { Token = "", Message = "Logged Out" });
