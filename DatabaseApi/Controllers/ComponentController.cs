@@ -11,7 +11,7 @@ using AutoMapper;
 using System.Reflection;
 using System.Diagnostics;
 using DatabaseApi.Helpers;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace DatabaseApi.Controllers
 {  
@@ -87,6 +87,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the updated retailstore</response>
         /// <response code="204">Retailstore to update is null</response>
         [HttpPut("{id}")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> UpdateComponent(int id, [FromBody] ComponetToUpdate component)
         {
             var toUpdateComponent = await _context.Component.FirstOrDefaultAsync(c => c.Componentid == id);
@@ -110,6 +111,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the newly created retail</response>
         /// <response code="204">ModelState error</response>
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> CreateComponent([FromBody] ComponetToCreate component)
         {
             // Missing parameters
@@ -140,6 +142,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">success</response>
         /// <response code="204">Retailstore is null</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult<Component>> DeleteComponent(int id)
         {
             var component = await _context.Component.FindAsync(id);

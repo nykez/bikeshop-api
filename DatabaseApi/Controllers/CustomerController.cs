@@ -10,6 +10,7 @@ using AutoMapper;
 using System.Diagnostics;
 using DatabaseApi.Helpers;
 using System.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DatabaseApi.Controllers
 {
@@ -134,6 +135,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the newly created customer</response>
         /// <response code="204">ModelState error</response>
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> CreateCustomer([FromBody] CustomerToCreate customer)
         {
             // Missing parameters
@@ -166,6 +168,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">the updated cistomer</response>
         /// <response code="204">Customer to update is null</response>
         [HttpPut("{id}")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> UpdateCustomer(int id, [FromBody] CustomerToUpdate customer)
         {
             var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
@@ -190,6 +193,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">success</response>
         /// <response code="204">Customer is null</response>
         [HttpDelete("{id}")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             var customerToDelete = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);

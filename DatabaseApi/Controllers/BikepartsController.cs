@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
 using DatabaseApi.Dtos;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DatabaseApi.Controllers
 {
@@ -62,6 +63,7 @@ namespace DatabaseApi.Controllers
         /// <param name="bikeparts"></param>
         /// <returns>error if encountered</returns>
         [HttpPut("{serialnumber}/{componentid}")]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> UpdateBikeparts(int serialnumber, int componentid,[FromForm]BikepartsToUpdate bikeparts)
         {
             var toUpdateBikeParts = await _context.Bikeparts.FirstOrDefaultAsync(b => b.Serialnumber == serialnumber && b.Componentid == componentid);
@@ -78,6 +80,7 @@ namespace DatabaseApi.Controllers
         /// <param name="bikeparts"></param>
         /// <returns>new bikeparts</returns>
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult<Bikeparts>> PostBikeparts([FromForm] BikepartsToCreate bikeparts)
         {
             if(!ModelState.IsValid) {
@@ -98,6 +101,7 @@ namespace DatabaseApi.Controllers
         /// <param name="componentid"></param>
         /// <returns>bikeparts</returns>
         [HttpDelete("{serialnumber}/{componentid}")]
+        [Authorize(Roles="Admin")]
         public async Task<ActionResult<Bikeparts>> DeleteBikeparts(int serialnumber, int componentid)
         {
             var bikeparts = await _context.Bikeparts.FindAsync(serialnumber, componentid);
