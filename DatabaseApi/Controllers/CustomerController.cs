@@ -21,14 +21,14 @@ namespace DatabaseApi.Controllers
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
         private readonly MonitoringService _monitoringService;
-        private readonly MonitoringServiceModels.Transaction t;
+        private readonly MonitoringServiceModels.Transaction transaction;
         private readonly MonitoringServiceModels.ErrorRate errorRate;
         public CustomerController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _mapper = mapper;
             _context = context;
             _monitoringService = monitoringService;
-             t = new MonitoringServiceModels.Transaction();
+             transaction = new MonitoringServiceModels.Transaction();
             errorRate = new MonitoringServiceModels.ErrorRate();
         }
 
@@ -49,8 +49,8 @@ namespace DatabaseApi.Controllers
             // ...
             // ..
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
 
             return Ok(await PageList<Customer>.CreateAsync(customers, userParams.PageNumber, userParams.PageSize));
         }
@@ -74,8 +74,8 @@ namespace DatabaseApi.Controllers
                 return NoContent();
             }
             
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
 
             return Ok(customer);
         }
@@ -98,8 +98,8 @@ namespace DatabaseApi.Controllers
                 return NoContent();
             }
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(customer);
         }
 
@@ -122,8 +122,8 @@ namespace DatabaseApi.Controllers
                 return NoContent();
             }
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(customer);
         }
 
@@ -153,8 +153,8 @@ namespace DatabaseApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(newCustomer);
         }
 
@@ -178,8 +178,8 @@ namespace DatabaseApi.Controllers
             // map our form data to our updated model
             _mapper.Map(customer, toUpdateCustomer);
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -196,8 +196,8 @@ namespace DatabaseApi.Controllers
             if (customerToDelete != null)
             {
                 _context.Remove(customerToDelete);
-                t.time_Stamp = DateTime.Now;
-                await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+                transaction.time_Stamp = DateTime.Now;
+                await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
                 return Ok(await _context.SaveChangesAsync());
             }
             else
