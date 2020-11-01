@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using DatabaseApi.Dtos;
 
 namespace DatabaseApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly BikeShop_Context _context;
@@ -46,13 +47,14 @@ namespace DatabaseApi.Controllers
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == id);
 
+            var userToReturn = _autoMapper.Map<UserToReturn>(user);
 
-            if (user == null)
+            if (user== null)
             {
                 return NoContent();
             }
 
-            return Ok(user);
+            return Ok(userToReturn);
         }
     }
 }

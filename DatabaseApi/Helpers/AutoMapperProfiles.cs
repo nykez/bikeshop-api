@@ -3,6 +3,7 @@ using AutoMapper;
 using AutoMapper.Configuration;
 using AutoMapper.Configuration.Conventions;
 using DatabaseApi.Dtos;
+using Microsoft.AspNetCore.Identity;
 
 namespace DatabaseApi
 {
@@ -32,6 +33,9 @@ namespace DatabaseApi
             CreateMap<ComponetToCreate, Component>();
             CreateMap<ComponetToUpdate, Component>();
             CreateMap<Component, ComponetToUpdate>();
+
+            CreateMap<IdentityUser, UserToReturn>();
+            CreateMap<UserToReturn, IdentityUser>();
             // For sprint 2. Model Table CRU;
         }
 
