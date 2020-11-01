@@ -45,14 +45,20 @@ namespace DatabaseApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUserById(string id)
         {
+            // attempt to find the user
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == id);
 
+            // map user to DTO (this protects password hashes, personal data.. etc)
             var userToReturn = _autoMapper.Map<UserToReturn>(user);
 
             if (user== null)
             {
+                // return a 204 if user doesnt exist
                 return NoContent();
             }
+
+            // return the roles attached to the user
+            userToReturn.Roles = await _userManager.GetRolesAsync(user);
 
             return Ok(userToReturn);
         }
