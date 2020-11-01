@@ -31,7 +31,8 @@ namespace DatabaseApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUserById(string id)
         {
-            var user = _userManager.Users.FirstOrDefaultAsync(u => u.UserName == id);
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == id);
+
 
             if (user == null)
             {
