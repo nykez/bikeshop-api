@@ -23,7 +23,7 @@ namespace DatabaseApi.Controllers
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
         private readonly MonitoringService _monitoringService;
-        private readonly MonitoringServiceModels.Transaction t;
+        private readonly MonitoringServiceModels.Transaction transaction;
         private readonly MonitoringServiceModels.ErrorRate errorRate;
 
         public ComponentController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
@@ -31,7 +31,7 @@ namespace DatabaseApi.Controllers
             _context = context;
             _mapper = mapper;
             _monitoringService = monitoringService;
-            t = new MonitoringServiceModels.Transaction();
+            transaction = new MonitoringServiceModels.Transaction();
             errorRate = new MonitoringServiceModels.ErrorRate();
         }
 
@@ -49,8 +49,8 @@ namespace DatabaseApi.Controllers
                 components = components.Where(lambda);
             }
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(await PageList<Component>.CreateAsync(components, userParams.PageNumber, userParams.PageSize));
         }
 
@@ -74,8 +74,8 @@ namespace DatabaseApi.Controllers
                 return NotFound();
             }
 
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return component;
         }
 
@@ -98,8 +98,8 @@ namespace DatabaseApi.Controllers
             }
             // map our form data to our updated model
             _mapper.Map(component, toUpdateComponent);
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(await _context.SaveChangesAsync());
         }
 
@@ -128,8 +128,8 @@ namespace DatabaseApi.Controllers
             _context.Add(newComponent);
 
             await _context.SaveChangesAsync();
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return Ok(newComponent);
         }
 
@@ -152,8 +152,8 @@ namespace DatabaseApi.Controllers
 
             _context.Component.Remove(component);
             await _context.SaveChangesAsync();
-            t.time_Stamp = DateTime.Now;
-            await _monitoringService.SendUpdateAsync("api/transaction/post", t);
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
             return component;
         }
     }

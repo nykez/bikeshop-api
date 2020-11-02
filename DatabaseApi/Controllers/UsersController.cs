@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using DatabaseApi.Dtos;
 
 namespace DatabaseApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly BikeShop_Context _context;
@@ -44,15 +45,22 @@ namespace DatabaseApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUserById(string id)
         {
+            // attempt to find the user
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == id);
 
+            // map user to DTO (this protects password hashes, personal data.. etc)
+            var userToReturn = _autoMapper.Map<UserToReturn>(user);
 
-            if (user == null)
+            if (user== null)
             {
+                // return a 204 if user doesnt exist
                 return NoContent();
             }
 
-            return Ok(user);
+            // return the roles attached to the user
+            userToReturn.Roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(userToReturn);
         }
     }
 }
