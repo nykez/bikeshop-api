@@ -47,7 +47,7 @@ namespace DatabaseApi.Controllers
                 return NotFound();
             }
 
-            return paint;
+            return Ok(paint);
         }
 
         // PUT: api/Paints/5
