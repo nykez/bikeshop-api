@@ -9,25 +9,21 @@ using Microsoft.EntityFrameworkCore;
 using DatabaseApi;
 using DatabaseApi.Dtos;
 
-namespace DatabaseApi.Controllers
-{
+namespace DatabaseApi.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaintsController : ControllerBase
-    {
+    public class PaintsController : ControllerBase {
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
-        public PaintsController(BikeShop_Context context, IMapper mapper)
-        {
+        public PaintsController(BikeShop_Context context, IMapper mapper) {
             _context = context;
             _mapper = mapper;
         }
 
         // GET: api/Paints
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Paint>>> GetPaint()
-        {
-            return await _context.Paint.ToListAsync();
+        public async Task<ActionResult<IEnumerable<Paint>>> GetPaint() {
+            return Ok(await _context.Paint.ToListAsync());
         }
 
         [HttpGet("list")]
@@ -39,12 +35,10 @@ namespace DatabaseApi.Controllers
 
         // GET: api/Paints/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPaint(int id)
-        {
+        public async Task<IActionResult> GetPaint(int id) {
             var paint = await _context.Paint.FindAsync(id);
 
-            if (paint == null)
-            {
+            if(paint == null) {
                 return NotFound();
             }
 
@@ -57,47 +51,46 @@ namespace DatabaseApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPaint(int id, [FromBody] PaintToUpdate paint) {
             var toUpdatePaint = await _context.Paint.FirstOrDefaultAsync(b => b.Paintid == id);
-            
-            if (toUpdatePaint == null) return NoContent();
+
+            if(toUpdatePaint == null)
+                return NoContent();
 
             _mapper.Map(paint, toUpdatePaint);
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(paint);
         }
 
         // POST: api/Paints
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<IActionResult> PostPaint([FromBody] PaintToCreate paint)
-        {
-            if (!ModelState.IsValid) return BadRequest();
+        public async Task<IActionResult> PostPaint([FromBody] PaintToCreate paint) {
+            if(!ModelState.IsValid)
+                return BadRequest();
 
             var newPaint = _mapper.Map<Paint>(paint);
             _context.Paint.Add(newPaint);
 
             await _context.SaveChangesAsync();
             return Ok(newPaint);
-
         }
 
         // DELETE: api/Paints/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePaint(int id)
-        {
+        public async Task<IActionResult> DeletePaint(int id) {
             var paint = await _context.Paint.FindAsync(id);
-            
-            if (paint == null) return NotFound();
+
+            if(paint == null)
+                return NotFound();
 
             _context.Paint.Remove(paint);
-            
+
             await _context.SaveChangesAsync();
 
             return Ok(paint);
         }
 
-        private bool PaintExists(int id)
-        {
+        private bool PaintExists(int id) {
             return _context.Paint.Any(e => e.Paintid == id);
         }
     }
