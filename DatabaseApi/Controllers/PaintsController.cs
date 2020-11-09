@@ -17,9 +17,10 @@ namespace DatabaseApi.Controllers
     {
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
-        public PaintsController(BikeShop_Context context)
+        public PaintsController(BikeShop_Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Paints
