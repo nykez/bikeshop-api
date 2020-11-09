@@ -37,6 +37,10 @@ namespace DatabaseApi
             CreateMap<IdentityUser, UserToReturn>();
             CreateMap<UserToReturn, IdentityUser>();
             // For sprint 2. Model Table CRU;
+
+            // Paint
+            CreateMap<PaintToCreate, Paint>();
+            CreateMap<PaintToUpdate, Paint>();
         }
 
     }
