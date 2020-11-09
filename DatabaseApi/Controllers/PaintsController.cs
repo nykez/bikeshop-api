@@ -38,7 +38,7 @@ namespace DatabaseApi.Controllers
 
         // GET: api/Paints/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Paint>> GetPaint(int id)
+        public async Task<IActionResult> GetPaint(int id)
         {
             var paint = await _context.Paint.FindAsync(id);
 
@@ -68,7 +68,7 @@ namespace DatabaseApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Paint>> PostPaint([FromBody] PaintToCreate paint)
+        public async Task<IActionResult> PostPaint([FromBody] PaintToCreate paint)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -82,7 +82,7 @@ namespace DatabaseApi.Controllers
 
         // DELETE: api/Paints/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Paint>> DeletePaint(int id)
+        public async Task<IActionResult> DeletePaint(int id)
         {
             var paint = await _context.Paint.FindAsync(id);
             
@@ -92,7 +92,7 @@ namespace DatabaseApi.Controllers
             
             await _context.SaveChangesAsync();
 
-            return paint;
+            return Ok(paint);
         }
 
         private bool PaintExists(int id)
