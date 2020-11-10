@@ -10,110 +10,100 @@ using AutoMapper;
 using DatabaseApi.Dtos;
 
 
-namespace DatabaseApi.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ManufacturersController : ControllerBase
-    {
-        private readonly BikeShop_Context _context;
-        private readonly IMapper _mapper;
-        public ManufacturersController(BikeShop_Context context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+namespace DatabaseApi.Controllers {
+	[Route("api/[controller]")]
+	[ApiController]
+	public class ManufacturersController : ControllerBase {
+		private readonly BikeShop_Context _context;
+		private readonly IMapper _mapper;
+		public ManufacturersController(BikeShop_Context context, IMapper mapper) {
+			_context = context;
+			_mapper = mapper;
+		}
 
-        // GET: api/Manufacturers
-        /// <summary>
-        /// Returns all Manufacturers
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Manufacturer>>> GetManufacturer()
-        {
-            return await _context.Manufacturer.ToListAsync();
-        }
+		// GET: api/Manufacturers
+		/// <summary>
+		/// Returns all Manufacturers
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<Manufacturer>>> GetManufacturer() {
+			return await _context.Manufacturer.ToListAsync();
+		}
 
-        // GET: api/Manufacturers/5
-        /// <summary>
-        /// Returns Manufacturer by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>manufacturer</returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Manufacturer>> GetManufacturer(int id)
-        {
-            var manufacturer = await _context.Manufacturer.FindAsync(id);
+		// GET: api/Manufacturers/5
+		/// <summary>
+		/// Returns Manufacturer by id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>manufacturer</returns>
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Manufacturer>> GetManufacturer(int id) {
+			var manufacturer = await _context.Manufacturer.FindAsync(id);
 
-            if (manufacturer == null)
-            {
-                return NotFound();
-            }
+			if(manufacturer == null) {
+				return NotFound();
+			}
 
-            return manufacturer;
-        }
+			return manufacturer;
+		}
 
-        // PUT: api/Manufacturers/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        /// <summary>
-        /// Adds existing manufacturer
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="manufacturer"></param>
-        /// <returns>error if encountered</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateManufacturer(int id, [FromForm]ManufacturerToUpdate manufacturer)
-        {
-            var toUpdateManufacturer = await _context.Manufacturer.FirstOrDefaultAsync(m => m.Manufacturerid == id);
-            if(toUpdateManufacturer == null)
-                return NoContent();
-            // map our form data to our updated model
-            _mapper.Map(manufacturer, toUpdateManufacturer);
-            return Ok(await _context.SaveChangesAsync());
-        }
+		// PUT: api/Manufacturers/5
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		/// <summary>
+		/// Adds existing manufacturer
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="manufacturer"></param>
+		/// <returns>error if encountered</returns>
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateManufacturer(int id, [FromForm] ManufacturerToUpdate manufacturer) {
+			var toUpdateManufacturer = await _context.Manufacturer.FirstOrDefaultAsync(m => m.Manufacturerid == id);
+			if(toUpdateManufacturer == null)
+				return NoContent();
+			// map our form data to our updated model
+			_mapper.Map(manufacturer, toUpdateManufacturer);
+			return Ok(await _context.SaveChangesAsync());
+		}
 
-        // POST: api/Manufacturers
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        /// <summary>
-        /// Adds Manufacturer provided manufacturer object
-        /// </summary>
-        /// <param name="manufacturer"></param>
-        /// <returns>new manufacturer</returns>
-        [HttpPost]
-        public async Task<ActionResult<Manufacturer>> PostManufacturer([FromForm]ManufacturerToCreate manufacturer)
-        {
-            if(!ModelState.IsValid) {
-                return BadRequest();
-            }
-            var newManufacturer = _mapper.Map<Manufacturer>(manufacturer);
-            _context.Manufacturer.Add(newManufacturer);
-            await _context.SaveChangesAsync();
+		// POST: api/Manufacturers
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+		// more details see https://aka.ms/RazorPagesCRUD.
+		/// <summary>
+		/// Adds Manufacturer provided manufacturer object
+		/// </summary>
+		/// <param name="manufacturer"></param>
+		/// <returns>new manufacturer</returns>
+		[HttpPost]
+		public async Task<ActionResult<Manufacturer>> PostManufacturer([FromForm] ManufacturerToCreate manufacturer) {
+			if(!ModelState.IsValid) {
+				return BadRequest();
+			}
+			var newManufacturer = _mapper.Map<Manufacturer>(manufacturer);
+			_context.Manufacturer.Add(newManufacturer);
+			await _context.SaveChangesAsync();
 
-            return Ok(newManufacturer);
-        }
+			return Ok(newManufacturer);
+		}
 
-        // DELETE: api/Manufacturers/5
-        /// <summary>
-        /// Deletes Manufacturer provided id as param
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>manufacturer</returns>
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Manufacturer>> DeleteManufacturer(int id)
-        {
-            var manufacturer = await _context.Manufacturer.FindAsync(id);
-            if (manufacturer == null)
-            {
-                return NotFound();
-            }
+		// DELETE: api/Manufacturers/5
+		/// <summary>
+		/// Deletes Manufacturer provided id as param
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns>manufacturer</returns>
+		[HttpDelete("{id}")]
+		public async Task<ActionResult<Manufacturer>> DeleteManufacturer(int id) {
+			var manufacturer = await _context.Manufacturer.FindAsync(id);
+			if(manufacturer == null) {
+				return NotFound();
+			}
 
-            _context.Manufacturer.Remove(manufacturer);
-            await _context.SaveChangesAsync();
+			_context.Manufacturer.Remove(manufacturer);
+			await _context.SaveChangesAsync();
 
-            return manufacturer;
-        }
-    }
+			return manufacturer;
+		}
+	}
 }
