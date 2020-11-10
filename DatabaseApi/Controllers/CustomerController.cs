@@ -91,7 +91,7 @@ namespace DatabaseApi.Controllers
         {
             var customer = await _context.Customer.Where(c => c.Zipcode == zipcode).ToListAsync();
 
-            if (customer == null)
+            if (customer.Count == 0)
             {
                 errorRate.time_Stamp = DateTime.Now;
                 await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
@@ -115,7 +115,7 @@ namespace DatabaseApi.Controllers
         {
             var customer = await _context.Customer.Where(b => b.Cityid == cityid).ToListAsync();
 
-            if (customer == null)
+            if (customer.Count == 0)
             {
                 errorRate.time_Stamp = DateTime.Now;
                 await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
