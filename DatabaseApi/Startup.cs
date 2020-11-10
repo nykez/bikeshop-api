@@ -45,7 +45,7 @@ namespace DatabaseApi
             // create imapper
             services.AddSingleton<IMapper>(mapServ => config.CreateMapper());
             // add monitoring service
-            services.AddSingleton<Helpers.MonitoringService>(monServ => new Helpers.MonitoringService("https://metricsapi20201007030533.azurewebsites.net"));
+            services.AddSingleton<Helpers.MonitoringService>(monServ => new Helpers.MonitoringService("https://metricsapi20201108200731.azurewebsites.net/ "));
             // add db context
             services.AddDbContext<BikeShop_Context>(options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             // add identity

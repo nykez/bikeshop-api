@@ -21,15 +21,14 @@ namespace DatabaseApi.Controllers
         private readonly BikeShop_Context _context;
         private readonly IMapper _mapper;
         private readonly MonitoringService _monitoringService;
-        private readonly MonitoringServiceModels.Transaction transaction;
-        private readonly MonitoringServiceModels.ErrorRate errorRate;
+        private readonly MonitoringServiceModels.Transaction transaction = new MonitoringServiceModels.Transaction();
+        private readonly MonitoringServiceModels.ErrorRate errorRate = new MonitoringServiceModels.ErrorRate();
         public CustomerController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService)
         {
             _mapper = mapper;
             _context = context;
             _monitoringService = monitoringService;
-             transaction = new MonitoringServiceModels.Transaction();
-            errorRate = new MonitoringServiceModels.ErrorRate();
+             
         }
 
         /// <summary>
