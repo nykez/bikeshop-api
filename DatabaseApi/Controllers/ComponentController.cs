@@ -63,7 +63,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">returns a Retailstore</response>
         /// <response code="204">Retailstore is null</response>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Component>> GetComponent(int id)
+        public async Task<IActionResult> GetComponent(int id)
         {
             var component = await _context.Component.FindAsync(id);
 
@@ -76,7 +76,7 @@ namespace DatabaseApi.Controllers
 
             transaction.time_Stamp = DateTime.Now;
             await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
-            return component;
+            return Ok(component);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace DatabaseApi.Controllers
         /// <response code="200">success</response>
         /// <response code="204">Retailstore is null</response>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Component>> DeleteComponent(int id)
+        public async Task<IActionResult> DeleteComponent(int id)
         {
             var component = await _context.Component.FindAsync(id);
             if (component == null)
@@ -154,7 +154,7 @@ namespace DatabaseApi.Controllers
             await _context.SaveChangesAsync();
             transaction.time_Stamp = DateTime.Now;
             await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
-            return component;
+            return Ok(component);
         }
     }
 }
