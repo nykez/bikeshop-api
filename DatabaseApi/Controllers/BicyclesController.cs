@@ -52,7 +52,7 @@ namespace DatabaseApi.Controllers {
 				if(Request.Query["paint"].Count > 0) {
 					Expression paintEx = Expression.Default(typeof(bool));
 					
-					var parameters = Expression.Parameter(typeof(Bicycle), typeof(Bicycle).Name());
+					var parameters = Expression.Parameter(typeof(Bicycle), typeof(Bicycle).Name);
 					MemberExpression mem = Expression.Property(parameters, typeof(Bicycle).GetProperty("Paint"));
 					var prop = Expression.Property(mem, "Colorlist");
                     string[] paintFilters = Request.Query["paint"][0].Split("|");
