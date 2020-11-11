@@ -31,8 +31,6 @@ namespace DatabaseApi.Controllers
             _context = context;
             _mapper = mapper;
             _monitoringService = monitoringService;
-         
-           
         }
 
         /// <summary>
