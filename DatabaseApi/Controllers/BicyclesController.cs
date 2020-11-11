@@ -155,5 +155,6 @@ namespace DatabaseApi.Controllers {
 			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
 			return Ok(bicycle);
 		}
+
 	}
 }
