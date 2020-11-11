@@ -103,56 +103,5 @@ namespace DatabaseApi {
 				return null;
 			}
 		}
-
-		/// <summary>
-		/// Used in URIBuilder, selects the operation to be done based on the request.
-		/// </summary>
-		/// <param name="selections"></param>
-		/// <param name="parameters"></param>
-		/// <returns></returns>
-		private static Expression SelectOperation(String[] selections, ParameterExpression parameters) {
-			Expression left = (Expression)Expression.Not((Expression)Expression.Default(typeof(bool)));
-			for(int index = 0; index < selections.Length - 1; index += 2) {
-				string selection = selections[index];
-				try {
-					string str = selections[index + 1].Replace("%20", " ");
-					MemberExpression memberExpression = Expression.Property((Expression)parameters, selection);
-					ConstantExpression constantExpression = Expression.Constant((object)str);
-					left = (Expression)Expression.And(left, (Expression)Expression.Equal((Expression)memberExpression, (Expression)constantExpression));
-				} catch(IndexOutOfRangeException) {
-					return (Expression)Expression.Empty();
-				}
-			}
-			return left;
-		}
-
-		/// <summary>
-		/// Builds a lambda based on a normal URI.
-		/// </summary>
-		/// <param name="queryString">The part of the URI to be built from.</param>
-		/// <param name="name">The name of the table being selected from</param>
-		/// <param name="operationType">The type of the operation wishing to be completed.</param>
-		/// <returns></returns>
-		public static Expression<Func<T, bool>> URIBuilder(
-			String queryString,
-			String name,
-			String operationType = "select") {
-			String[] selections = queryString.Split("/");
-			ParameterExpression parameters = Expression.Parameter(typeof(T), name);
-			Expression body = (Expression)Expression.Empty();
-			if(selections.Length != 0 && selections[0] != "") {
-				switch(operationType) {
-					case "select":
-						body = LambdaBuilder<T>.SelectOperation(selections, parameters);
-						break;
-					case "purchase":
-						body = LambdaBuilder<T>.SelectOperation(selections, parameters);
-						break;
-				}
-			}
-			if(!(body.Type != typeof(void)))
-				return (Expression<Func<T, bool>>)null;
-			return Expression.Lambda<Func<T, bool>>(body, parameters);
-		}
 	}
 }
