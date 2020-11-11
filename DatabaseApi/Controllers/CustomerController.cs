@@ -21,12 +21,16 @@ namespace DatabaseApi.Controllers {
 		private readonly MonitoringService _monitoringService;
 		private readonly MonitoringServiceModels.Transaction transaction = new MonitoringServiceModels.Transaction();
 		private readonly MonitoringServiceModels.ErrorRate errorRate = new MonitoringServiceModels.ErrorRate();
+
+
+        private const string transPost = "api/transaction/post";
+        private const string errPost = "api/error/post";
+
 		public CustomerController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService) {
 			_mapper = mapper;
 			_context = context;
 			_monitoringService = monitoringService;
-
-		}
+        }
 
 		/// <summary>
 		/// Returns all customers in the database
@@ -37,15 +41,13 @@ namespace DatabaseApi.Controllers {
 			var lambda = LambdaBuilder<Customer>.Builder(Request.QueryString.Value);
 			var customers = _context.Customer.OrderByDescending(u => u.Customerid).AsQueryable();
 			if(lambda != null) {
-				Debug.WriteLine(lambda.ToString());
 				customers = customers.Where(lambda);
 			}
 			// do some filtering...
 			// ...
 			// ..
 
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 
 			return Ok(await PageList<Customer>.CreateAsync(customers, userParams.PageNumber, userParams.PageSize));
 		}
@@ -61,16 +63,11 @@ namespace DatabaseApi.Controllers {
 			var customer = await _context.Customer.FirstOrDefaultAsync(b => b.Customerid == id);
 
 			if(customer == null) {
-
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                await TimeStampError();
 				return NoContent();
 			}
-
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
-
-			return Ok(customer);
+            await TimeStampTransaction();
+            return Ok(customer);
 		}
 
 		/// <summary>
@@ -84,17 +81,17 @@ namespace DatabaseApi.Controllers {
 			var customer = await _context.Customer.Where(c => c.Zipcode == zipcode).ToListAsync();
 
 			if(customer.Count == 0) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
-				return NoContent();
-			}
+                await TimeStampError();
+                return NoContent();
+            }
 
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(customer);
 		}
 
-		/// <summary>
+
+
+        /// <summary>
 		/// Returns all customers matching the given cityid
 		/// </summary>
 		/// <param name="cityid"></param>
@@ -106,13 +103,11 @@ namespace DatabaseApi.Controllers {
 			var customer = await _context.Customer.Where(b => b.Cityid == cityid).ToListAsync();
 
 			if(customer.Count == 0) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                await TimeStampError();
 				return NoContent();
 			}
 
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(customer);
 		}
 
@@ -127,8 +122,7 @@ namespace DatabaseApi.Controllers {
 			// Missing parameters
 			// More info in response
 			if(!ModelState.IsValid) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                await TimeStampError();
 				return BadRequest();
 			}
 
@@ -140,8 +134,7 @@ namespace DatabaseApi.Controllers {
 
 			await _context.SaveChangesAsync();
 
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(newCustomer);
 		}
 
@@ -156,15 +149,13 @@ namespace DatabaseApi.Controllers {
 		public async Task<IActionResult> UpdateCustomer(int id, [FromBody] CustomerToUpdate customer) {
 			var toUpdateCustomer = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
 			if(toUpdateCustomer == null) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                await TimeStampError();
 				return NoContent();
 			}
 			// map our form data to our updated model
 			_mapper.Map(customer, toUpdateCustomer);
 
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(await _context.SaveChangesAsync());
 		}
 
@@ -179,14 +170,25 @@ namespace DatabaseApi.Controllers {
 			var customerToDelete = await _context.Customer.FirstOrDefaultAsync(c => c.Customerid == id);
 			if(customerToDelete != null) {
 				_context.Remove(customerToDelete);
-				transaction.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
-				return Ok(await _context.SaveChangesAsync());
-			} else {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
-				return BadRequest();
+				await TimeStampTransaction();
+                return Ok(await _context.SaveChangesAsync());
 			}
-		}
+
+            await TimeStampError();
+            return BadRequest();
+        }
+
+        private async Task TimeStampTransaction() {
+            this.transaction.time_Stamp = DateTime.Now;
+            await this._monitoringService.SendUpdateAsync(transPost, this.transaction);
+        }
+
+
+        private async Task TimeStampError() {
+            this.errorRate.time_Stamp = DateTime.Now;
+            await this._monitoringService.SendUpdateAsync(errPost, this.errorRate);
+        }
+
+
 	}
 }
