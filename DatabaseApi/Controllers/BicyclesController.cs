@@ -23,13 +23,19 @@ namespace DatabaseApi.Controllers {
 		private readonly IMapper _mapper;
 		private readonly MonitoringService _monitoringService;
 		private readonly MonitoringServiceModels.Transaction transaction = new MonitoringServiceModels.Transaction();
-		private readonly MonitoringServiceModels.ErrorRate errorRate = new MonitoringServiceModels.ErrorRate();
-		public BicyclesController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService) {
+        private readonly MonitoringServiceModels.ErrorRate errorRate = new MonitoringServiceModels.ErrorRate();
+
+
+        private const string transPost = "api/transaction/post";
+        private const string errPost = "api/error/post";
+        private const string AdminRole = "Admin";
+
+
+        public BicyclesController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService) {
 			_context = context;
 			_mapper = mapper;
 			_monitoringService = monitoringService;
-
-		}
+        }
 
 		// GET: api/Bicycles
 		/// <summary>
@@ -38,22 +44,22 @@ namespace DatabaseApi.Controllers {
 		/// <returns></returns>
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Bicycle>>> GetAll([FromQuery] UserParams userParams) {
-			String qString = Request.QueryString.Value;
+			string qString = Request.QueryString.Value;
 			var lambda = LambdaBuilder<Bicycle>.Builder(Request.QueryString.Value);
 			var bicycles = _context.Bicycle.Include(p => p.Paint).OrderByDescending(u => u.Customerid).AsQueryable();
 			if(lambda != null) {
 				bicycles = bicycles.Where(lambda);
 				if(Request.Query["paint"].Count > 0) {
 					Expression paintEx = Expression.Default(typeof(bool));
+					
 					var parameters = Expression.Parameter(typeof(Bicycle), typeof(Bicycle).Name);
 					MemberExpression mem = Expression.Property(parameters, typeof(Bicycle).GetProperty("Paint"));
 					var prop = Expression.Property(mem, "Colorlist");
-					ConstantExpression cons;
-					String[] paintFilters = Request.Query["paint"][0].Split("|");
-					foreach(String f in paintFilters) {
-						cons = Expression.Constant(f);
-						paintEx = Expression.Or(paintEx, Expression.Equal(prop, cons));
-					}
+                    string[] paintFilters = Request.Query["paint"][0].Split("|");
+					foreach(string f in paintFilters) {
+                        ConstantExpression cons = Expression.Constant(f);
+                        paintEx = Expression.Or(paintEx, Expression.Equal(prop, cons));
+                    }
 					Expression<Func<Bicycle, bool>> ex = Expression.Lambda<Func<Bicycle, bool>>(paintEx, parameters);
 					bicycles = bicycles.Where(ex);
 				}
@@ -61,8 +67,7 @@ namespace DatabaseApi.Controllers {
 			// do some filtering...
 			// ...
 			// ..
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(await PageList<Bicycle>.CreateAsync(bicycles, userParams.PageNumber, userParams.PageSize));
 		}
 
@@ -78,13 +83,10 @@ namespace DatabaseApi.Controllers {
 			var bicycle = await _context.Bicycle.Include(p => p.Paint).Where(b => b.Serialnumber == id).FirstOrDefaultAsync();
 
 			if(bicycle == null) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                await TimeStampError();
 				return NotFound();
 			}
-
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return bicycle;
 		}
 
@@ -95,41 +97,46 @@ namespace DatabaseApi.Controllers {
 		/// <param name="bicycle"></param>
 		/// <returns>error if encountered</returns>
 		[HttpPut("{id}")]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = AdminRole)]
 		public async Task<IActionResult> UpdateBicycle(int id, [FromBody] BicycleToUpdate bicycle) {
 			var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
 			if(toUpdateBicycle == null) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
-				return NoContent();
-			}
+                await TimeStampError();
+                return NoContent();
+            }
 			// map our form data to our updated model
 			_mapper.Map(bicycle, toUpdateBicycle);
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(await _context.SaveChangesAsync());
 		}
 
+        private async Task TimeStampError() {
+            this.errorRate.time_Stamp = DateTime.Now;
+            await this._monitoringService.SendUpdateAsync(errPost, errorRate);
+        }
 
-		/// <summary>
+        private async Task TimeStampTransaction() {
+            transaction.time_Stamp = DateTime.Now;
+            await _monitoringService.SendUpdateAsync(transPost, transaction);
+		}
+
+        /// <summary>
 		/// Adds Bicycles provided Bicycles object
 		/// </summary>
 		/// <param name="bicycle"></param>
 		/// <returns>new Bicycle</returns>
 		[HttpPost]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = AdminRole)]
 		public async Task<IActionResult> CreateBicycle([FromBody] BicycleToCreate bicycle) {
 
 			if(!ModelState.IsValid) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+                await TimeStampError();
 				return BadRequest();
 			}
 			var newBicycle = _mapper.Map<Bicycle>(bicycle);
 			_context.Bicycle.Add(newBicycle);
 			await _context.SaveChangesAsync();
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(newBicycle);
 		}
 
@@ -140,21 +147,18 @@ namespace DatabaseApi.Controllers {
 		/// <param name="id"></param>
 		/// <returns>Bicycle</returns>
 		[HttpDelete("{id}")]
-		[Authorize(Roles = "Admin")]
+		[Authorize(Roles = AdminRole)]
 		public async Task<IActionResult> DeleteBicycle(int id) {
 			var bicycle = await _context.Bicycle.FindAsync(id);
-			if(bicycle == null) {
-				errorRate.time_Stamp = DateTime.Now;
-				await _monitoringService.SendUpdateAsync("api/error/post", errorRate);
+			if (bicycle == null) {
+                await TimeStampError();
 				return NotFound();
-			}
+            }
 
 			_context.Bicycle.Remove(bicycle);
 			await _context.SaveChangesAsync();
-			transaction.time_Stamp = DateTime.Now;
-			await _monitoringService.SendUpdateAsync("api/transaction/post", transaction);
+            await TimeStampTransaction();
 			return Ok(bicycle);
 		}
-
-	}
+    }
 }
