@@ -110,12 +110,18 @@ namespace DatabaseApi.Controllers {
 			return Ok(await _context.SaveChangesAsync());
 		}
 
-        private async Task TimeStampError() {
+        /// <summary>
+        /// Time stamps current time in errorRate, then updates monitoring service.
+        /// </summary>
+		private async Task TimeStampError() {
             this.errorRate.time_Stamp = DateTime.Now;
             await this._monitoringService.SendUpdateAsync(errPost, errorRate);
         }
 
-        private async Task TimeStampTransaction() {
+        /// <summary>
+        /// Times stamps current time in transaction, then updates monitoring service.
+        /// </summary>
+		private async Task TimeStampTransaction() {
             transaction.time_Stamp = DateTime.Now;
             await _monitoringService.SendUpdateAsync(transPost, transaction);
 		}
