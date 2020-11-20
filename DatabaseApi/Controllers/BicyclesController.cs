@@ -28,7 +28,6 @@ namespace DatabaseApi.Controllers {
 
         private const string transPost = "api/transaction/post";
         private const string errPost = "api/error/post";
-        private const string AdminRole = "Admin";
 
 
         public BicyclesController(BikeShop_Context context, IMapper mapper, MonitoringService monitoringService) {
@@ -97,7 +96,6 @@ namespace DatabaseApi.Controllers {
 		/// <param name="bicycle"></param>
 		/// <returns>error if encountered</returns>
 		[HttpPut("{id}")]
-		[Authorize(Roles = AdminRole)]
 		public async Task<IActionResult> UpdateBicycle(int id, [FromBody] BicycleToUpdate bicycle) {
 			var toUpdateBicycle = await _context.Bicycle.FirstOrDefaultAsync(b => b.Serialnumber == id);
 			if(toUpdateBicycle == null) {
@@ -132,7 +130,6 @@ namespace DatabaseApi.Controllers {
 		/// <param name="bicycle"></param>
 		/// <returns>new Bicycle</returns>
 		[HttpPost]
-		[Authorize(Roles = AdminRole)]
 		public async Task<IActionResult> CreateBicycle([FromBody] BicycleToCreate bicycle) {
 
 			if(!ModelState.IsValid) {
@@ -153,7 +150,6 @@ namespace DatabaseApi.Controllers {
 		/// <param name="id"></param>
 		/// <returns>Bicycle</returns>
 		[HttpDelete("{id}")]
-		[Authorize(Roles = AdminRole)]
 		public async Task<IActionResult> DeleteBicycle(int id) {
 			var bicycle = await _context.Bicycle.FindAsync(id);
 			if (bicycle == null) {
