@@ -4,9 +4,9 @@
 
 Matthew "Hew": Developer
 
-Max: Developer
+[Max](https://github.com/heyPhillwhatsUp): Developer
 
-Harrison: Product Owner
+[Harrison](): Product Owner
 
 Matthew: Waffle Catering/Developer
 
