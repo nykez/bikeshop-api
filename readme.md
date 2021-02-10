@@ -1,12 +1,18 @@
 # Information
 ***
-[Michael](https://github.com/devMichaelREdwards) : Developer
+[Michael](https://github.com/devMichaelREdwards): Developer
+
 Matthew "Hew": Developer
+
 Max: Developer
+
 Harrison: Product Owner
+
 Matthew: Waffle Catering/Developer
+
 James: Scrum Daddy
-[Jordan](https://github.com/nykez): Devloper
+
+[Jordan](https://github.com/nykez): Developer
 
 ## Documentation 
 ***
