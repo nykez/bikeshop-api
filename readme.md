@@ -1,5 +1,12 @@
-# Software Engineering II
+# Information
 ***
+[Michael](https://github.com/devMichaelREdwards) : Developer
+Matthew "Hew": Developer
+Max: Developer
+Harrison: Product Owner
+Matthew: Waffle Catering/Developer
+James: Scrum Daddy
+[Jordan](https://github.com/nykez): Devloper
 
 ## Documentation 
 ***
