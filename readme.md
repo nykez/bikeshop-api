@@ -6,7 +6,7 @@ Matthew "Hew": Developer
 
 [Max](https://github.com/heyPhillwhatsUp): Developer
 
-[Harrison](): Product Owner
+[Harrison](https://github.com/FanOfWolves): Product Owner
 
 Matthew: Waffle Catering/Developer
 
