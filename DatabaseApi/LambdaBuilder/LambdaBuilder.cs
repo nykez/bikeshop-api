@@ -97,7 +97,6 @@ namespace DatabaseApi {
 			// If the expression never changed to the boolean type, we want to return all bikes(query was not specified)
 			if(expression.Type != typeof(void)) {
 				Expression<Func<T, bool>> ex = Expression.Lambda<Func<T, bool>>(expression, parameters);
-				Debug.WriteLine(ex);
 				return ex;
 			} else {// else(no query) return all bikes
 				return null;
