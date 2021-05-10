@@ -2,20 +2,6 @@
 ***
 [Front-end](https://github.com/nykez/bikeshop/)
 
-[Michael](https://github.com/devMichaelREdwards): Developer
-
-Matthew "Hew": Developer
-
-[Max](https://github.com/heyPhillwhatsUp): Developer
-
-[Harrison](https://github.com/FanOfWolves): Product Owner
-
-Matthew: Waffle Catering/Developer
-
-James: Scrum Daddy
-
-[Jordan](https://github.com/nykez): Developer
-
 ## Documentation 
 ***
 
